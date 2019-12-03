@@ -1,18 +1,20 @@
-import { PureComponent } from 'react' // eslint-disable-line import/no-extraneous-dependencies
-import { } from 'prop-types' // eslint-disable-line import/no-extraneous-dependencies
+import React from 'react' // eslint-disable-line import/no-extraneous-dependencies
+import PropTypes from 'prop-types' // eslint-disable-line import/no-extraneous-dependencies
 
-export default class SchemaTable extends PureComponent {
-  static defaultProps = {
-  };
+function SchemaTable () {
+  return (
+    <div>
+      SchemaTable
+    </div>
+  )
+};
 
-  static propTypes = {
-  };
+SchemaTable.propTypes = {
 
-  render () {
-    return (
-      <div>
-        SchemaTable
-      </div>
-    )
-  }
 }
+
+SchemaTable.defaultProps = {
+
+}
+
+export default SchemaTable
