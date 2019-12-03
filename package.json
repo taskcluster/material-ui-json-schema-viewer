@@ -2,17 +2,25 @@
   "name": "material-ui-json-schema-viewer",
   "version": "1.0.0",
   "main": "index.js",
+  "repository": "https://github.com/taskcluster/material-ui-json-schema-viewer",
   "license": "MIT",
   "scripts": {
     "build": "neutrino build",
     "start": "neutrino start",
     "lint": "neutrino lint",
-    "test": "neutrino test"
+    "test": "neutrino test",
+    "styleguide": "styleguidist server",
+    "styleguide:build": "styleguidist build"
   },
   "devDependencies": {
+    "@babel/core": "^7.7.4",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "@babel/preset-react": "^7.7.4",
     "@neutrinojs/jest": "^8.3.0",
     "@neutrinojs/react-components": "^8.3.0",
     "@neutrinojs/standardjs": "^8.3.0",
+    "babel-loader": "^8.0.6",
     "neutrino": "^8.3.0",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
@@ -21,6 +29,13 @@
     "webpack": "^4.41.2"
   },
   "dependencies": {
-    "@material-ui/core": "^4.7.1"
-  }
+    "@material-ui/core": "^4.7.1",
+    "core-js": "2"
+  },
+  "browserslist": [
+    ">1%",
+    "last 1 version",
+    "Firefox ESR",
+    "not dead"
+  ]
 }
