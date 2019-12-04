@@ -6,6 +6,11 @@ module.exports = {
   use: [
     airbnb(),
     reactComponents(),
-    jest()
+    jest(),
+    (neutrino) => {
+      neutrino.register('styleguide', () => ({
+        webpackConfig: neutrino.config.toConfig(),
+      }));
+    },
   ]
 };
