@@ -58,7 +58,10 @@ typings/
 .env
 
 # build directory
-lib
+build
+
+# styleguide build directory
+styleguide
 
 # Intellij IDE specific settings
 .idea/
