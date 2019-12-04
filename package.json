@@ -14,14 +14,9 @@
     "styleguide:build": "styleguidist build"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.4",
-    "@babel/plugin-proposal-class-properties": "^7.7.4",
-    "@babel/preset-env": "^7.7.4",
-    "@babel/preset-react": "^7.7.4",
     "@neutrinojs/airbnb": "9.0.0-rc.5",
     "@neutrinojs/jest": "9.0.0-rc.5",
     "@neutrinojs/react-components": "9.0.0-rc.5",
-    "babel-loader": "^8.0.6",
     "eslint": "^6.7.2",
     "jest": "^24.9.0",
     "neutrino": "9.0.0-rc.5",
@@ -34,13 +29,6 @@
     "webpack-dev-server": "^3.9.0"
   },
   "dependencies": {
-    "@material-ui/core": "^4.7.1",
-    "core-js": "2"
-  },
-  "browserslist": [
-    ">1%",
-    "last 1 version",
-    "Firefox ESR",
-    "not dead"
-  ]
+    "@material-ui/core": "^4.7.1"
+  }
 }
