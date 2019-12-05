@@ -1,0 +1,111 @@
+{
+  "$id": "/schemas/common/metaschema.json#",
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "allOf": [
+      {
+          "$ref": "http://json-schema.org/draft-06/schema#"
+      },
+      {
+          "$ref": "#/definitions/schema"
+      }
+  ],
+  "definitions": {
+      "recurse": {
+          "properties": {
+              "additionalItems": {
+                  "$ref": "#/definitions/schema"
+              },
+              "additionalProperties": {
+                  "$ref": "#/definitions/schema"
+              },
+              "allOf": {
+                  "$ref": "#/definitions/schemaArray"
+              },
+              "anyOf": {
+                  "$ref": "#/definitions/schemaArray"
+              },
+              "contains": {
+                  "$ref": "#/definitions/schema"
+              },
+              "definitions": {
+                  "additionalProperties": {
+                      "$ref": "#/definitions/schema"
+                  }
+              },
+              "dependencies": {
+                  "additionalProperties": {
+                      "anyOf": [
+                          {
+                              "$ref": "#/definitions/schema"
+                          },
+                          {
+                              "$ref": "http://json-schema.org/draft-06/schema#/definitions/stringArray"
+                          }
+                      ]
+                  }
+              },
+              "items": {
+                  "anyOf": [
+                      {
+                          "$ref": "#/definitions/schema"
+                      },
+                      {
+                          "$ref": "#/definitions/schemaArray"
+                      }
+                  ]
+              },
+              "not": {
+                  "$ref": "#/definitions/schema"
+              },
+              "oneOf": {
+                  "$ref": "#/definitions/schemaArray"
+              },
+              "patternProperties": {
+                  "additionalProperties": {
+                      "$ref": "#/definitions/schema"
+                  }
+              },
+              "properties": {
+                  "additionalProperties": {
+                      "$ref": "#/definitions/schema"
+                  }
+              },
+              "propertyNames": {
+                  "$ref": "#/definitions/schema"
+              }
+          }
+      },
+      "requiredProperties": {
+          "dependencies": {
+              "items": [
+                  "type",
+                  "uniqueItems"
+              ],
+              "properties": [
+                  "type",
+                  "additionalProperties",
+                  "required"
+              ]
+          }
+      },
+      "schema": {
+          "allOf": [
+              {
+                  "$ref": "#/definitions/recurse"
+              },
+              {
+                  "$ref": "#/definitions/requiredProperties"
+              }
+          ]
+      },
+      "schemaArray": {
+          "items": {
+              "$ref": "#/definitions/schema"
+          },
+          "type": "array",
+          "uniqueItems": false
+      }
+  },
+  "description": "This is a refinement of JSON-schema, with the following changes:\n\n  * if `properties` is present, `type` and `additionalProperties` must be present, too\n  * if `entries` is present, `type` and `uniqueItems` must be present, too\n\nNote that any schema that validates against this metaschema will also\nvalidate against the upstream draft-06 metaschema, and is usable by any\nJSON-schema tool.\n",
+  "title": "Taskcluster JSON-Schema Meta-Schema, with some stricter validation"
+}

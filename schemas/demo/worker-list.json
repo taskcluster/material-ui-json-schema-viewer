@@ -1,0 +1,27 @@
+{
+  "$id": "/schemas/worker-manager/v1/worker-list.json#",
+  "$schema": "/schemas/common/metaschema.json#",
+  "additionalProperties": false,
+  "description": "A list of workers in a given worker pool",
+  "properties": {
+    "continuationToken": {
+      "description": "Opaque `continuationToken` to be given as query-string option to get the\nnext set of workers in the worker-manager.\nThis property is only present if another request is necessary to fetch all\nresults. In practice the next request with a `continuationToken` may not\nreturn additional results, but it can. Thus, you can only be sure to have\nall the results if you've called `listWorkerPools` with `continuationToken`\nuntil you get a result without a `continuationToken`.\n",
+      "title": "Continuation Token",
+      "type": "string"
+    },
+    "workers": {
+      "description": "List of all workers in a given worker pool",
+      "items": {
+        "$ref": "worker-full.json#"
+      },
+      "title": "Workers",
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "workers"
+  ],
+  "title": "Worker List in a Given Worker Pool",
+  "type": "object"
+}

@@ -1,0 +1,97 @@
+{
+  "$id": "/schemas/hooks/v1/hook-status.json#",
+  "$schema": "/schemas/common/metaschema.json#",
+  "additionalProperties": false,
+  "description": "A snapshot of the current status of a hook.\n",
+  "properties": {
+    "lastFire": {
+      "description": "Information about the last time this hook fired.  This property is only present\nif the hook has fired at least once.\n",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "description": "Information about a successful firing of the hook",
+          "properties": {
+            "result": {
+              "enum": [
+                "success"
+              ],
+              "type": "string"
+            },
+            "taskId": {
+              "description": "The task created",
+              "pattern": "^[A-Za-z0-9_-]{8}[Q-T][A-Za-z0-9_-][CGKOSWaeimquy26-][A-Za-z0-9_-]{10}[AQgw]$",
+              "type": "string"
+            },
+            "time": {
+              "description": "The time the task was created.  This will not necessarily match `task.created`.\n",
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          "required": [
+            "result",
+            "taskId",
+            "time"
+          ],
+          "title": "Successful Fire",
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "Information about an unsuccessful firing of the hook",
+          "properties": {
+            "error": {
+              "description": "The error that occurred when firing the task.  This is typically,\nbut not always, an API error message.\n",
+              "type": "object"
+            },
+            "result": {
+              "enum": [
+                "error"
+              ],
+              "type": "string"
+            },
+            "time": {
+              "description": "The time the task was created.  This will not necessarily match `task.created`.\n",
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          "required": [
+            "result",
+            "error",
+            "time"
+          ],
+          "title": "Failed Fire",
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "Information about no firing of the hook (e.g., a new hook)",
+          "properties": {
+            "result": {
+              "enum": [
+                "no-fire"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "result"
+          ],
+          "title": "No Fire",
+          "type": "object"
+        }
+      ]
+    },
+    "nextScheduledDate": {
+      "description": "The next time this hook's task is scheduled to be created. This property\nis only present if there is a scheduled next time. Some hooks don't have\nany schedules.\n",
+      "format": "date-time",
+      "type": "string"
+    }
+  },
+  "required": [
+    "lastFire"
+  ],
+  "title": "Hook status response",
+  "type": "object"
+}

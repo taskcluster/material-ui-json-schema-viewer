@@ -1,0 +1,89 @@
+{
+  "$id": "/schemas/worker-manager/v1/worker-full.json#",
+  "$schema": "/schemas/common/metaschema.json#",
+  "additionalProperties": false,
+  "description": "A complete worker definition.",
+  "properties": {
+    "capacity": {
+      "description": "Number of tasks this worker can handle at once",
+      "minimum": 1,
+      "title": "Worker Capacity",
+      "type": "integer"
+    },
+    "created": {
+      "description": "Date and time when this worker was created",
+      "format": "date-time",
+      "title": "Created",
+      "type": "string"
+    },
+    "expires": {
+      "description": "Date and time when this worker will be deleted from the DB",
+      "format": "date-time",
+      "title": "Expires",
+      "type": "string"
+    },
+    "lastChecked": {
+      "description": "Date and time when the state of this worker was verified with a cloud api.\nFor providers with nothing to check, this will just be permanently set to the\ntime the worker was created.\n",
+      "format": "date-time",
+      "title": "Last Checked",
+      "type": "string"
+    },
+    "lastModified": {
+      "description": "Date and time when this worker last changed state",
+      "format": "date-time",
+      "title": "Last Modified",
+      "type": "string"
+    },
+    "providerId": {
+      "description": "The provider that had started the worker and responsible for managing it.\nCan be different from the provider that's currently in the worker pool config.\n",
+      "maxLength": 38,
+      "minLength": 1,
+      "pattern": "^([a-zA-Z0-9-_]*)$",
+      "title": "Provider",
+      "type": "string"
+    },
+    "state": {
+      "description": "A string specifying the state this worker is in so far as worker-manager knows.\n",
+      "enum": [
+        "requested",
+        "running",
+        "stopped"
+      ],
+      "title": "State",
+      "type": "string"
+    },
+    "workerGroup": {
+      "description": "Worker group to which this worker belongs",
+      "maxLength": 38,
+      "minLength": 1,
+      "pattern": "^([a-zA-Z0-9-_]*)$",
+      "title": "Worker group",
+      "type": "string"
+    },
+    "workerId": {
+      "description": "Worker ID",
+      "maxLength": 38,
+      "minLength": 1,
+      "pattern": "^([a-zA-Z0-9-_]*)$",
+      "title": "Worker ID",
+      "type": "string"
+    },
+    "workerPoolId": {
+      "$ref": "worker-pool-full.json#/properties/workerPoolId"
+    }
+  },
+  "required": [
+    "workerPoolId",
+    "workerGroup",
+    "workerId",
+    "providerId",
+    "created",
+    "expires",
+    "state",
+    "capacity",
+    "lastChecked",
+    "lastModified"
+  ],
+  "title": "Worker Full Definition",
+  "type": "object"
+},
