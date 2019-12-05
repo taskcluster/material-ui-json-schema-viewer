@@ -60,5 +60,8 @@ typings/
 # build directory
 lib
 
+# styleguide build directory
+styleguide
+
 # Intellij IDE specific settings
 .idea/

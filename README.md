@@ -3,3 +3,5 @@ scaffolded project using [Neutrino](https://master.neutrinojs.org/packages/react
 
 ## Requirements
 - `@material-ui/core` v4+
+- `react` 16.8+
+- `react-dom` 16.8+
