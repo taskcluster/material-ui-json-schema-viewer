@@ -1,0 +1,15 @@
+* {
+  box-sizing: 0;
+  margin: 0;
+  padding: 0;
+}
+p {
+  white-space: nowrap;
+}
+.left-panel {
+  background-color: lightyellow;
+  overflow-x: auto;
+}
+.right-panel {
+    overflow-x:auto;
+}
