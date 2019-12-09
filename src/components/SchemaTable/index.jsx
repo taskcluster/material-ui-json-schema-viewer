@@ -1,54 +1,60 @@
 import React from 'react';
 import PropTypes from 'prop-types'; // eslint-disable-line no-unused-vars
-import MuiGrid from '@material-ui/core/Grid';
-import './index.css'; // temporary stylesheet for testing
+import './index.css'; // temporary stylesheet for testing (TODO: refactor to use MUI styles)
+
+// TODO: eliminate after testing
+const exampleSchema = require('../../../schemas/basicDataTypes/string/stringPattern.json');
 
 function SchemaTable() {
-  const leftRows = [
-    (
-      <div>
-        <p>[</p>
-        <br />
+  const leftRows = [];
+  const rightRows = [];
+
+  const renderDefault = (schema) => {
+    const { type } = schema;
+    const keywords = Object.keys(schema);
+
+    const leftRow = (
+      <div className="left-row">
+        <p className="left-line">{type}</p>
+        {keywords.map((keyword) => (
+          (keyword !== 'type' && keyword !== 'description') && (
+            <br className="left-line blank-line" />
+          )
+        ))}
       </div>
-    ),
-    (
-      <div>
-        <p>&quot;...&quot;</p>
-        <br />
-        <br />
+    );
+    leftRows.push(leftRow);
+
+    const rightRow = (
+      <div className="right-row">
+        <div className="keywords">
+          {keywords.map((keyword) => (
+            <p className="right-line">
+              {keyword}
+              {': '}
+              {schema[keyword]}
+            </p>
+          ))}
+        </div>
+        <div className="description">
+          {('description' in schema) && <p>{schema.description}</p>}
+        </div>
       </div>
-    ),
-    (
-      <div>
-        <p>]</p>
-      </div>
-    ),
-  ];
-  const rightRows = [
-    (
-      <div>
-        <p>uniqueItems: true</p>
-        <p>additionalItems: false</p>
-      </div>
-    ),
-    (
-      <div>
-        <p>(string)</p>
-        <p>format: email</p>
-        <p>maxLength: 20</p>
-      </div>
-    ),
-    (<div><br /></div>),
-  ];
+    );
+    rightRows.push(rightRow);
+  };
+
+  renderDefault(exampleSchema);
+
   return (
-    <MuiGrid container wrap="nowrap">
-      <MuiGrid item className="left-panel">
+    <div className="wrapper">
+      <div className="left-panel">
         {leftRows}
-      </MuiGrid>
-      <MuiGrid item className="right-panel">
+      </div>
+      <div className="right-panel">
         {rightRows}
-      </MuiGrid>
-    </MuiGrid>
+      </div>
+    </div>
   );
 }
 

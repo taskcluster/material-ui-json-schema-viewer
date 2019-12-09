@@ -6,6 +6,11 @@
 p {
   white-space: nowrap;
 }
+.wrapper {
+  display: grid;
+  grid-template-columns: [left-panel] 1fr [right-panel] 1fr;
+  row-gap: 4px;
+}
 .left-panel {
   background-color: lightyellow;
   overflow-x: auto;
