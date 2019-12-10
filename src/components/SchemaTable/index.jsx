@@ -1,21 +1,49 @@
 import React from 'react';
 import PropTypes from 'prop-types'; // eslint-disable-line no-unused-vars
-import './index.css'; // temporary stylesheet for testing (TODO: refactor to use MUI styles)
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+  wrapper: {
+    display: 'grid',
+    gridTemplateColumns: '[left-panel] 1fr [right-panel] 1fr',
+    rowGap: 4,
+  },
+  leftPanel: {
+    // TODO: accept theme
+    backgroundColor: 'lightyellow',
+    overflowX: 'auto',
+  },
+  rightPanel: {
+    overflowX: 'auto',
+  },
+  row: {
+    boxSizing: 'border-box',
+    margin: 0,
+    padding: 0,
+  },
+  line: {
+    whiteSpace: 'nowrap',
+  },
+});
 
 // TODO: eliminate after testing
 const exampleSchema = require('../../../schemas/basicDataTypes/string/stringPattern.json');
 
 function SchemaTable() {
+  const classes = useStyles();
+
   const leftRows = [];
   const rightRows = [];
 
+  /**
+   *
+   */
   const renderDefault = (schema) => {
-    const { type } = schema;
     const keywords = Object.keys(schema);
 
     const leftRow = (
       <div className="left-row">
-        <p className="left-line">{type}</p>
+        <p className="left-line">{schema.type}</p>
         {keywords.map((keyword) => (
           (keyword !== 'type' && keyword !== 'description') && (
             <br className="left-line blank-line" />
@@ -23,13 +51,12 @@ function SchemaTable() {
         ))}
       </div>
     );
-    leftRows.push(leftRow);
 
     const rightRow = (
       <div className="right-row">
         <div className="keywords">
           {keywords.map((keyword) => (
-            <p className="right-line">
+            <p key={keyword} className="right-line">
               {keyword}
               {': '}
               {schema[keyword]}
@@ -41,17 +68,19 @@ function SchemaTable() {
         </div>
       </div>
     );
+
+    leftRows.push(leftRow);
     rightRows.push(rightRow);
   };
 
   renderDefault(exampleSchema);
 
   return (
-    <div className="wrapper">
-      <div className="left-panel">
+    <div className={classes.wrapper}>
+      <div className={classes.leftPanel}>
         {leftRows}
       </div>
-      <div className="right-panel">
+      <div className={classes.rightPanel}>
         {rightRows}
       </div>
     </div>
