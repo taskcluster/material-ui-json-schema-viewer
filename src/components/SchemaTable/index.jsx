@@ -45,14 +45,35 @@ const exampleSchema = require('../../../schemas/basicDataTypes/string/stringPatt
 function SchemaTable() {
   const classes = useStyles();
 
+  /**
+   * Rows for the left and right column are stored separately
+   * so that the left and right panels can render the rows separately.
+   * This enable the viewer to have a two-column layout with each of
+   * the columns having its own horizontal scroll.
+   */
   const leftRows = [];
   const rightRows = [];
 
-  /** 
-   *  Default data type schemas (boolean, null, number, integer, string)
-   *  are parsed to create both NormalLeftRow and NormalRightRow components.
-   *  Each components are then stored into leftRows and rightRows array respectively
-   *  so that they can be rendered into the LeftPanel and rightPanel.
+  /**
+   * TODO: define renderArray method
+   *       add description comment
+   */
+  const renderArray = (schema) => {
+
+  };
+
+  /**
+   * TODO: define renderCombination method
+   *       add description comment
+   */
+  const renderCombination = (schema) => {
+
+  };
+
+  /**
+   * Default data type schemas (boolean, null, number, integer, string)
+   * are parsed to create 'NormalLeftRow' and 'NormalRightRow' components.
+   * These will then be stored into 'leftRows' and 'rightRows' arrays respectively.
    */
   const renderDefault = (schema) => {
     const leftRow = (
@@ -74,7 +95,52 @@ function SchemaTable() {
     rightRows.push(rightRow);
   };
 
-  renderDefault(exampleSchema);
+  /**
+   * TODO: define renderObject method
+   *       add description comment
+   */
+  const renderObject = (schema) => {
+
+  };
+
+  /**
+   * TODO: define renderRef method
+   *       add description comment
+   */
+  const renderRef = (schema) => {
+
+  };
+
+  /**
+   * Schemas are passed to different render methods according to its
+   * specific type (combination, array, object, ref, and default).
+   * Each method will create rows with the appropriate format to its
+   * type and push the rows into 'leftRows' and 'rightRows' respectively.
+   *
+   * Types other than default schemas may repeatedly call this method
+   * within their render method if the schema has a nested structure.
+   */
+  const renderSchema = (schema) => {
+    const combinationTypes = ['allOf', 'anyOf', 'oneOf', 'not'];
+    const defaultTypes = ['boolean', 'null', 'number', 'integer', 'string'];
+
+    combinationTypes.forEach((keyword) => {
+      if (keyword in schema) {
+        renderCombination(schema);
+      }
+    });
+    if (schema.type === 'array') {
+      renderArray(schema);
+    } else if (schema.type === 'object') {
+      renderObject(schema);
+    } else if (defaultTypes.includes(schema.type)) {
+      renderDefault(schema);
+    } else {
+      // TODO: handle exception cases of empty JSON schemas
+    }
+  };
+
+  renderSchema(exampleSchema);
 
   return (
     <div className={classes.wrapper}>

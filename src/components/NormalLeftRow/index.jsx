@@ -17,7 +17,7 @@ function NormalLeftRow({ schema, classes }) {
   /** Create blank line paddings only for additional keywords that
    *  will have their own lines on the according right row.
    *  This enables the left row to have matching number of lines with
-   *  the right row.
+   *  the right row and align the lines and heights between the two rows.
    */
   const nonPaddedKeywords = ['type', 'description', 'name'];
   const blankLinePaddings = [];
