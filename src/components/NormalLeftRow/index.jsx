@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types'; // eslint-disable-line no-unused-vars
+import { shape, string } from 'prop-types';
 
 function NormalLeftRow({ schema, classes }) {
   const name = ('name' in schema) ? `${schema.name}: ` : null;
@@ -28,7 +28,7 @@ function NormalLeftRow({ schema, classes }) {
   });
 
   return (
-    <div>
+    <div className={classes.row}>
       <p className={classes.line}>
         {name}
         {typeSymbol}
@@ -39,13 +39,13 @@ function NormalLeftRow({ schema, classes }) {
 }
 
 NormalLeftRow.propTypes = {
-  schema: PropTypes.shape({
-    type: PropTypes.string.isRequired,
-    name: PropTypes.string,
+  schema: shape({
+    type: string.isRequired,
+    name: string,
   }).isRequired,
-  classes: PropTypes.shape({
-    row: PropTypes.string.isRequired,
-    line: PropTypes.string.isRequired,
+  classes: shape({
+    row: string.isRequired,
+    line: string.isRequired,
   }).isRequired,
 };
 
