@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types'; // eslint-disable-line no-unused-vars
 import { makeStyles } from '@material-ui/core/styles';
+import NormalLeftRow from '../NormalLeftRow';
 
 const useStyles = makeStyles({
   wrapper: {
@@ -41,16 +42,7 @@ function SchemaTable() {
   const renderDefault = (schema) => {
     const keywords = Object.keys(schema);
 
-    const leftRow = (
-      <div className="left-row">
-        <p className="left-line">{schema.type}</p>
-        {keywords.map((keyword) => (
-          (keyword !== 'type' && keyword !== 'description') && (
-            <br className="left-line blank-line" />
-          )
-        ))}
-      </div>
-    );
+    const leftRow = (<NormalLeftRow schema={schema} classes={classes} />);
 
     const rightRow = (
       <div className="right-row">
