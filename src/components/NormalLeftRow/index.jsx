@@ -2,9 +2,8 @@ import React from 'react';
 import { shape, string } from 'prop-types';
 
 function NormalLeftRow({ schema, classes }) {
-  const name = ('name' in schema) ? `${schema.name}: ` : null;
-
-  const typeSymbol = ({
+  const name = 'name' in schema ? `${schema.name}: ` : null;
+  const typeSymbol = {
     array: '[',
     boolean: '"..."',
     integer: '"..."',
@@ -12,8 +11,7 @@ function NormalLeftRow({ schema, classes }) {
     number: '"..."',
     object: '{',
     string: '"..."',
-  }[schema.type]);
-
+  }[schema.type];
   /** Create blank line paddings only for additional keywords that
    *  will have their own lines on the according right row.
    *  This enables the left row to have matching number of lines with
@@ -21,7 +19,8 @@ function NormalLeftRow({ schema, classes }) {
    */
   const nonPaddedKeywords = ['type', 'description', 'name'];
   const blankLinePaddings = [];
-  Object.keys(schema).forEach((keyword) => {
+
+  Object.keys(schema).forEach(keyword => {
     if (!nonPaddedKeywords.includes(keyword)) {
       blankLinePaddings.push(<br key={keyword} className={classes.line} />);
     }

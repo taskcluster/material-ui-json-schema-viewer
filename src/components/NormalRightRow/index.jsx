@@ -7,7 +7,7 @@ function NormalRightRow({ schema, classes }) {
   return (
     <div className={`${classes.row} ${classes.rightRow}`}>
       <div className={classes.keywordColumn}>
-        {keywords.map((keyword) => (
+        {keywords.map(keyword => (
           <p key={keyword} className={classes.line}>
             {keyword}
             {': '}
@@ -16,7 +16,7 @@ function NormalRightRow({ schema, classes }) {
         ))}
       </div>
       <div className={classes.descriptionColumn}>
-        {('description' in schema) && <p>{schema.description}</p>}
+        {'description' in schema && <p>{schema.description}</p>}
       </div>
     </div>
   );
