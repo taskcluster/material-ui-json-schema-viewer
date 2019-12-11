@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { shape, string } from 'prop-types';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
 import NormalLeftRow from '../NormalLeftRow';
 import NormalRightRow from '../NormalRightRow';
@@ -137,10 +136,9 @@ function SchemaTable({ schema }) {
   };
 
   return (
-    <>
-      <CssBaseline />
+    <Fragment>
       {renderSchema(schema)}
-    </>
+    </Fragment>
   );
 }
 
@@ -156,4 +154,4 @@ SchemaTable.defaultProps = {
   },
 };
 
-export default SchemaTable;
+export default React.memo(SchemaTable);

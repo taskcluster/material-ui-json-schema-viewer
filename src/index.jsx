@@ -1,8 +1,18 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React from 'react';
+import React, { Fragment } from 'react';
 import { render } from 'react-dom';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import SchemaTable from './components/SchemaTable';
 
 const root = document.getElementById('root');
 
-render(<SchemaTable />, root);
+function App() {
+  return (
+    <Fragment>
+      <CssBaseline />
+      <SchemaTable />
+    </Fragment>
+  );
+}
+
+render(<App />, root);
