@@ -10,6 +10,7 @@ module.exports = {
     (neutrino) => {
       neutrino.register('styleguide', () => ({
         webpackConfig: neutrino.config.toConfig(),
+        skipComponentsWithoutExample: true,
       }));
     },
   ]
