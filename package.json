@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@material-ui/core": "^4.7.1",
-    "@neutrinojs/airbnb": "9.0.0-rc.5",
+    "@mozilla-frontend-infra/react-lint": "^2.0.1",
     "@neutrinojs/jest": "9.0.0-rc.5",
     "@neutrinojs/react-components": "9.0.0-rc.5",
     "eslint": "^6.7.2",

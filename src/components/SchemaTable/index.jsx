@@ -25,12 +25,8 @@ const useStyles = makeStyles({
     display: 'grid',
     gridTemplateColumns: '[keyword-column] 1fr [description-column] 1fr',
   },
-  keywordColumn: {
-
-  },
-  descriptionColumn: {
-
-  },
+  keywordColumn: {},
+  descriptionColumn: {},
   line: {
     boxSizing: 'border-box',
     margin: 0,
@@ -41,7 +37,6 @@ const useStyles = makeStyles({
 
 function SchemaTable({ schema }) {
   const classes = useStyles();
-
   /**
    * Rows for the left and right column are stored separately
    * so that the left and right panels can render the rows separately.
@@ -50,25 +45,26 @@ function SchemaTable({ schema }) {
    */
   const leftRows = [];
   const rightRows = [];
-
   /**
    * TODO: define renderArray method
    *       add description comment
    */
-  const renderArray = (schemaInput) => <>{schemaInput}</>;
-
+  const renderArray = schemaInput => (
+    <React.Fragment>{schemaInput}</React.Fragment>
+  );
   /**
    * TODO: define renderCombination method
    *       add description comment
    */
-  const renderCombination = (schemaInput) => <>{schemaInput}</>;
-
+  const renderCombination = schemaInput => (
+    <React.Fragment>{schemaInput}</React.Fragment>
+  );
   /**
    * Default data type schemas (boolean, null, number, integer, string)
    * are parsed to create 'NormalLeftRow' and 'NormalRightRow' components.
-   * These will then be stored into 'leftRows' and 'rightRows' arrays respectively.
+   * These will then be stored into 'leftRows' and 'rightRows' arrays each.
    */
-  const renderDefault = (schemaInput) => {
+  const renderDefault = schemaInput => {
     const leftRow = (
       <NormalLeftRow
         key={leftRows.length + 1}
@@ -92,14 +88,16 @@ function SchemaTable({ schema }) {
    * TODO: define renderObject method
    *       add description comment
    */
-  const renderObject = (schemaInput) => <>{schemaInput}</>;
-
+  const renderObject = schemaInput => (
+    <React.Fragment>{schemaInput}</React.Fragment>
+  );
   /**
    * TODO: define renderRef method
    *       add description comment
    */
-  const renderRef = (schemaInput) => <>{schemaInput}</>;
-
+  const renderRef = schemaInput => (
+    <React.Fragment>{schemaInput}</React.Fragment>
+  );
   /**
    * Schemas are passed to different render methods according to its
    * specific type (combination, array, object, ref, and default).
@@ -109,8 +107,13 @@ function SchemaTable({ schema }) {
    * Types other than default schemas may repeatedly call this method
    * within their render method if the schema has a nested structure.
    */
-  const renderSchema = (schemaInput) => {
-    if ('allOf' in schemaInput || 'anyOf' in schemaInput || 'oneOf' in schemaInput || 'not' in schemaInput) {
+  const renderSchema = schemaInput => {
+    if (
+      'allOf' in schemaInput ||
+      'anyOf' in schemaInput ||
+      'oneOf' in schemaInput ||
+      'not' in schemaInput
+    ) {
       renderCombination(schemaInput);
     } else if ('$ref' in schemaInput) {
       renderRef(schemaInput);
@@ -125,21 +128,13 @@ function SchemaTable({ schema }) {
 
     return (
       <div className={classes.wrapper}>
-        <div className={classes.leftPanel}>
-          {leftRows}
-        </div>
-        <div className={classes.rightPanel}>
-          {rightRows}
-        </div>
+        <div className={classes.leftPanel}>{leftRows}</div>
+        <div className={classes.rightPanel}>{rightRows}</div>
       </div>
     );
   };
 
-  return (
-    <Fragment>
-      {renderSchema(schema)}
-    </Fragment>
-  );
+  return <Fragment>{renderSchema(schema)}</Fragment>;
 }
 
 SchemaTable.propTypes = {
