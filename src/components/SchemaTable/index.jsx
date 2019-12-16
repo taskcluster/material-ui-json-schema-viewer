@@ -49,6 +49,37 @@ function SchemaTable({ schema }) {
    */
   const leftRows = [];
   const rightRows = [];
+  /**
+   * Create a single normal row (left and right column each).
+   * The result is stored in an object format in order for the
+   * pushRow() method to easily access each left and right column
+   * of the single row and push them to leftRows and rightRows respectively.
+   */
+  const createNormalRow = schemaInput => ({
+    leftRow: (
+      <NormalLeftRow
+        key={leftRows.length + 1}
+        schema={schemaInput}
+        classes={classes}
+      />
+    ),
+    rightRow: (
+      <NormalRightRow
+        key={rightRows.length + 1}
+        schema={schemaInput}
+        classes={classes}
+      />
+    ),
+  });
+  /**
+   * Takes a single row as input, created from createNormalRow()
+   * method, and pushes the left column and right column of the
+   * row into the leftRows and rightRows respectively.
+   */
+  const pushRow = row => {
+    leftRows.push(row.leftRow);
+    rightRows.push(row.rightRow);
+  };
 
   /**
    * TODO: define renderArray method
@@ -72,23 +103,9 @@ function SchemaTable({ schema }) {
    * These will then be stored into 'leftRows' and 'rightRows' arrays each.
    */
   function renderDefault(schemaInput) {
-    const leftRow = (
-      <NormalLeftRow
-        key={leftRows.length + 1}
-        schema={schemaInput}
-        classes={classes}
-      />
-    );
-    const rightRow = (
-      <NormalRightRow
-        key={rightRows.length + 1}
-        schema={schemaInput}
-        classes={classes}
-      />
-    );
+    const normalRow = createNormalRow(schemaInput);
 
-    leftRows.push(leftRow);
-    rightRows.push(rightRow);
+    pushRow(normalRow);
   }
 
   /**
