@@ -4,7 +4,17 @@ const jest = require('@neutrinojs/jest');
 
 module.exports = {
   use: [
-    reactLint(),
+    reactLint({
+      rules: {
+        'no-use-before-define': ['error', { 
+          /**
+           * Ignores reference to functions used before the function declaration. 
+           * Since function declarations are hoisted, this is considered safe.
+           */
+          functions: false,
+        }],
+      },
+    }),
     reactComponents(),
     jest(),
     (neutrino) => {
