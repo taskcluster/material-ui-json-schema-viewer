@@ -72,6 +72,31 @@ function SchemaTable({ schema }) {
     ),
   });
   /**
+   * Create a row to close off an array or object type schema.
+   * The left row displays a closing bracket of the type while
+   * the right row only consists of blank line padding.
+   */
+  const createClosingRow = type => {
+    const typeSymbol = {
+      array: ']',
+      object: '}',
+    }[type];
+
+    return {
+      leftRow: (
+        <div className={classes.row}>
+          <p className={classes.line}>{typeSymbol}</p>
+        </div>
+      ),
+      rightRow: (
+        <div className={`${classes.row} ${classes.rightRow}`}>
+          <br key={`close ${type}`} className={classes.line} />
+        </div>
+      ),
+    };
+  };
+
+  /**
    * Takes a single row as input, created from createNormalRow()
    * method, and pushes the left column and right column of the
    * row into the leftRows and rightRows respectively.
@@ -82,11 +107,23 @@ function SchemaTable({ schema }) {
   };
 
   /**
-   * TODO: define renderArray method
-   *       add description comment
+   * Array data type schemas start with an openArrayRow, which displays
+   * an open bracket symbol along with keywords describing the array schema.
+   * Then, array items are parsed to create
+   *
+   * Finally,
    */
   function renderArray(schemaInput) {
-    return <React.Fragment>{schemaInput}</React.Fragment>;
+    const openArrayRow = createNormalRow(schemaInput);
+    const closeArrayRow = createClosingRow(schemaInput.type);
+
+    pushRow(openArrayRow);
+
+    if ('items' in schemaInput) {
+      renderSchema(schemaInput.items);
+    }
+
+    pushRow(closeArrayRow);
   }
 
   /**
