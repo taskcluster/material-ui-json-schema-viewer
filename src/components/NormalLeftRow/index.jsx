@@ -1,8 +1,9 @@
 import React from 'react';
 import { shape, string } from 'prop-types';
+import Typography from '@material-ui/core/Typography';
 
 function NormalLeftRow({ schema, classes }) {
-  const name = 'name' in schema ? `${schema.name}: ` : null;
+  const name = 'name' in schema ? schema.name : null;
   const typeSymbol = {
     array: '[',
     boolean: '"..."',
@@ -22,16 +23,20 @@ function NormalLeftRow({ schema, classes }) {
 
   Object.keys(schema).forEach(keyword => {
     if (!nonPaddedKeywords.includes(keyword)) {
-      blankLinePaddings.push(<br key={keyword} className={classes.line} />);
+      blankLinePaddings.push(
+        <Typography key={`${keyword} line`} className={classes.line}>
+          <br />
+        </Typography>
+      );
     }
   });
 
   return (
-    <div className={classes.row}>
-      <p className={classes.line}>
-        {name}
+    <div key={schema.type} className={classes.row}>
+      <Typography component="div" className={classes.line}>
+        {name && `${name}: `}
         {typeSymbol}
-      </p>
+      </Typography>
       {blankLinePaddings}
     </div>
   );

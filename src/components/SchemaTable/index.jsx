@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { shape, string } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import NormalLeftRow from '../NormalLeftRow';
 import NormalRightRow from '../NormalRightRow';
 
@@ -68,26 +69,37 @@ function SchemaTable({ schema }) {
       />
     ),
   });
+  // TODO: refactor closeRow into separate component
   /**
    * Create a row to close off an array or object type schema.
    * The left row displays a closing bracket of the type while
    * the right row only consists of blank line padding.
    */
   const createClosingRow = type => {
-    const typeSymbol = {
+    const clostTypeSymbol = {
       array: ']',
       object: '}',
     }[type];
 
     return {
       leftRow: (
-        <div className={classes.row}>
-          <p className={classes.line}>{typeSymbol}</p>
+        <div key={`close ${type}`} className={classes.row}>
+          <Typography component="div" className={classes.line}>
+            {clostTypeSymbol}
+          </Typography>
         </div>
       ),
+      /** TODO: may have to restrucutre closeRightRow to include
+       *        keywordColumn, descriptionColumn for overall consistency
+       *        with <NormalRightRow />
+       */
       rightRow: (
-        <div className={`${classes.row} ${classes.rightRow}`}>
-          <br key={`close ${type}`} className={classes.line} />
+        <div
+          key={`close ${type}`}
+          className={`${classes.row} ${classes.rightRow}`}>
+          <Typography component="div" className={classes.line}>
+            <br />
+          </Typography>
         </div>
       ),
     };
@@ -104,11 +116,11 @@ function SchemaTable({ schema }) {
   };
 
   /**
-   * Array data type schemas start with an openArrayRow, which displays
-   * an open bracket symbol along with keywords describing the array schema.
-   * Then, array items are parsed to create
-   *
-   * Finally,
+   * Array type schemas start with an openArrayRow and are closed off
+   * with a closeArrayRow, which both display brackets to indicate an array.
+   * In between those two rows, array items are parsed and rendered 
+   * according to their type via calling back on the renderSchema() method. 
+   * The rows created are added sequentially below the openArrayRow.
    */
   function renderArray(schemaInput) {
     const openArrayRow = createNormalRow(schemaInput);
