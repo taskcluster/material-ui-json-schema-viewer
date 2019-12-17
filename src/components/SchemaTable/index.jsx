@@ -4,22 +4,25 @@ import { makeStyles } from '@material-ui/core/styles';
 import NormalLeftRow from '../NormalLeftRow';
 import NormalRightRow from '../NormalRightRow';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   wrapper: {
     display: 'grid',
-    // TODO: change diminsions to fixed width size
     gridTemplateColumns: '[left-panel] 1fr [right-panel] 1fr',
   },
   leftPanel: {
-    // TODO: accept theme
-    backgroundColor: 'lightyellow',
+    backgroundColor: theme.palette.background.paper,
+    borderRight: `${theme.spacing(1)}px solid ${theme.palette.text.secondary}`,
     overflowX: 'auto',
   },
   rightPanel: {
+    backgroundColor: theme.palette.background.paper,
     overflowX: 'auto',
   },
   row: {
-    borderBottom: '1px black solid',
+    borderBottom: `1px solid ${theme.palette.text.secondary}`,
+  },
+  lastRow: {
+    borderBottom: 'none',
   },
   rightRow: {
     display: 'grid',
@@ -28,12 +31,10 @@ const useStyles = makeStyles({
   keywordColumn: {},
   descriptionColumn: {},
   line: {
-    boxSizing: 'border-box',
     margin: 0,
-    padding: 0,
     whiteSpace: 'nowrap',
   },
-});
+}));
 
 function SchemaTable({ schema }) {
   const classes = useStyles();
