@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
   },
   leftPanel: {
     backgroundColor: theme.palette.background.paper,
-    borderRight: `8px solid ${theme.palette.text.secondary}`,
+    borderRight: `${theme.spacing(1)}px solid ${theme.palette.text.secondary}`,
     overflowX: 'auto',
   },
   rightPanel: {
