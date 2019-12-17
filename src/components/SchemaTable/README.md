@@ -1,14 +1,20 @@
-SchemaTable example:
-
-## Default Type Schema
+### Default Type Schema
 ```js
 const schema = require('../../../schemas/basicDataTypes/string/stringPattern.json');
 <SchemaTable schema={schema} />
 ```
 
-## Array Type Schema
+### Array Type Schema
+
+list validation
 ```js
 const schema = require('../../../schemas/basicDataTypes/array/listValidation.json');
+<SchemaTable schema={schema} />
+```
+
+tuple validation
+```js
+const schema = require('../../../schemas/basicDataTypes/array/tupleValidation.json');
 <SchemaTable schema={schema} />
 ```
 

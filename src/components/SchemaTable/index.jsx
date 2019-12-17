@@ -1,10 +1,12 @@
 import React, { Fragment } from 'react';
 import { shape, string } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import NormalLeftRow from '../NormalLeftRow';
 import NormalRightRow from '../NormalRightRow';
 
+// TODO: add comments for styles
 const useStyles = makeStyles(theme => ({
   wrapper: {
     display: 'grid',
@@ -99,7 +101,7 @@ function SchemaTable({ schema }) {
       rightRow: (
         <div
           key={`close ${type}`}
-          className={`${classes.row} ${classes.rightRow}`}>
+          className={classNames(classes.row, classes.rightRow)}>
           <Typography component="div" className={classes.line}>
             <br />
           </Typography>
@@ -121,7 +123,7 @@ function SchemaTable({ schema }) {
   /**
    * Array type schemas start with an openArrayRow and are closed off
    * with a closeArrayRow, which both display brackets to indicate an array.
-   * Array items are parsed and rendered according to their type via 
+   * Array items are parsed and rendered according to their type via
    * calling back on the renderSchema() method. The resulting rows are
    * added sequentially in between the opening and closing rows.
    */
@@ -131,8 +133,23 @@ function SchemaTable({ schema }) {
 
     pushRow(openArrayRow);
 
+    /** Render array items only if defined */
     if ('items' in schemaInput) {
-      renderSchema(schemaInput.items);
+      /**
+       * If array is defined by tuple vaidation,
+       * render each of the item schemas individually.
+       */
+      if (Array.isArray(schemaInput.items)) {
+        schemaInput.items.forEach(item => {
+          renderSchema(item);
+        });
+      } else {
+        /**
+         * else, is defined by list vaidation,
+         * render the item schema only once.
+         */
+        renderSchema(schemaInput.items);
+      }
     }
 
     pushRow(closeArrayRow);
@@ -213,9 +230,7 @@ function SchemaTable({ schema }) {
 }
 
 SchemaTable.propTypes = {
-  /** 
-   * Schema input given to render.
-  */
+  /** Schema input given to render */
   schema: shape({
     /** Type of schema */
     type: string,
@@ -223,9 +238,7 @@ SchemaTable.propTypes = {
 };
 
 SchemaTable.defaultProps = {
-  /** 
-   * Null type schema is set as default prop.
-  */
+  /** Null type schema is set as default prop */
   schema: {
     type: 'null',
   },
