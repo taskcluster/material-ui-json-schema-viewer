@@ -121,9 +121,9 @@ function SchemaTable({ schema }) {
   /**
    * Array type schemas start with an openArrayRow and are closed off
    * with a closeArrayRow, which both display brackets to indicate an array.
-   * In between those two rows, array items are parsed and rendered 
-   * according to their type via calling back on the renderSchema() method. 
-   * The rows created are added sequentially below the openArrayRow.
+   * Array items are parsed and rendered according to their type via 
+   * calling back on the renderSchema() method. The resulting rows are
+   * added sequentially in between the opening and closing rows.
    */
   function renderArray(schemaInput) {
     const openArrayRow = createNormalRow(schemaInput);
@@ -213,12 +213,19 @@ function SchemaTable({ schema }) {
 }
 
 SchemaTable.propTypes = {
+  /** 
+   * Schema input given to render.
+  */
   schema: shape({
+    /** Type of schema */
     type: string,
   }),
 };
 
 SchemaTable.defaultProps = {
+  /** 
+   * Null type schema is set as default prop.
+  */
   schema: {
     type: 'null',
   },
