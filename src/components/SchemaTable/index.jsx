@@ -45,26 +45,29 @@ function SchemaTable({ schema }) {
    */
   const leftRows = [];
   const rightRows = [];
+
   /**
    * TODO: define renderArray method
    *       add description comment
    */
-  const renderArray = schemaInput => (
-    <React.Fragment>{schemaInput}</React.Fragment>
-  );
+  function renderArray(schemaInput) {
+    return <React.Fragment>{schemaInput}</React.Fragment>;
+  }
+
   /**
    * TODO: define renderCombination method
    *       add description comment
    */
-  const renderCombination = schemaInput => (
-    <React.Fragment>{schemaInput}</React.Fragment>
-  );
+  function renderCombination(schemaInput) {
+    return <React.Fragment>{schemaInput}</React.Fragment>;
+  }
+
   /**
    * Default data type schemas (boolean, null, number, integer, string)
    * are parsed to create 'NormalLeftRow' and 'NormalRightRow' components.
    * These will then be stored into 'leftRows' and 'rightRows' arrays each.
    */
-  const renderDefault = schemaInput => {
+  function renderDefault(schemaInput) {
     const leftRow = (
       <NormalLeftRow
         key={leftRows.length + 1}
@@ -82,22 +85,24 @@ function SchemaTable({ schema }) {
 
     leftRows.push(leftRow);
     rightRows.push(rightRow);
-  };
+  }
 
   /**
    * TODO: define renderObject method
    *       add description comment
    */
-  const renderObject = schemaInput => (
-    <React.Fragment>{schemaInput}</React.Fragment>
-  );
+  function renderObject(schemaInput) {
+    return <React.Fragment>{schemaInput}</React.Fragment>;
+  }
+
   /**
    * TODO: define renderRef method
    *       add description comment
    */
-  const renderRef = schemaInput => (
-    <React.Fragment>{schemaInput}</React.Fragment>
-  );
+  function renderRef(schemaInput) {
+    return <React.Fragment>{schemaInput}</React.Fragment>;
+  }
+
   /**
    * Schemas are passed to different render methods according to its
    * specific type (combination, array, object, ref, and default).
@@ -107,7 +112,7 @@ function SchemaTable({ schema }) {
    * Types other than default schemas may repeatedly call this method
    * within their render method if the schema has a nested structure.
    */
-  const renderSchema = schemaInput => {
+  function renderSchema(schemaInput) {
     if (
       'allOf' in schemaInput ||
       'anyOf' in schemaInput ||
@@ -132,7 +137,7 @@ function SchemaTable({ schema }) {
         <div className={classes.rightPanel}>{rightRows}</div>
       </div>
     );
-  };
+  }
 
   return <Fragment>{renderSchema(schema)}</Fragment>;
 }
