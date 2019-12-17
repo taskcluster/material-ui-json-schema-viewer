@@ -3,7 +3,12 @@ import { shape, string } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
 function NormalLeftRow({ schema, classes }) {
+  /**
+   * If schema or sub-schema has a name keyword,
+   * (ex. properties of object) store in variable to display.
+   */
   const name = 'name' in schema ? schema.name : null;
+  /** Map schema's type to a symbol for display. */
   const typeSymbol = {
     array: '[',
     boolean: '"..."',
@@ -13,10 +18,11 @@ function NormalLeftRow({ schema, classes }) {
     object: '{',
     string: '"..."',
   }[schema.type];
-  /** Create blank line paddings only for additional keywords that
-   *  will have their own lines on the according right row.
-   *  This enables the left row to have matching number of lines with
-   *  the right row and align the lines and heights between the two rows.
+  /**
+   * Create blank line paddings only for additional keywords that
+   * will have their own lines on the according right row.
+   * This enables the left row to have matching number of lines with
+   * the right row and align the lines and heights between the two rows.
    */
   const nonPaddedKeywords = ['type', 'description', 'name', 'items'];
   const blankLinePaddings = [];
@@ -43,11 +49,11 @@ function NormalLeftRow({ schema, classes }) {
 }
 
 NormalLeftRow.propTypes = {
-  /** 
+  /**
    * Schema input given to render.
    * May also be a sub-schema in case for array items,
-   * object properties or more complex schemas. 
-  */
+   * object properties or more complex schemas.
+   */
   schema: shape({
     /** Type of schema or sub-schema */
     type: string.isRequired,

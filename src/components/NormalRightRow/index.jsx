@@ -33,11 +33,11 @@ function NormalRightRow({ schema, classes }) {
 }
 
 NormalRightRow.propTypes = {
-  /** 
+  /**
    * Schema input given to render.
    * May also be a sub-schema in case for array items,
-   * object properties or more complex schemas. 
-  */
+   * object properties or more complex schemas.
+   */
   schema: shape({
     /** Type of schema or sub-schema */
     type: string.isRequired,
@@ -50,8 +50,8 @@ NormalRightRow.propTypes = {
   classes: shape({
     row: string.isRequired,
     line: string.isRequired,
-    /** 
-     * Display the right panel in a two-column grid 
+    /**
+     * Display the right panel in a two-column grid
      * : keywordColumn, descriptionColumn
      */
     rightRow: string.isRequired,
