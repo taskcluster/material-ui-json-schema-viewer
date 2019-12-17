@@ -1,5 +1,6 @@
 import React from 'react';
 import { shape, string } from 'prop-types';
+import Typography from '@material-ui/core/Typography';
 
 function NormalRightRow({ schema, classes }) {
   const keywords = Object.keys(schema);
@@ -11,16 +12,21 @@ function NormalRightRow({ schema, classes }) {
         {keywords.map(
           keyword =>
             !nonDisplayedKeywords.includes(keyword) && (
-              <p key={keyword} className={classes.line}>
+              <Typography
+                component="div"
+                key={keyword}
+                className={classes.line}>
                 {keyword}
                 {': '}
                 {schema[keyword]}
-              </p>
+              </Typography>
             )
         )}
       </div>
       <div className={classes.descriptionColumn}>
-        {'description' in schema && <p>{schema.description}</p>}
+        {'description' in schema && (
+          <Typography component="div">{schema.description}</Typography>
+        )}
       </div>
     </div>
   );
