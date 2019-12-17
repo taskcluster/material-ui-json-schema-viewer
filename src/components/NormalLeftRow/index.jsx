@@ -43,11 +43,22 @@ function NormalLeftRow({ schema, classes }) {
 }
 
 NormalLeftRow.propTypes = {
+  /** 
+   * Schema input given to render.
+   * May also be a sub-schema in case for array items,
+   * object properties or more complex schemas. 
+  */
   schema: shape({
-    type: string,
+    /** Type of schema or sub-schema */
+    type: string.isRequired,
+    /** Name of schema or sub-schema */
     name: string,
-    close: string,
   }).isRequired,
+  /**
+   * Style for rows and lines for schema viewer.
+   * Necessary to maintain consistency with right panel's
+   * rows and lines.
+   */
   classes: shape({
     row: string.isRequired,
     line: string.isRequired,
