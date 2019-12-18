@@ -154,17 +154,16 @@ function SchemaTable({ schema }) {
       }
     }
 
-    /*
+    /** Render contains keyword if defined */
     if ('contains' in schemaInput) {
+      renderSchema(schemaInput.contains);
     }
-    */
 
     /**
      * Add a extra row for additionalItems defined as schema.
      * (If additionalItems is defined simply as a boolean value,
      *  will be handled in openArrayRow's NormalRightRow instead)
      */
-
     if (typeof schemaInput.additionalItems === 'object') {
       // TODO: alter the sub-schema to include extra description?
       renderSchema(schemaInput.additionalItems);

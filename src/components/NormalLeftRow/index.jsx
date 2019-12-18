@@ -24,7 +24,13 @@ function NormalLeftRow({ schema, classes }) {
    * This enables the left row to have matching number of lines with
    * the right row and align the lines and heights between the two rows.
    */
-  const nonPaddedKeywords = ['type', 'description', 'name', 'items'];
+  const nonPaddedKeywords = [
+    'type',
+    'description',
+    'name',
+    'items',
+    'contains',
+  ];
   const blankLinePaddings = [];
 
   Object.keys(schema).forEach(keyword => {
