@@ -128,7 +128,11 @@ function SchemaTable({ schema }) {
    * added sequentially in between the opening and closing rows.
    */
   function renderArray(schemaInput) {
-    const openArrayRow = createNormalRow(schemaInput);
+    const { additionalItems, ...addItemsKeyExcluded } = schemaInput;
+    const openArrayRow =
+      typeof schemaInput.additionalItems === 'object'
+        ? createNormalRow(addItemsKeyExcluded)
+        : createNormalRow(schemaInput);
     const closeArrayRow = createClosingRow(schemaInput.type);
 
     pushRow(openArrayRow);
@@ -136,8 +140,9 @@ function SchemaTable({ schema }) {
     /** Render array items only if defined */
     if ('items' in schemaInput) {
       /**
-       * If array is defined by tuple vaidation,
-       * render each of the item schemas individually.
+       * If array items are defined by tuple vaidation (each item may
+       * have a different schema and the order of items is important),
+       * render each of the item schemas sequentially.
        */
       if (Array.isArray(schemaInput.items)) {
         schemaInput.items.forEach(item => {
@@ -145,11 +150,27 @@ function SchemaTable({ schema }) {
         });
       } else {
         /**
-         * else, is defined by list vaidation,
-         * render the item schema only once.
+         * else, items are defined by list vaidation (each item matches
+         *  the same schema), render the item schema only once.
          */
         renderSchema(schemaInput.items);
       }
+    }
+
+    /*
+    if ('contains' in schemaInput) {
+    }
+    */
+
+    /**
+     * Add a extra row for additionalItems defined as schema.
+     * (If additionalItems is defined simply as a boolean value,
+     *  will be handled in openArrayRow's NormalRightRow instead)
+     */
+
+    if (typeof schemaInput.additionalItems === 'object') {
+      // TODO: alter the sub-schema to include extra description?
+      renderSchema(schemaInput.additionalItems);
     }
 
     pushRow(closeArrayRow);

@@ -23,3 +23,9 @@ empty array
 const schema = require('../../../schemas/basicDataTypes/array/emptyArray.json');
 <SchemaTable schema={schema} />
 ```
+
+additional items (defined as schema)
+```js
+const schema = require('../../../schemas/basicDataTypes/array/additionalItems.json');
+<SchemaTable schema={schema} />
+```
