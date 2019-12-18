@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 
 function NormalRightRow({ schema, classes }) {
   const keywords = Object.keys(schema);
-  const nonDisplayedKeywords = ['items'];
+  const nonDisplayedKeywords = ['items', 'contains'];
 
   // TODO: specify details to see below?
   /*
