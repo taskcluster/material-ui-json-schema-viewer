@@ -3,15 +3,15 @@ import { shape, string } from 'prop-types';
 
 function NormalLeftRow({ schema, classes }) {
   const name = 'name' in schema ? `${schema.name}: ` : null;
-  const typeSymbol = {
-    array: '[',
-    boolean: '"..."',
-    integer: '"..."',
-    null: '"..."',
-    number: '"..."',
-    object: '{',
-    string: '"..."',
-  }[schema.type];
+  const typeSymbol =
+    schema.type === 'array' || schema.type === 'object' ? (
+      {
+        array: '[',
+        object: '{',
+      }[schema.type]
+    ) : (
+      <code className={classes.code}>{schema.type}</code>
+    );
   /** Create blank line paddings only for additional keywords that
    *  will have their own lines on the according right row.
    *  This enables the left row to have matching number of lines with
@@ -45,6 +45,7 @@ NormalLeftRow.propTypes = {
   classes: shape({
     row: string.isRequired,
     line: string.isRequired,
+    code: string.isRequired,
   }).isRequired,
 };
 
