@@ -6,6 +6,12 @@ function NormalRightRow({ schema, classes }) {
   const keywords = Object.keys(schema);
   const nonDisplayedKeywords = ['items'];
 
+  // TODO: specify details to see below?
+  /*
+  if (typeof schema.additionalItems === 'object') {
+  }
+  */
+
   return (
     <div className={`${classes.row} ${classes.rightRow}`}>
       <div className={classes.keywordColumn}>
