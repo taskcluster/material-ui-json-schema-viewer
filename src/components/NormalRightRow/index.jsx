@@ -19,8 +19,9 @@ function NormalRightRow({ schema, classes }) {
           keyword =>
             !nonDisplayedKeywords.includes(keyword) && (
               <Typography
-                component="div"
                 key={keyword}
+                component="div"
+                variant="subtitle2"
                 className={classes.line}>
                 {keyword}
                 {': '}
@@ -31,7 +32,7 @@ function NormalRightRow({ schema, classes }) {
       </div>
       <div className={classes.descriptionColumn}>
         {'description' in schema && (
-          <Typography component="div">{schema.description}</Typography>
+          <Typography component="div" variant="subtitle2">{schema.description}</Typography>
         )}
       </div>
     </div>

@@ -30,8 +30,12 @@ function NormalLeftRow({ schema, classes }) {
   Object.keys(schema).forEach(keyword => {
     if (!nonPaddedKeywords.includes(keyword)) {
       blankLinePaddings.push(
-        <Typography key={`${keyword} line`} className={classes.line}>
-          <br />
+        <Typography 
+          key={`${keyword} line`} 
+          component="div" 
+          variant="subtitle2" 
+          className={classes.line}>
+            <br />
         </Typography>
       );
     }
@@ -39,7 +43,7 @@ function NormalLeftRow({ schema, classes }) {
 
   return (
     <div key={schema.type} className={classes.row}>
-      <Typography component="div" className={classes.line}>
+      <Typography component="div" variant="subtitle2" className={classes.line}>
         {name && `${name}: `}
         {typeSymbol}
       </Typography>

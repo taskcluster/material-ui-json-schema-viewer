@@ -89,7 +89,7 @@ function SchemaTable({ schema }) {
     return {
       leftRow: (
         <div key={`close ${type}`} className={classes.row}>
-          <Typography component="div" className={classes.line}>
+          <Typography component="div" variant="subtitle2" className={classes.line}>
             {clostTypeSymbol}
           </Typography>
         </div>
@@ -102,7 +102,7 @@ function SchemaTable({ schema }) {
         <div
           key={`close ${type}`}
           className={classNames(classes.row, classes.rightRow)}>
-          <Typography component="div" className={classes.line}>
+          <Typography component="div" variant="subtitle2" className={classes.line}>
             <br />
           </Typography>
         </div>
