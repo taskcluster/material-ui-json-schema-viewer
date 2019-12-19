@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
   },
   leftPanel: {
     backgroundColor: theme.palette.background.paper,
-    borderRight: `${theme.spacing(1)}px solid ${theme.palette.text.secondary}`,
+    borderRight: `${theme.spacing(1)}px solid ${theme.palette.grey[300]}`,
     overflowX: 'auto',
   },
   rightPanel: {
@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     overflowX: 'auto',
   },
   row: {
-    borderBottom: `1px solid ${theme.palette.text.secondary}`,
+    borderBottom: `2px solid ${theme.palette.grey[300]}`,
   },
   lastRow: {
     borderBottom: 'none',
@@ -33,6 +33,9 @@ const useStyles = makeStyles(theme => ({
   line: {
     margin: 0,
     whiteSpace: 'nowrap',
+  },
+  code: {
+    backgroundColor: theme.palette.grey[300],
   },
 }));
 
