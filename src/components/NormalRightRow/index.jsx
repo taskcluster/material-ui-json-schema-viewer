@@ -1,33 +1,33 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { shape, string } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
 function NormalRightRow({ schema, classes }) {
-  const keywords = Object.keys(schema);
-  const nonDisplayedKeywords = ['items', 'contains'];
-
-  // TODO: specify details to see below?
-  /*
-  if (typeof schema.additionalItems === 'object') {
-  }
-  */
+  const skipKeywords = ['type', 'name', 'description', 'items', 'contains'];
+  const keywords = Object.keys(schema).filter(
+    key => !skipKeywords.includes(key)
+  );
 
   return (
     <div className={`${classes.row} ${classes.rightRow}`}>
       <div className={classes.keywordColumn}>
-        {keywords.map(
-          keyword =>
-            !nonDisplayedKeywords.includes(keyword) && (
-              <Typography
-                key={keyword}
-                component="div"
-                variant="subtitle2"
-                className={classes.line}>
+        {keywords.length === 0 ? (
+          <Typography
+            component="div"
+            variant="subtitle2"
+            className={classes.line}>
+            <br />
+          </Typography>
+        ) : (
+          <Fragment>
+            {keywords.map(keyword => (
+              <p key={keyword} className={classes.line}>
                 {keyword}
                 {': '}
                 {schema[keyword]}
-              </Typography>
-            )
+              </p>
+            ))}
+          </Fragment>
         )}
       </div>
       <div className={classes.descriptionColumn}>

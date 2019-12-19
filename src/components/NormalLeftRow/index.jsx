@@ -26,9 +26,13 @@ function NormalLeftRow({ schema, classes }) {
     'contains',
   ];
   const blankLinePaddings = [];
+  const skipKeywords = ['type', 'description', 'name'];
+  const keywords = Object.keys(schema).filter(
+    key => !skipKeywords.includes(key)
+  );
 
-  Object.keys(schema).forEach(keyword => {
-    if (!nonPaddedKeywords.includes(keyword)) {
+  keywords.forEach((keyword, i) => {
+    if (i > 0) {
       blankLinePaddings.push(
         <Typography
           key={`${keyword} line`}
