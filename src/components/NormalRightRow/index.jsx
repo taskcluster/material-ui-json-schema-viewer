@@ -21,11 +21,15 @@ function NormalRightRow({ schema, classes }) {
         ) : (
           <Fragment>
             {keywords.map(keyword => (
-              <p key={keyword} className={classes.line}>
+              <Typography
+                key={keyword}
+                component="div"
+                variant="subtitle2"
+                className={classes.line}>
                 {keyword}
                 {': '}
                 {`${schema[keyword]}`}
-              </p>
+              </Typography>
             ))}
           </Fragment>
         )}
