@@ -78,6 +78,7 @@ NormalLeftRow.propTypes = {
   classes: shape({
     row: string.isRequired,
     line: string.isRequired,
+    code: string.isRequired,
   }).isRequired,
 };
 
