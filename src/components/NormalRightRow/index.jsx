@@ -24,7 +24,7 @@ function NormalRightRow({ schema, classes }) {
               <p key={keyword} className={classes.line}>
                 {keyword}
                 {': '}
-                {schema[keyword]}
+                {`${schema[keyword]}`}
               </p>
             ))}
           </Fragment>
