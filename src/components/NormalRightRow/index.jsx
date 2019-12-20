@@ -1,8 +1,13 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { shape, string } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
 function NormalRightRow({ schema, classes }) {
+  /**
+   * Skip keywords illustrated in other parts of the SchemaTable
+   * : either in symbols in the left panel or in the description column.
+   *   (ex. 'type' is displayed in highlighted form in left panel)
+   */
   const skipKeywords = ['type', 'name', 'description', 'items', 'contains'];
   const keywords = Object.keys(schema).filter(
     key => !skipKeywords.includes(key)
@@ -19,19 +24,17 @@ function NormalRightRow({ schema, classes }) {
             <br />
           </Typography>
         ) : (
-          <Fragment>
-            {keywords.map(keyword => (
-              <Typography
-                key={keyword}
-                component="div"
-                variant="subtitle2"
-                className={classes.line}>
-                {keyword}
-                {': '}
-                {`${schema[keyword]}`}
-              </Typography>
-            ))}
-          </Fragment>
+          keywords.map(keyword => (
+            <Typography
+              key={keyword}
+              component="div"
+              variant="subtitle2"
+              className={classes.line}>
+              {keyword}
+              {': '}
+              {`${schema[keyword]}`}
+            </Typography>
+          ))
         )}
       </div>
       <div className={classes.descriptionColumn}>
