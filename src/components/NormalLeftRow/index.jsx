@@ -21,7 +21,7 @@ function NormalLeftRow({ schema, classes }) {
    * the right row and align the lines and heights between the two rows.
    */
   const blankLinePaddings = [];
-  const skipKeywords = ['type', 'description', 'name', 'items', 'contains'];
+  const skipKeywords = ['type', 'name', 'description', 'items', 'contains', 'properties'];
   const keywords = Object.keys(schema).filter(
     key => !skipKeywords.includes(key)
   );

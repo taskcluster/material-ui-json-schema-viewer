@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { shape, string } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
+import { clone } from 'ramda';
 import Typography from '@material-ui/core/Typography';
 import NormalLeftRow from '../NormalLeftRow';
 import NormalRightRow from '../NormalRightRow';
@@ -212,11 +213,38 @@ function SchemaTable({ schema }) {
   }
 
   /**
-   * TODO: define renderObject method
-   *       add description comment
+   * Object type schemas start with an openObjectRow and are closed off with
+   * a closeObjectRow, both displaying curly brackets to indicate an object.
+   * Object properties are parsed and rendered according to their type via
+   * calling back on the renderSchema() method. The resulting rows are
+   * added sequentially in between the opening and closing rows.
    */
   function renderObject(schemaInput) {
-    return <React.Fragment>{schemaInput}</React.Fragment>;
+    const openObjectRow = createNormalRow(schemaInput);
+    const closeObjectRow = createClosingRow(schemaInput.type);
+
+    pushRow(openObjectRow);
+
+    /** Render object properties only if defined */
+    if ('properties' in schemaInput) {
+      /**
+       * Render each of the property schemas sequentially.
+       * Make sure to create a name field for each of the properties'
+       * sub-schema so the names are also displayed in the left panel.
+       * (use cloned sub-schema to create new field in order to maintain
+       *  immutability of schema data)
+       */
+      const propertyList = Object.keys(schemaInput.properties);
+
+      propertyList.forEach(property => {
+        const cloneSubschema = clone(schemaInput.properties[property]);
+
+        cloneSubschema.name = property;
+        renderSchema(cloneSubschema);
+      });
+    }
+
+    pushRow(closeObjectRow);
   }
 
   /**
