@@ -81,7 +81,7 @@ function SchemaTable({ schema }) {
    * the right row only consists of blank line padding.
    */
   const createClosingRow = type => {
-    const clostTypeSymbol = {
+    const closeTypeSymbol = {
       array: ']',
       object: '}',
     }[type];
@@ -89,8 +89,11 @@ function SchemaTable({ schema }) {
     return {
       leftRow: (
         <div key={`close ${type}`} className={classes.row}>
-          <Typography component="div" variant="subtitle2" className={classes.line}>
-            {clostTypeSymbol}
+          <Typography
+            component="div"
+            variant="subtitle2"
+            className={classes.line}>
+            {closeTypeSymbol}
           </Typography>
         </div>
       ),
@@ -102,9 +105,17 @@ function SchemaTable({ schema }) {
         <div
           key={`close ${type}`}
           className={classNames(classes.row, classes.rightRow)}>
-          <Typography component="div" variant="subtitle2" className={classes.line}>
-            <br />
-          </Typography>
+          <div className={classes.keywordColumn}>
+            <Typography
+              component="div"
+              variant="subtitle2"
+              className={classes.line}>
+              <br />
+            </Typography>
+          </div>
+          <div className={classes.descriptionColumn}>
+            <Typography component="div" variant="subtitle2" />
+          </div>
         </div>
       ),
     };
