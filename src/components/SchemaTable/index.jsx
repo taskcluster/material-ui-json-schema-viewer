@@ -139,6 +139,10 @@ function SchemaTable({ schema }) {
    * added sequentially in between the opening and closing rows.
    */
   function renderArray(schemaInput) {
+    /**
+     * TODO: if caution tag is enabled, maybe additionalItems keyword
+     *       should be passed down to createNormalRow() even if in object form
+     */
     const { additionalItems, ...addItemsKeyExcluded } = schemaInput;
     const openArrayRow =
       typeof schemaInput.additionalItems === 'object'

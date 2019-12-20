@@ -13,22 +13,21 @@ function NormalLeftRow({ schema, classes }) {
     ) : (
       <code className={classes.code}>{schema.type}</code>
     );
-  /** Create blank line paddings only for additional keywords that
-   *  will have their own lines on the according right row.
-   *  This enables the left row to have matching number of lines with
-   *  the right row and align the lines and heights between the two rows.
+  /**
+   * Create blank line paddings only for additional keywords
+   * (skip keywords which are not displayed in NormalRightRow)
+   * that will have their own lines on the according right row.
+   * This enables the left row to have matching number of lines with
+   * the right row and align the lines and heights between the two rows.
    */
-  const nonPaddedKeywords = [
-    'type',
-    'description',
-    'name',
-    'items',
-    'contains',
-  ];
   const blankLinePaddings = [];
+  const skipKeywords = ['type', 'description', 'name', 'items', 'contains'];
+  const keywords = Object.keys(schema).filter(
+    key => !skipKeywords.includes(key)
+  );
 
-  Object.keys(schema).forEach(keyword => {
-    if (!nonPaddedKeywords.includes(keyword)) {
+  keywords.forEach((keyword, i) => {
+    if (i > 0) {
       blankLinePaddings.push(
         <Typography
           key={`${keyword} line`}

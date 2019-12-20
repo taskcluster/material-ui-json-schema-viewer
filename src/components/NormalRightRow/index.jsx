@@ -3,31 +3,38 @@ import { shape, string } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
 function NormalRightRow({ schema, classes }) {
-  const keywords = Object.keys(schema);
-  const nonDisplayedKeywords = ['items', 'contains'];
-
-  // TODO: specify details to see below?
-  /*
-  if (typeof schema.additionalItems === 'object') {
-  }
-  */
+  /**
+   * Skip keywords illustrated in other parts of the SchemaTable
+   * : either in symbols in the left panel or in the description column.
+   *   (ex. 'type' is displayed in highlighted form in left panel)
+   */
+  const skipKeywords = ['type', 'name', 'description', 'items', 'contains'];
+  const keywords = Object.keys(schema).filter(
+    key => !skipKeywords.includes(key)
+  );
 
   return (
     <div className={`${classes.row} ${classes.rightRow}`}>
       <div className={classes.keywordColumn}>
-        {keywords.map(
-          keyword =>
-            !nonDisplayedKeywords.includes(keyword) && (
-              <Typography
-                key={keyword}
-                component="div"
-                variant="subtitle2"
-                className={classes.line}>
-                {keyword}
-                {': '}
-                {schema[keyword]}
-              </Typography>
-            )
+        {keywords.length === 0 ? (
+          <Typography
+            component="div"
+            variant="subtitle2"
+            className={classes.line}>
+            <br />
+          </Typography>
+        ) : (
+          keywords.map(keyword => (
+            <Typography
+              key={keyword}
+              component="div"
+              variant="subtitle2"
+              className={classes.line}>
+              {keyword}
+              {': '}
+              {`${schema[keyword]}`}
+            </Typography>
+          ))
         )}
       </div>
       <div className={classes.descriptionColumn}>
