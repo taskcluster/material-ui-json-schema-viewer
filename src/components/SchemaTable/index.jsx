@@ -1,9 +1,12 @@
 import React, { Fragment } from 'react';
 import { shape, string } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+import classNames from 'classnames';
+import Typography from '@material-ui/core/Typography';
 import NormalLeftRow from '../NormalLeftRow';
 import NormalRightRow from '../NormalRightRow';
 
+// TODO: add comments for styles
 const useStyles = makeStyles(theme => ({
   wrapper: {
     display: 'grid',
@@ -49,13 +52,138 @@ function SchemaTable({ schema }) {
    */
   const leftRows = [];
   const rightRows = [];
+  /**
+   * Create a single normal row (left and right column each).
+   * The result is stored in an object format in order for the
+   * pushRow() method to easily access each left and right column
+   * of the single row and push them to leftRows and rightRows respectively.
+   */
+  const createNormalRow = schemaInput => ({
+    leftRow: (
+      <NormalLeftRow
+        key={leftRows.length + 1}
+        schema={schemaInput}
+        classes={classes}
+      />
+    ),
+    rightRow: (
+      <NormalRightRow
+        key={rightRows.length + 1}
+        schema={schemaInput}
+        classes={classes}
+      />
+    ),
+  });
+  // TODO: refactor closeRow into separate component
+  /**
+   * Create a row to close off an array or object type schema.
+   * The left row displays a closing bracket of the type while
+   * the right row only consists of blank line padding.
+   */
+  const createClosingRow = type => {
+    const clostTypeSymbol = {
+      array: ']',
+      object: '}',
+    }[type];
+
+    return {
+      leftRow: (
+        <div key={`close ${type}`} className={classes.row}>
+          <Typography
+            component="div"
+            variant="subtitle2"
+            className={classes.line}>
+            {clostTypeSymbol}
+          </Typography>
+        </div>
+      ),
+      /** TODO: may have to restrucutre closeRightRow to include
+       *        keywordColumn, descriptionColumn for overall consistency
+       *        with <NormalRightRow />
+       */
+      rightRow: (
+        <div
+          key={`close ${type}`}
+          className={classNames(classes.row, classes.rightRow)}>
+          <div className={classes.keywordColumn}>
+            <Typography
+              component="div"
+              variant="subtitle2"
+              className={classes.line}>
+              <br />
+            </Typography>
+          </div>
+          <div className={classes.descriptionColumn}>
+            <Typography component="div" variant="subtitle2" />
+          </div>
+        </div>
+      ),
+    };
+  };
 
   /**
-   * TODO: define renderArray method
-   *       add description comment
+   * Takes a single row as input, created from createNormalRow()
+   * method, and pushes the left column and right column of the
+   * row into the leftRows and rightRows respectively.
+   */
+  const pushRow = row => {
+    leftRows.push(row.leftRow);
+    rightRows.push(row.rightRow);
+  };
+
+  /**
+   * Array type schemas start with an openArrayRow and are closed off
+   * with a closeArrayRow, which both display brackets to indicate an array.
+   * Array items are parsed and rendered according to their type via
+   * calling back on the renderSchema() method. The resulting rows are
+   * added sequentially in between the opening and closing rows.
    */
   function renderArray(schemaInput) {
-    return <React.Fragment>{schemaInput}</React.Fragment>;
+    const { additionalItems, ...addItemsKeyExcluded } = schemaInput;
+    const openArrayRow =
+      typeof schemaInput.additionalItems === 'object'
+        ? createNormalRow(addItemsKeyExcluded)
+        : createNormalRow(schemaInput);
+    const closeArrayRow = createClosingRow(schemaInput.type);
+
+    pushRow(openArrayRow);
+
+    /** Render array items only if defined */
+    if ('items' in schemaInput) {
+      /**
+       * If array items are defined by tuple vaidation (each item may
+       * have a different schema and the order of items is important),
+       * render each of the item schemas sequentially.
+       */
+      if (Array.isArray(schemaInput.items)) {
+        schemaInput.items.forEach(item => {
+          renderSchema(item);
+        });
+      } else {
+        /**
+         * else, items are defined by list vaidation (each item matches
+         *  the same schema), render the item schema only once.
+         */
+        renderSchema(schemaInput.items);
+      }
+    }
+
+    /** Render contains keyword if defined */
+    if ('contains' in schemaInput) {
+      renderSchema(schemaInput.contains);
+    }
+
+    /**
+     * Add a extra row for additionalItems defined as schema.
+     * (If additionalItems is defined simply as a boolean value,
+     *  will be handled in openArrayRow's NormalRightRow instead)
+     */
+    if (typeof schemaInput.additionalItems === 'object') {
+      // TODO: alter the sub-schema to include extra description?
+      renderSchema(schemaInput.additionalItems);
+    }
+
+    pushRow(closeArrayRow);
   }
 
   /**
@@ -72,23 +200,9 @@ function SchemaTable({ schema }) {
    * These will then be stored into 'leftRows' and 'rightRows' arrays each.
    */
   function renderDefault(schemaInput) {
-    const leftRow = (
-      <NormalLeftRow
-        key={leftRows.length + 1}
-        schema={schemaInput}
-        classes={classes}
-      />
-    );
-    const rightRow = (
-      <NormalRightRow
-        key={rightRows.length + 1}
-        schema={schemaInput}
-        classes={classes}
-      />
-    );
+    const normalRow = createNormalRow(schemaInput);
 
-    leftRows.push(leftRow);
-    rightRows.push(rightRow);
+    pushRow(normalRow);
   }
 
   /**
@@ -147,12 +261,15 @@ function SchemaTable({ schema }) {
 }
 
 SchemaTable.propTypes = {
+  /** Schema input given to render */
   schema: shape({
+    /** Type of schema */
     type: string,
   }),
 };
 
 SchemaTable.defaultProps = {
+  /** Null type schema is set as default prop */
   schema: {
     type: 'null',
   },
