@@ -1,14 +1,23 @@
 import React from 'react';
 import { shape, string } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
+import Warning from '@material-ui/icons/Info';
 
 function NormalRightRow({ schema, classes }) {
   /**
-   * Skip keywords illustrated in other parts of the SchemaTable
-   * : either in symbols in the left panel or in the description column.
-   *   (ex. 'type' is displayed in highlighted form in left panel)
+   * Skip over certain keywords illustrated in other parts of
+   * the SchemaTable to avoid displaying them repeatedly.
+   * (ex. symbols in the left panel or description in right panel)
    */
-  const skipKeywords = ['type', 'name', 'description', 'items', 'contains', 'properties'];
+  const skipKeywords = [
+    'type',
+    'name',
+    'description',
+    'items',
+    'contains',
+    'properties',
+  ];
   const keywords = Object.keys(schema).filter(
     key => !skipKeywords.includes(key)
   );
@@ -30,9 +39,20 @@ function NormalRightRow({ schema, classes }) {
               component="div"
               variant="subtitle2"
               className={classes.line}>
-              {keyword}
-              {': '}
-              {`${schema[keyword]}`}
+              {typeof schema[keyword] === 'object' &&
+              !Array.isArray(schema[keyword]) ? (
+                <Tooltip
+                  title="Additional items must match a sub-schema. 
+                  See the JSON-schema source for details."
+                  arrow>
+                  <Typography component="span" variant="subtitle">
+                    {`${keyword}: `}
+                    <Warning fontSize="inherit" color="inherit" />
+                  </Typography>
+                </Tooltip>
+              ) : (
+                `${keyword}: ${schema[keyword]}`
+              )}
             </Typography>
           ))
         )}

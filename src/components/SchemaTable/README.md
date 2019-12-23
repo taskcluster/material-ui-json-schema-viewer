@@ -43,3 +43,9 @@ simple object
 const schema = require('../../../schemas/basicDataTypes/object/simpleObject.json');
 <SchemaTable schema={schema} />
 ```
+
+empty object
+```js
+const schema = require('../../../schemas/basicDataTypes/object/emptyObject.json');
+<SchemaTable schema={schema} />
+```

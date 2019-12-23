@@ -142,15 +142,7 @@ function SchemaTable({ schema }) {
    * added sequentially in between the opening and closing rows.
    */
   function renderArray(schemaInput) {
-    /**
-     * TODO: if caution tag is enabled, maybe additionalItems keyword
-     *       should be passed down to createNormalRow() even if in object form
-     */
-    const { additionalItems, ...addItemsKeyExcluded } = schemaInput;
-    const openArrayRow =
-      typeof schemaInput.additionalItems === 'object'
-        ? createNormalRow(addItemsKeyExcluded)
-        : createNormalRow(schemaInput);
+    const openArrayRow = createNormalRow(schemaInput);
     const closeArrayRow = createClosingRow(schemaInput.type);
 
     pushRow(openArrayRow);
@@ -178,16 +170,6 @@ function SchemaTable({ schema }) {
     /** Render contains keyword if defined */
     if ('contains' in schemaInput) {
       renderSchema(schemaInput.contains);
-    }
-
-    /**
-     * Add a extra row for additionalItems defined as schema.
-     * (If additionalItems is defined simply as a boolean value,
-     *  will be handled in openArrayRow's NormalRightRow instead)
-     */
-    if (typeof schemaInput.additionalItems === 'object') {
-      // TODO: alter the sub-schema to include extra description?
-      renderSchema(schemaInput.additionalItems);
     }
 
     pushRow(closeArrayRow);
