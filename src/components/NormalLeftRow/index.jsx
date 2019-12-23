@@ -3,7 +3,7 @@ import { shape, string } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
 function NormalLeftRow({ schema, classes }) {
-  const name = 'name' in schema ? `${schema.name}: ` : null;
+  const name = 'name' in schema ? schema.name : null;
   const typeSymbol =
     schema.type === 'array' || schema.type === 'object' ? (
       {
