@@ -34,7 +34,7 @@ function NormalLeftRow({ schema, classes }) {
           component="div"
           variant="subtitle2"
           className={classes.line}>
-          <br />
+          {null}
         </Typography>
       );
     }

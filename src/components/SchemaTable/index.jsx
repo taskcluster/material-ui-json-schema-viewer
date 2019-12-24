@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
   },
   leftPanel: {
     backgroundColor: theme.palette.background.paper,
-    borderRight: `${theme.spacing(1)}px solid ${theme.palette.grey[300]}`,
+    borderRight: `${theme.spacing(1)}px solid ${theme.palette.divider}`,
     overflowX: 'auto',
   },
   rightPanel: {
@@ -22,7 +22,8 @@ const useStyles = makeStyles(theme => ({
     overflowX: 'auto',
   },
   row: {
-    borderBottom: `2px solid ${theme.palette.grey[300]}`,
+    borderBottom: `${theme.spacing(0.25)}px solid ${theme.palette.divider}`,
+    minHeight: theme.spacing(3),
   },
   lastRow: {
     borderBottom: 'none',
@@ -36,6 +37,7 @@ const useStyles = makeStyles(theme => ({
   line: {
     margin: 0,
     whiteSpace: 'nowrap',
+    minHeight: theme.spacing(3),
   },
   code: {
     backgroundColor: theme.palette.grey[300],
@@ -110,7 +112,7 @@ function SchemaTable({ schema }) {
               component="div"
               variant="subtitle2"
               className={classes.line}>
-              <br />
+              {null}
             </Typography>
           </div>
           <div className={classes.descriptionColumn}>
