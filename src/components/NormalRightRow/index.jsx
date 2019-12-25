@@ -27,20 +27,20 @@ function NormalRightRow({ schema, classes }) {
         {keywords.length === 0 ? (
           <div className={classes.line} />
         ) : (
-          keywords.map(keyword => (
-            <Typography
-              key={keyword}
-              component="div"
-              variant="subtitle2"
-              className={classes.line}>
-              {typeof schema[keyword] === 'object' &&
+          keywords.map(keyword => {
+            return typeof schema[keyword] === 'object' &&
               !Array.isArray(schema[keyword]) ? (
-                <Tooltip keyword={keyword} />
-              ) : (
-                `${keyword}: ${schema[keyword]}`
-              )}
-            </Typography>
-          ))
+              <Tooltip keyword={keyword} classes={classes} />
+            ) : (
+              <Typography
+                key={keyword}
+                component="div"
+                variant="subtitle2"
+                className={classes.line}>
+                {`${keyword}: ${schema[keyword]}`}
+              </Typography>
+            );
+          })
         )}
       </div>
       <div className={classes.descriptionColumn}>

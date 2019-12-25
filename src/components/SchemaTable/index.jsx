@@ -51,9 +51,11 @@ const useStyles = makeStyles(theme => ({
    *  on how many keywords the given schema or sub-schema defines)
    */
   line: {
+    display: 'flex',
+    alignItems: 'center',
     margin: 0,
     whiteSpace: 'nowrap',
-    minHeight: theme.spacing(3),
+    height: theme.spacing(3.5),
   },
   /**
    * Highlighting the type for the schema or sub-schema displayed
@@ -61,6 +63,10 @@ const useStyles = makeStyles(theme => ({
    */
   code: {
     backgroundColor: theme.palette.grey[300],
+    padding: `0 ${theme.spacing(0.5)}px`,
+  },
+  tooltip: {
+    height: '100%',
   },
 }));
 

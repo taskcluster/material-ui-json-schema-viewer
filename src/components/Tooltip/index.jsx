@@ -1,10 +1,10 @@
 import React from 'react';
-import { string } from 'prop-types';
+import { shape, string } from 'prop-types';
 import MuiTooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import Warning from '@material-ui/icons/Info';
+import InfoIcon from '@material-ui/icons/Info';
 
-function Tooltip({ keyword }) {
+function Tooltip({ keyword, classes }) {
   /**
    * Generate tooltip descriptions to provide further information
    * regarding the given keywords.
@@ -25,9 +25,13 @@ function Tooltip({ keyword }) {
 
   return (
     <MuiTooltip title={createTooltipTitle(keyword)} arrow>
-      <Typography component="span" variant="subtitle2">
+      <Typography component="div" variant="subtitle2" className={classes.line}>
         {`${keyword}: `}
-        <Warning fontSize="inherit" color="inherit" />
+        <InfoIcon
+          fontSize="inherit"
+          color="inherit"
+          className={classes.tooltip}
+        />
       </Typography>
     </MuiTooltip>
   );
@@ -36,6 +40,10 @@ function Tooltip({ keyword }) {
 Tooltip.propTypes = {
   /** Keyword to display with tooltip feature */
   keyword: string.isRequired,
+  /** Style for icon display */
+  classes: shape({
+    tooltip: string.isRequired,
+  }).isRequired,
 };
 
 export default React.memo(Tooltip);
