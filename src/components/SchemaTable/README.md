@@ -36,3 +36,28 @@ const schema = require('../../../schemas/basicDataTypes/array/emptyArray.json');
 <SchemaTable schema={schema} />
 ```
 
+## Object Type Schema
+
+simple object
+```js
+const schema = require('../../../schemas/basicDataTypes/object/simpleObject.json');
+<SchemaTable schema={schema} />
+```
+
+empty object
+```js
+const schema = require('../../../schemas/basicDataTypes/object/emptyObject.json');
+<SchemaTable schema={schema} />
+```
+
+property specifications (names, patterns, additional subschemas)
+```js
+const schema = require('../../../schemas/basicDataTypes/object/propertySpecifications.json');
+<SchemaTable schema={schema} />
+```
+
+property dependencies
+```js
+const schema = require('../../../schemas/basicDataTypes/object/propertyDependencies.json');
+<SchemaTable schema={schema} />
+```
