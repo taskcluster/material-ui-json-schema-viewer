@@ -128,12 +128,7 @@ function SchemaTable({ schema }) {
           key={`close ${type}`}
           className={classNames(classes.row, classes.rightRow)}>
           <div className={classes.keywordColumn}>
-            <Typography
-              component="div"
-              variant="subtitle2"
-              className={classes.line}>
-              {null}
-            </Typography>
+            <div className={classes.line} />
           </div>
           <div className={classes.descriptionColumn}>
             <Typography component="div" variant="subtitle2" />

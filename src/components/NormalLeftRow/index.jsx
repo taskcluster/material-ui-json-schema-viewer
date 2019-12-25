@@ -36,13 +36,7 @@ function NormalLeftRow({ schema, classes }) {
   keywords.forEach((keyword, i) => {
     if (i > 0) {
       blankLinePaddings.push(
-        <Typography
-          key={`${keyword} line`}
-          component="div"
-          variant="subtitle2"
-          className={classes.line}>
-          {null}
-        </Typography>
+        <div key={`${keyword} line`} className={classes.line} />
       );
     }
   });

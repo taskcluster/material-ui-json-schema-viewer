@@ -43,12 +43,7 @@ function NormalRightRow({ schema, classes }) {
     <div className={`${classes.row} ${classes.rightRow}`}>
       <div className={classes.keywordColumn}>
         {keywords.length === 0 ? (
-          <Typography
-            component="div"
-            variant="subtitle2"
-            className={classes.line}>
-            {null}
-          </Typography>
+          <div className={classes.line} />
         ) : (
           keywords.map(keyword => (
             <Typography
