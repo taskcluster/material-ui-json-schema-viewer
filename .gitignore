@@ -58,7 +58,7 @@ typings/
 .env
 
 # build directory
-lib
+build
 
 # styleguide build directory
 styleguide
