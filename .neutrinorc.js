@@ -18,11 +18,5 @@ module.exports = {
     }),
     reactComponents(),
     jest(),
-    (neutrino) => {
-      neutrino.register('styleguide', () => ({
-        webpackConfig: neutrino.config.toConfig(),
-        skipComponentsWithoutExample: true,
-      }));
-    },
   ]
 };

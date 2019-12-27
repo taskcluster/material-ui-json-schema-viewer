@@ -60,9 +60,6 @@ typings/
 # build directory
 build
 
-# styleguide build directory
-styleguide
-
 # storybook build directory
 storybook
 
