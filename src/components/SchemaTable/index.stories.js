@@ -1,35 +1,39 @@
 import React, { Fragment } from 'react';
 import SchemaTable from './index';
-import { F } from 'ramda';
 
 export default {
   title: 'Schema Table',
   component: SchemaTable,
 };
 
-const defaultSchemas = {
-  boolean: require('../../../schemas/basicDataTypes/boolean/boolean.json'),
-  null: require('../../../schemas/basicDataTypes/null/null.json'),
-  integer: require('../../../schemas/basicDataTypes/numeric/integer.json'),
-  numberMultiples: require('../../../schemas/basicDataTypes/numeric/numberMultiples.json'),
-  numberRange: require('../../../schemas/basicDataTypes/numeric/numberRange.json'),
-  stringPattern: require('../../../schemas/basicDataTypes/string/stringPattern.json'),
-  stringFormat: require('../../../schemas/basicDataTypes/string/stringFormat.json'),
-};
-const arraySchemas = {
-  emptyArray: require('../../../schemas/basicDataTypes/array/emptyArray.json'),
-  listValidation: require('../../../schemas/basicDataTypes/array/listValidation.json'),
-  tupleValidation: require('../../../schemas/basicDataTypes/array/tupleValidation.json'),
-  containsValidations: require('../../../schemas/basicDataTypes/array/containsValidation.json'),
-  additionalItems: require('../../../schemas/basicDataTypes/array/additionalItems.json'),
-};
-const objectSchemas = {
-  emptyObject: require('../../../schemas/basicDataTypes/object/emptyObject.json'),
-  simpleObject: require('../../../schemas/basicDataTypes/object/simpleObject.json'),
-  propertySpecification: require('../../../schemas/basicDataTypes/object/propertySpecifications.json'),
-  propertyDependency: require('../../../schemas/basicDataTypes/object/propertyDependencies.json'),
-  requiredProperties: require('../../../schemas/basicDataTypes/object/requiredProperties.json'),
-};
+/**
+ * Schema examples to use for displaying stories
+ */
+const defaultSchemas = {};
+
+defaultSchemas.boolean = require('../../../schemas/basicDataTypes/boolean/boolean.json');
+defaultSchemas.null = require('../../../schemas/basicDataTypes/null/null.json');
+defaultSchemas.integer = require('../../../schemas/basicDataTypes/numeric/integer.json');
+defaultSchemas.numberMultiples = require('../../../schemas/basicDataTypes/numeric/numberMultiples.json');
+defaultSchemas.numberRange = require('../../../schemas/basicDataTypes/numeric/numberRange.json');
+defaultSchemas.stringPattern = require('../../../schemas/basicDataTypes/string/stringPattern.json');
+defaultSchemas.stringFormat = require('../../../schemas/basicDataTypes/string/stringFormat.json');
+
+const arraySchemas = {};
+
+arraySchemas.emptyArray = require('../../../schemas/basicDataTypes/array/emptyArray.json');
+arraySchemas.listValidation = require('../../../schemas/basicDataTypes/array/listValidation.json');
+arraySchemas.tupleValidation = require('../../../schemas/basicDataTypes/array/tupleValidation.json');
+arraySchemas.containsValidations = require('../../../schemas/basicDataTypes/array/containsValidation.json');
+arraySchemas.additionalItems = require('../../../schemas/basicDataTypes/array/additionalItems.json');
+
+const objectSchemas = {};
+
+objectSchemas.emptyObject = require('../../../schemas/basicDataTypes/object/emptyObject.json');
+objectSchemas.simpleObject = require('../../../schemas/basicDataTypes/object/simpleObject.json');
+objectSchemas.propertySpecification = require('../../../schemas/basicDataTypes/object/propertySpecifications.json');
+objectSchemas.propertyDependency = require('../../../schemas/basicDataTypes/object/propertyDependencies.json');
+objectSchemas.requiredProperties = require('../../../schemas/basicDataTypes/object/requiredProperties.json');
 
 export const defaultType = () => (
   <Fragment>
