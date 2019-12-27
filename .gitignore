@@ -63,5 +63,8 @@ build
 # styleguide build directory
 styleguide
 
+# storybook build directory
+storybook
+
 # Intellij IDE specific settings
 .idea/

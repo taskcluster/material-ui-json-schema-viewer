@@ -16,7 +16,7 @@
     "test:watch": "jest --watch",
     "styleguide": "styleguidist server",
     "storybook": "start-storybook",
-    "deploy": "styleguidist build && gh-pages --remote upstream -d styleguide"
+    "deploy": "build-storybook -c .storybook -o storybook && gh-pages --remote upstream -d storybook"
   },
   "devDependencies": {
     "@material-ui/core": "^4.7.1",
@@ -25,6 +25,7 @@
     "@neutrinojs/jest": "9.0.0-rc.5",
     "@neutrinojs/react-components": "9.0.0-rc.5",
     "@storybook/react": "^5.2.8",
+    "babel-loader": "^8.0.6",
     "eslint": "^6.7.2",
     "gh-pages": "^2.1.1",
     "jest": "^24.9.0",
