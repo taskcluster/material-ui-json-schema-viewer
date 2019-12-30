@@ -1,9 +1,7 @@
 import React, { Fragment } from 'react';
 import { shape, string } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import classNames from 'classnames';
 import { clone } from 'ramda';
-import Typography from '@material-ui/core/Typography';
 import NormalLeftRow from '../NormalLeftRow';
 import NormalRightRow from '../NormalRightRow';
 
@@ -53,7 +51,6 @@ const useStyles = makeStyles(theme => ({
   line: {
     display: 'flex',
     alignItems: 'center',
-    margin: 0,
     whiteSpace: 'nowrap',
     height: theme.spacing(3.5),
   },
@@ -77,9 +74,16 @@ const useStyles = makeStyles(theme => ({
   icon: {
     margin: `0 ${theme.spacing(0.5)}px`,
   },
+  requiredPrefix: {
+    color: theme.palette.error.main,
+    padding: `0 ${theme.spacing(0.5)}px}`,
+  },
 }));
 
 function SchemaTable({ schema }) {
+  /**
+   * Generate classes to define overall style for the schema table.
+   */
   const classes = useStyles();
   /**
    * Rows for the left and right column are stored separately
@@ -89,79 +93,60 @@ function SchemaTable({ schema }) {
    */
   const leftRows = [];
   const rightRows = [];
+
   /**
    * Create a single normal row (left and right column each).
    * The result is stored in an object format in order for the
    * pushRow() method to easily access each left and right column
    * of the single row and push them to leftRows and rightRows respectively.
    */
-  const createNormalRow = schemaInput => ({
-    leftRow: (
-      <NormalLeftRow
-        key={leftRows.length + 1}
-        schema={schemaInput}
-        classes={classes}
-      />
-    ),
-    rightRow: (
-      <NormalRightRow
-        key={rightRows.length + 1}
-        schema={schemaInput}
-        classes={classes}
-      />
-    ),
-  });
-  // TODO: refactor closeRow into separate component
+  function createNormalRow(schemaInput, indent) {
+    return {
+      leftRow: (
+        <NormalLeftRow
+          key={leftRows.length + 1}
+          schema={schemaInput}
+          classes={classes}
+          indent={indent}
+        />
+      ),
+      rightRow: (
+        <NormalRightRow
+          key={rightRows.length + 1}
+          schema={schemaInput}
+          classes={classes}
+        />
+      ),
+    };
+  }
+
+  // TODO: refactor closeRow into using createNormalRow
   /**
    * Create a row to close off an array or object type schema.
    * The left row displays a closing bracket of the type while
    * the right row only consists of blank line padding.
    */
-  const createClosingRow = type => {
-    const closeTypeSymbol = {
-      array: ']',
-      object: '}',
+  function createClosingRow(type, indent) {
+    const closeType = {
+      array: 'closeArray',
+      object: 'closeObject',
     }[type];
-
-    return {
-      leftRow: (
-        <div key={`close ${type}`} className={classes.row}>
-          <Typography
-            component="div"
-            variant="subtitle2"
-            className={classes.line}>
-            {closeTypeSymbol}
-          </Typography>
-        </div>
-      ),
-      /** TODO: may have to restrucutre closeRightRow to include
-       *        keywordColumn, descriptionColumn for overall consistency
-       *        with <NormalRightRow />
-       */
-      rightRow: (
-        <div
-          key={`close ${type}`}
-          className={classNames(classes.row, classes.rightRow)}>
-          <div className={classes.keywordColumn}>
-            <div className={classes.line} />
-          </div>
-          <div className={classes.descriptionColumn}>
-            <Typography component="div" variant="subtitle2" />
-          </div>
-        </div>
-      ),
+    const closingSchema = {
+      type: closeType,
     };
-  };
+
+    return createNormalRow(closingSchema, indent);
+  }
 
   /**
    * Takes a single row as input, created from createNormalRow()
    * method, and pushes the left column and right column of the
    * row into the leftRows and rightRows respectively.
    */
-  const pushRow = row => {
+  function pushRow(row) {
     leftRows.push(row.leftRow);
     rightRows.push(row.rightRow);
-  };
+  }
 
   /**
    * Array type schemas start with an openArrayRow and are closed off
@@ -170,9 +155,9 @@ function SchemaTable({ schema }) {
    * calling back on the renderSchema() method. The resulting rows are
    * added sequentially in between the opening and closing rows.
    */
-  function renderArray(schemaInput) {
-    const openArrayRow = createNormalRow(schemaInput);
-    const closeArrayRow = createClosingRow(schemaInput.type);
+  function renderArray(schemaInput, indent) {
+    const openArrayRow = createNormalRow(schemaInput, indent);
+    const closeArrayRow = createClosingRow(schemaInput.type, indent);
 
     pushRow(openArrayRow);
 
@@ -185,20 +170,20 @@ function SchemaTable({ schema }) {
        */
       if (Array.isArray(schemaInput.items)) {
         schemaInput.items.forEach(item => {
-          renderSchema(item);
+          renderSchema(item, indent + 1);
         });
       } else {
         /**
          * else, items are defined by list vaidation (each item matches
          *  the same schema), render the item schema only once.
          */
-        renderSchema(schemaInput.items);
+        renderSchema(schemaInput.items, indent + 1);
       }
     }
 
     /** Render contains keyword if defined */
     if ('contains' in schemaInput) {
-      renderSchema(schemaInput.contains);
+      renderSchema(schemaInput.contains, indent + 1);
     }
 
     pushRow(closeArrayRow);
@@ -217,8 +202,8 @@ function SchemaTable({ schema }) {
    * are parsed to create 'NormalLeftRow' and 'NormalRightRow' components.
    * These will then be stored into 'leftRows' and 'rightRows' arrays each.
    */
-  function renderDefault(schemaInput) {
-    const normalRow = createNormalRow(schemaInput);
+  function renderDefault(schemaInput, indent) {
+    const normalRow = createNormalRow(schemaInput, indent);
 
     pushRow(normalRow);
   }
@@ -230,9 +215,11 @@ function SchemaTable({ schema }) {
    * calling back on the renderSchema() method. The resulting rows are
    * added sequentially in between the opening and closing rows.
    */
-  function renderObject(schemaInput) {
-    const openObjectRow = createNormalRow(schemaInput);
-    const closeObjectRow = createClosingRow(schemaInput.type);
+  function renderObject(schemaInput, indent) {
+    const openObjectRow = createNormalRow(schemaInput, indent);
+    const closeObjectRow = createClosingRow(schemaInput.type, indent);
+    const requiredProperties =
+      'required' in schemaInput ? new Set(schemaInput.required) : new Set();
 
     pushRow(openObjectRow);
 
@@ -251,7 +238,12 @@ function SchemaTable({ schema }) {
         const cloneSubschema = clone(schemaInput.properties[property]);
 
         cloneSubschema.name = property;
-        renderSchema(cloneSubschema);
+
+        if (requiredProperties.has(property)) {
+          cloneSubschema.required = true;
+        }
+
+        renderSchema(cloneSubschema, indent + 1);
       });
     }
 
@@ -275,24 +267,23 @@ function SchemaTable({ schema }) {
    * Types other than default schemas may repeatedly call this method
    * within their render method if the schema has a nested structure.
    */
-  function renderSchema(schemaInput) {
+  function renderSchema(schemaInput, indent = 0) {
     if (
       'allOf' in schemaInput ||
       'anyOf' in schemaInput ||
       'oneOf' in schemaInput ||
       'not' in schemaInput
     ) {
-      renderCombination(schemaInput);
+      renderCombination(schemaInput, indent);
     } else if ('$ref' in schemaInput) {
-      renderRef(schemaInput);
+      renderRef(schemaInput, indent);
     } else if (schemaInput.type === 'array') {
-      renderArray(schemaInput);
+      renderArray(schemaInput, indent);
     } else if (schemaInput.type === 'object') {
-      renderObject(schemaInput);
+      renderObject(schemaInput, indent);
     } else {
-      renderDefault(schemaInput);
+      renderDefault(schemaInput, indent);
     }
-    // TODO: handle empty json schemas
 
     return (
       <div className={classes.wrapper}>
