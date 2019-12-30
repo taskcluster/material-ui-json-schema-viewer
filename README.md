@@ -1,5 +1,5 @@
 # material-ui-json-schema-viewer
-a viewer component that displays JSON schemas
+a viewer component that displays JSON schemas (built using [material-ui](https://material-ui.com/))
 
 ## Requirements
 - `@material-ui/core` v4+
