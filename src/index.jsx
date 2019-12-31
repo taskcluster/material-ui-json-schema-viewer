@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import React, { Fragment } from 'react';
 import { render } from 'react-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';

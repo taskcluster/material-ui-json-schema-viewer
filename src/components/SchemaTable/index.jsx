@@ -7,21 +7,25 @@ import Typography from '@material-ui/core/Typography';
 import NormalLeftRow from '../NormalLeftRow';
 import NormalRightRow from '../NormalRightRow';
 
-// TODO: add comments for styles
 const useStyles = makeStyles(theme => ({
+  /** Schema table displays two-column layout */
   wrapper: {
     display: 'grid',
     gridTemplateColumns: '[left-panel] 1fr [right-panel] 1fr',
+    color: theme.palette.text.primary,
   },
+  /** The left panel of the Schema Table */
   leftPanel: {
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.default,
     borderRight: `${theme.spacing(1)}px solid ${theme.palette.divider}`,
     overflowX: 'auto',
   },
+  /** The right panel of the Schema Table */
   rightPanel: {
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.default,
     overflowX: 'auto',
   },
+  /** Rows for the left and right panels */
   row: {
     borderBottom: `${theme.spacing(0.25)}px solid ${theme.palette.divider}`,
     minHeight: theme.spacing(3),
@@ -29,17 +33,32 @@ const useStyles = makeStyles(theme => ({
   lastRow: {
     borderBottom: 'none',
   },
+  /**
+   * The right panel's rows are further divided into two columns
+   * : keyword column, description column
+   */
   rightRow: {
     display: 'grid',
     gridTemplateColumns: '[keyword-column] 1fr [description-column] 1fr',
   },
+  /** Column for displaying keywords for right panel's rows */
   keywordColumn: {},
+  /** Column for displaying description for right panel's rows */
   descriptionColumn: {},
+  /**
+   * Lines within the rows.
+   * (a single row may constitute of more than one line depending
+   *  on how many keywords the given schema or sub-schema defines)
+   */
   line: {
     margin: 0,
     whiteSpace: 'nowrap',
     minHeight: theme.spacing(3),
   },
+  /**
+   * Highlighting the type for the schema or sub-schema displayed
+   * in the left panel of the schema table component.
+   */
   code: {
     backgroundColor: theme.palette.grey[300],
   },
