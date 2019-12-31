@@ -66,7 +66,9 @@ const useStyles = makeStyles(theme => ({
     padding: `0 ${theme.spacing(0.5)}px`,
   },
   tooltip: {
-    height: '100%',
+    fontSize: `${theme.typography.subtitle2.fontSize}`,
+    lineHeight: 1,
+    border: '1px red solid', // TODO: remove border
   },
 }));
 

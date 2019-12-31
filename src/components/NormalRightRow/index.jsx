@@ -30,7 +30,7 @@ function NormalRightRow({ schema, classes }) {
           keywords.map(keyword => {
             return typeof schema[keyword] === 'object' &&
               !Array.isArray(schema[keyword]) ? (
-              <Tooltip keyword={keyword} classes={classes} />
+              <Tooltip key={keyword} keyword={keyword} classes={classes} />
             ) : (
               <Typography
                 key={keyword}

@@ -25,14 +25,19 @@ function Tooltip({ keyword, classes }) {
 
   return (
     <MuiTooltip title={createTooltipTitle(keyword)} arrow>
-      <Typography component="div" variant="subtitle2" className={classes.line}>
-        {`${keyword}: `}
+      <div className={classes.line}>
+        <Typography
+          component="div"
+          variant="subtitle2"
+          className={classes.tooltip}>
+          {`${keyword}: `}
+        </Typography>
         <InfoIcon
           fontSize="inherit"
           color="inherit"
           className={classes.tooltip}
         />
-      </Typography>
+      </div>
     </MuiTooltip>
   );
 }
