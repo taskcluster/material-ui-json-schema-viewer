@@ -63,6 +63,14 @@ const useStyles = makeStyles(theme => ({
     padding: `0 ${theme.spacing(0.5)}px`,
   },
   /**
+   * Prefixes used to notate special properties of data types in
+   * lines of NormalLeftRow. (ex. 'required', 'contains' keywords)
+   */
+  prefix: {
+    color: theme.palette.error.main,
+    padding: `0 ${theme.spacing(0.5)}px}`,
+  },
+  /**
    * The text and icon within Tooltip component should maintain
    * a consistent line height and font size to align vertically.
    */
@@ -73,10 +81,6 @@ const useStyles = makeStyles(theme => ({
   /** Icon within Tooltip component */
   icon: {
     margin: `0 ${theme.spacing(0.5)}px`,
-  },
-  requiredPrefix: {
-    color: theme.palette.error.main,
-    padding: `0 ${theme.spacing(0.5)}px}`,
   },
 }));
 
@@ -120,7 +124,6 @@ function SchemaTable({ schema }) {
     };
   }
 
-  // TODO: refactor closeRow into using createNormalRow
   /**
    * Create a row to close off an array or object type schema.
    * The left row displays a closing bracket of the type while
@@ -181,9 +184,16 @@ function SchemaTable({ schema }) {
       }
     }
 
-    /** Render contains keyword if defined */
+    /**
+     * Render contains keyword if defined.
+     * (create a subschema with 'contains' key set to true in order to
+     *  use the contains symbol in NormalLeftRow)
+     */
     if ('contains' in schemaInput) {
-      renderSchema(schemaInput.contains, indent + 1);
+      const cloneSubschema = clone(schemaInput.contains);
+
+      cloneSubschema.contains = true;
+      renderSchema(cloneSubschema, indent + 1);
     }
 
     pushRow(closeArrayRow);

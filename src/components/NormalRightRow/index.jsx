@@ -10,6 +10,8 @@ function NormalRightRow({ schema, classes }) {
    * (ex. symbols in the left panel or description in right panel)
    */
   const skipKeywords = [
+    '$id',
+    '$schema',
     'type',
     'name',
     'description',

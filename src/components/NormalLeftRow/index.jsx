@@ -15,14 +15,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function NormalLeftRow({ schema, classes, indent }) {
-  /** 
+  /**
    * Dynamically generate indent styles according to the given
    * indent props.
    */
   const styles = useStyles(indent);
-  /** 
+  /**
    * Define the name to illustrate the schema or sub-schema.
-   * If a name property is not defined within the schema, 
+   * If a name property is not defined within the schema,
    * set it to null in order to not display any name.
    */
   const name = 'name' in schema ? schema.name : null;
@@ -42,13 +42,17 @@ function NormalLeftRow({ schema, classes, indent }) {
   ) : (
     <code className={classes.code}>{schema.type}</code>
   );
-  /** 
+  /**
    * Define the required prefix (* symbol) if the schema type
    * is a required property of an object.
-  */
+   */
   const requiredPrefix =
     'required' in schema && schema.required === true ? (
-      <span className={classes.requiredPrefix}>*</span>
+      <span className={classes.prefix}>*</span>
+    ) : null;
+  const containsPrefix =
+    'contains' in schema && schema.contains === true ? (
+      <span className={classes.prefix}>⊃</span>
     ) : null;
   /**
    * Create blank line paddings only for additional keywords
@@ -59,6 +63,8 @@ function NormalLeftRow({ schema, classes, indent }) {
    */
   const blankLinePaddings = [];
   const skipKeywords = [
+    '$id',
+    '$schema',
     'type',
     'name',
     'description',
@@ -85,6 +91,7 @@ function NormalLeftRow({ schema, classes, indent }) {
         component="div"
         variant="subtitle2"
         className={classNames(classes.line, styles.indentation)}>
+        {containsPrefix}
         {name && `${name}: `}
         {typeSymbol}
         {requiredPrefix}
@@ -115,7 +122,7 @@ NormalLeftRow.propTypes = {
     row: string.isRequired,
     line: string.isRequired,
     code: string.isRequired,
-    requiredPrefix: string.isRequired,
+    prefix: string.isRequired,
   }).isRequired,
   indent: number.isRequired,
 };
