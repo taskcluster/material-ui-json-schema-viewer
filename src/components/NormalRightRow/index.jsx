@@ -48,7 +48,10 @@ function NormalRightRow({ schema, classes }) {
       </div>
       <div className={classes.descriptionColumn}>
         {'description' in schema && (
-          <Typography component="div" variant="subtitle2">
+          <Typography
+            component="div"
+            variant="subtitle2"
+            className={classes.line}>
             {schema.description}
           </Typography>
         )}

@@ -61,3 +61,9 @@ property dependencies
 const schema = require('../../../schemas/basicDataTypes/object/requiredProperties.json');
 <SchemaTable schema={schema} />
 ```
+
+## Complex Nested Types
+```js
+const schema = require('../../../schemas/demo/list-clients-response.json');
+<SchemaTable schema={schema} />
+```
