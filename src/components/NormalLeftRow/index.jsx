@@ -15,7 +15,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function NormalLeftRow({ schema, classes, indent }) {
+  /** 
+   * Dynamically generate indent styles according to the given
+   * indent props.
+   */
   const styles = useStyles(indent);
+  /** 
+   * Define the name to illustrate the schema or sub-schema.
+   * If a name property is not defined within the schema, 
+   * set it to null in order to not display any name.
+   */
   const name = 'name' in schema ? schema.name : null;
   /**
    * Define the type symbol for the schema or sub-schema's type
@@ -33,7 +42,10 @@ function NormalLeftRow({ schema, classes, indent }) {
   ) : (
     <code className={classes.code}>{schema.type}</code>
   );
-  // TODO: add 'contains' prefix
+  /** 
+   * Define the required prefix (* symbol) if the schema type
+   * is a required property of an object.
+  */
   const requiredPrefix =
     'required' in schema && schema.required === true ? (
       <span className={classes.requiredPrefix}>*</span>
