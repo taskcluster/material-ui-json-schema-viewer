@@ -51,9 +51,11 @@ const useStyles = makeStyles(theme => ({
    *  on how many keywords the given schema or sub-schema defines)
    */
   line: {
+    display: 'flex',
+    alignItems: 'center',
     margin: 0,
     whiteSpace: 'nowrap',
-    minHeight: theme.spacing(3),
+    height: theme.spacing(3.5),
   },
   /**
    * Highlighting the type for the schema or sub-schema displayed
@@ -61,6 +63,19 @@ const useStyles = makeStyles(theme => ({
    */
   code: {
     backgroundColor: theme.palette.grey[300],
+    padding: `0 ${theme.spacing(0.5)}px`,
+  },
+  /**
+   * The text and icon within Tooltip component should maintain
+   * a consistent line height and font size to align vertically.
+   */
+  tooltip: {
+    fontSize: `${theme.typography.subtitle2.fontSize}`,
+    lineHeight: 1,
+  },
+  /** Icon within Tooltip component */
+  icon: {
+    margin: `0 ${theme.spacing(0.5)}px`,
   },
 }));
 
@@ -128,12 +143,7 @@ function SchemaTable({ schema }) {
           key={`close ${type}`}
           className={classNames(classes.row, classes.rightRow)}>
           <div className={classes.keywordColumn}>
-            <Typography
-              component="div"
-              variant="subtitle2"
-              className={classes.line}>
-              {null}
-            </Typography>
+            <div className={classes.line} />
           </div>
           <div className={classes.descriptionColumn}>
             <Typography component="div" variant="subtitle2" />
