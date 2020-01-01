@@ -1,5 +1,6 @@
 import React from 'react';
 import { shape, string } from 'prop-types';
+import classNames from 'classnames';
 import MuiTooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import InfoIcon from '@material-ui/icons/Info';
@@ -30,12 +31,12 @@ function Tooltip({ keyword, classes }) {
           component="div"
           variant="subtitle2"
           className={classes.tooltip}>
-          {`${keyword}: `}
+          {keyword}
         </Typography>
         <InfoIcon
           fontSize="inherit"
           color="inherit"
-          className={classes.tooltip}
+          className={classNames(classes.tooltip, classes.icon)}
         />
       </div>
     </MuiTooltip>
@@ -45,9 +46,10 @@ function Tooltip({ keyword, classes }) {
 Tooltip.propTypes = {
   /** Keyword to display with tooltip feature */
   keyword: string.isRequired,
-  /** Style for icon display */
+  /** Style for tooltip and icon display */
   classes: shape({
     tooltip: string.isRequired,
+    icon: string.isRequired,
   }).isRequired,
 };
 

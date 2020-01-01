@@ -65,10 +65,17 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.grey[300],
     padding: `0 ${theme.spacing(0.5)}px`,
   },
+  /**
+   * The text and icon within Tooltip component should maintain
+   * a consistent line height and font size to align vertically.
+   */
   tooltip: {
     fontSize: `${theme.typography.subtitle2.fontSize}`,
     lineHeight: 1,
-    border: '1px red solid', // TODO: remove border
+  },
+  /** Icon within Tooltip component */
+  icon: {
+    margin: `0 ${theme.spacing(0.5)}px`,
   },
 }));
 
