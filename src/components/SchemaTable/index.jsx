@@ -108,7 +108,7 @@ function SchemaTable({ schema }) {
     return {
       leftRow: (
         <NormalLeftRow
-          key={leftRows.length + 1}
+          key={`left-row-${leftRows.length + 1}`}
           schema={schemaInput}
           classes={classes}
           indent={indent}
@@ -116,7 +116,7 @@ function SchemaTable({ schema }) {
       ),
       rightRow: (
         <NormalRightRow
-          key={rightRows.length + 1}
+          key={`right-row-${rightRows.length + 1}`}
           schema={schemaInput}
           classes={classes}
         />
@@ -136,7 +136,7 @@ function SchemaTable({ schema }) {
       allOf: 'and',
       anyOf: 'or',
       oneOf: 'or',
-      not: 'and',
+      not: 'nor',
     }[type];
     const literalSchema = {
       type: literalType,
@@ -220,7 +220,13 @@ function SchemaTable({ schema }) {
       /**
        * Render each of the option schemas sequentially.
        */
-      combOptionList.forEach(option => {
+      combOptionList.forEach((option, i) => {
+        if (i > 0) {
+          const optionSeparatorRow = createLiteralRow(combType, indent + 1);
+
+          pushRow(optionSeparatorRow);
+        }
+
         renderSchema(option, indent + 1);
       });
     }

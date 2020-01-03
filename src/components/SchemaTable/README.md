@@ -80,3 +80,15 @@ anyOf
 const schema = require('../../../schemas/combinationTypes/anyOf.json');
 <SchemaTable schema={schema} />
 ```
+
+oneOf
+```js
+const schema = require('../../../schemas/combinationTypes/oneOf.json');
+<SchemaTable schema={schema} />
+```
+
+not
+```js
+const schema = require('../../../schemas/combinationTypes/not.json');
+<SchemaTable schema={schema} />
+```

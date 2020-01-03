@@ -33,7 +33,15 @@ function NormalLeftRow({ schema, classes, indent }) {
    * while others use highlighted text to illustrate the data type.
    */
   const bracketTypes = ['array', 'object', 'closeArray', 'closeObject'];
-  const combinationTypes = ['allOf', 'anyOf', 'oneOf', 'not'];
+  const combinationTypes = [
+    'allOf',
+    'anyOf',
+    'oneOf',
+    'not',
+    'and',
+    'or',
+    'nor',
+  ];
   const typeSymbol =
     bracketTypes.includes(schema.type) ||
     combinationTypes.includes(schema.type) ? (
@@ -48,6 +56,7 @@ function NormalLeftRow({ schema, classes, indent }) {
         not: '// Not',
         and: '// and',
         or: '// or',
+        nor: '// nor',
       }[schema.type]
     ) : (
       <code className={classes.code}>{schema.type}</code>
