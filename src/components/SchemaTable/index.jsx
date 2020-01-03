@@ -288,6 +288,28 @@ function SchemaTable({ schema }) {
   }
 
   /**
+   * Create a clone schema with an identified type property.
+   * Since complex schema cases, such as combinations and ref types,
+   * do not specify its particular type, it is necessary to manually include
+   * the type property in order to provide a consistent API when creating rows.
+   * For cases which do not specify types for specific reasons (ex. an option
+   * schema of an 'allOf' combination), just simply return the schema as-is
+   * so that it will be directed to the renderDefault method by default.
+   */
+  function addSchemaType(schemaInput) {
+    const complexTypes = ['allOf', 'anyOf', 'oneOf', 'not', '$ref'];
+    const cloneSchema = clone(schemaInput);
+
+    complexTypes.forEach(type => {
+      if (type in schemaInput) {
+        cloneSchema.type = type;
+      }
+    });
+
+    return cloneSchema;
+  }
+
+  /**
    * Schemas are passed to different render methods according to its
    * specific type (combination, array, object, ref, and default).
    * Each method will create rows with the appropriate format to its
@@ -297,21 +319,17 @@ function SchemaTable({ schema }) {
    * within their render method if the schema has a nested structure.
    */
   function renderSchema(schemaInput, indent = 0) {
-    const combinationTypes = ['allOf', 'anyOf', 'oneOf', 'not'];
-    let schemaType = schemaInput.type;
-    combinationTypes.forEach(type => {
-      if (type in schemaInput) {
-        schemaType = type;
-      }
-    });
+    /**
+     * If schema is complex (combination or ref type),
+     * make sure the schema includes a type property.
+     */
+    const schemaWithType =
+      'type' in schemaInput ? schemaInput : addSchemaType(schemaInput);
+    const schemaType = schemaWithType.type;
 
-    if (combinationTypes.includes(schemaType)) {
-      const cloneSchema = clone(schemaInput);
-
-      cloneSchema.type = schemaType;
-      renderCombination(cloneSchema, indent);
-    }
-    else if ('$ref' in schemaInput) {
+    if (['allOf', 'anyOf', 'oneOf', 'not'].includes(schemaType)) {
+      renderCombination(schemaWithType, indent);
+    } else if (schemaType === '$ref') {
       renderRef(schemaInput, indent);
     } else if (schemaType === 'array') {
       renderArray(schemaInput, indent);
