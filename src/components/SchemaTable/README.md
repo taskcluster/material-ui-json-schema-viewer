@@ -58,6 +58,12 @@ const schema = require('../../../schemas/basicDataTypes/object/propertySpecifica
 
 property dependencies
 ```js
-const schema = require('../../../schemas/basicDataTypes/object/propertyDependencies.json');
+const schema = require('../../../schemas/basicDataTypes/object/requiredProperties.json');
+<SchemaTable schema={schema} />
+```
+
+## Complex Nested Types
+```js
+const schema = require('../../../schemas/demo/list-clients-response.json');
 <SchemaTable schema={schema} />
 ```

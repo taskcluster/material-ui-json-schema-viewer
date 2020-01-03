@@ -1,18 +1,59 @@
 import React from 'react';
-import { shape, string } from 'prop-types';
+import { shape, string, number } from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
+import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 
-function NormalLeftRow({ schema, classes }) {
+/**
+ * Dynamically generate styles for indentations to be used for
+ * displaying the data structure of the schemas.
+ */
+const useStyles = makeStyles(theme => ({
+  indentation: {
+    marginLeft: indent => `${theme.spacing(indent * 2)}px`,
+  },
+}));
+
+function NormalLeftRow({ schema, classes, indent }) {
+  /**
+   * Dynamically generate indent styles according to the given
+   * indent props.
+   */
+  const styles = useStyles(indent);
+  /**
+   * Define the name to illustrate the schema or sub-schema.
+   * If a name property is not defined within the schema,
+   * set it to null in order to not display any name.
+   */
   const name = 'name' in schema ? schema.name : null;
-  const typeSymbol =
-    schema.type === 'array' || schema.type === 'object' ? (
-      {
-        array: '[',
-        object: '{',
-      }[schema.type]
-    ) : (
-      <code className={classes.code}>{schema.type}</code>
-    );
+  /**
+   * Define the type symbol for the schema or sub-schema's type
+   * Types requiring nested structures use the according bracket symbol
+   * while others use highlighted text to illustrate the data type.
+   */
+  const bracketTypes = ['array', 'object', 'closeArray', 'closeObject'];
+  const typeSymbol = bracketTypes.includes(schema.type) ? (
+    {
+      array: '[',
+      object: '{',
+      closeArray: ']',
+      closeObject: '}',
+    }[schema.type]
+  ) : (
+    <code className={classes.code}>{schema.type}</code>
+  );
+  /**
+   * Define the required prefix (* symbol) if the schema type
+   * is a required property of an object.
+   */
+  const requiredPrefix =
+    'required' in schema && schema.required === true ? (
+      <span className={classes.prefix}>*</span>
+    ) : null;
+  const containsPrefix =
+    'contains' in schema && schema.contains === true ? (
+      <span className={classes.prefix}>⊃</span>
+    ) : null;
   /**
    * Create blank line paddings only for additional keywords
    * (skip over certain keywords not displayed in NormalRightRow)
@@ -22,12 +63,15 @@ function NormalLeftRow({ schema, classes }) {
    */
   const blankLinePaddings = [];
   const skipKeywords = [
+    '$id',
+    '$schema',
     'type',
     'name',
     'description',
     'items',
     'contains',
     'properties',
+    'required',
   ];
   const keywords = Object.keys(schema).filter(
     key => !skipKeywords.includes(key)
@@ -43,9 +87,14 @@ function NormalLeftRow({ schema, classes }) {
 
   return (
     <div key={schema.type} className={classes.row}>
-      <Typography component="div" variant="subtitle2" className={classes.line}>
+      <Typography
+        component="div"
+        variant="subtitle2"
+        className={classNames(classes.line, styles.indentation)}>
+        {containsPrefix}
         {name && `${name}: `}
         {typeSymbol}
+        {requiredPrefix}
       </Typography>
       {blankLinePaddings}
     </div>
@@ -73,7 +122,9 @@ NormalLeftRow.propTypes = {
     row: string.isRequired,
     line: string.isRequired,
     code: string.isRequired,
+    prefix: string.isRequired,
   }).isRequired,
+  indent: number.isRequired,
 };
 
 export default React.memo(NormalLeftRow);

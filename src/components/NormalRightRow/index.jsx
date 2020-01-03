@@ -10,12 +10,15 @@ function NormalRightRow({ schema, classes }) {
    * (ex. symbols in the left panel or description in right panel)
    */
   const skipKeywords = [
+    '$id',
+    '$schema',
     'type',
     'name',
     'description',
     'items',
     'contains',
     'properties',
+    'required',
   ];
   const keywords = Object.keys(schema).filter(
     key => !skipKeywords.includes(key)
@@ -45,7 +48,10 @@ function NormalRightRow({ schema, classes }) {
       </div>
       <div className={classes.descriptionColumn}>
         {'description' in schema && (
-          <Typography component="div" variant="subtitle2">
+          <Typography
+            component="div"
+            variant="subtitle2"
+            className={classes.line}>
             {schema.description}
           </Typography>
         )}
