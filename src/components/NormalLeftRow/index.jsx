@@ -132,7 +132,7 @@ NormalLeftRow.propTypes = {
    */
   schema: shape({
     /** Type of schema or sub-schema */
-    type: string.isRequired,
+    type: string,
     /** Name of schema or sub-schema */
     name: string,
   }).isRequired,

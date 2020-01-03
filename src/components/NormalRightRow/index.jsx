@@ -72,7 +72,7 @@ NormalRightRow.propTypes = {
    */
   schema: shape({
     /** Type of schema or sub-schema */
-    type: string.isRequired,
+    type: string,
   }).isRequired,
   /**
    * Style for rows and lines for schema viewer.

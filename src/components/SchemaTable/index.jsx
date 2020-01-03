@@ -214,27 +214,33 @@ function SchemaTable({ schema }) {
    */
   function renderCombination(schemaInput, indent) {
     const openCombRow = createNormalRow(schemaInput, indent);
+    const combType = schemaInput.type;
+    const optionIndent = indent + 1;
 
     pushRow(openCombRow);
 
-    /**  */
-    const combType = schemaInput.type;
-    const combOptionList = schemaInput[combType];
+    /** If combination type is 'not', render only one option */
+    if (combType === 'not') {
+      renderSchema(schemaInput[combType], optionIndent);
+    } else {
+      /**
+       * else, options are defined as an array.
+       * Render each of the option schemas sequentially.
+       */
+      const combOptionList = schemaInput[combType];
 
-    /** If options exist, render each of the option schemas sequentially. */
-    if (combOptionList.length > 0) {
       combOptionList.forEach((option, i) => {
         /**
          * If more than one option, create a row with 'or', 'and', 'nor'
          * in order to separate the options.
          */
         if (i > 0) {
-          const optionSeparatorRow = createLiteralRow(combType, indent + 1);
+          const optionSeparatorRow = createLiteralRow(combType, optionIndent);
 
           pushRow(optionSeparatorRow);
         }
 
-        renderSchema(option, indent + 1);
+        renderSchema(option, optionIndent);
       });
     }
   }
