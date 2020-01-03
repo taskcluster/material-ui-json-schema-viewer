@@ -164,7 +164,6 @@ function SchemaTable({ schema }) {
    */
   function renderArray(schemaInput, indent) {
     const openArrayRow = createNormalRow(schemaInput, indent);
-    const closeArrayRow = createLiteralRow(schemaInput.type, indent);
 
     pushRow(openArrayRow);
 
@@ -200,12 +199,18 @@ function SchemaTable({ schema }) {
       renderSchema(cloneSubschema, indent + 1);
     }
 
+    const closeArrayRow = createLiteralRow(schemaInput.type, indent);
+
     pushRow(closeArrayRow);
   }
 
   /**
-   * TODO: define renderCombination method
-   *       add description comment
+   * Combination type schemas (allOf, anyOf, oneOf, not) start with
+   * an openCombRow to denote which kind of combination type it defines.
+   * Combination Options are parsed and rendered according to their type
+   * via calling back on the renderSchema() method. The resulting rows are
+   * added sequentially after the openCombRow. In between the option rows
+   * are single rows denoting 'and', 'or', 'nor' keywords to separate options.
    */
   function renderCombination(schemaInput, indent) {
     const openCombRow = createNormalRow(schemaInput, indent);
@@ -216,11 +221,13 @@ function SchemaTable({ schema }) {
     const combType = schemaInput.type;
     const combOptionList = schemaInput[combType];
 
+    /** If options exist, render each of the option schemas sequentially. */
     if (combOptionList.length > 0) {
-      /**
-       * Render each of the option schemas sequentially.
-       */
       combOptionList.forEach((option, i) => {
+        /**
+         * If more than one option, create a row with 'or', 'and', 'nor'
+         * in order to separate the options.
+         */
         if (i > 0) {
           const optionSeparatorRow = createLiteralRow(combType, indent + 1);
 
@@ -252,9 +259,6 @@ function SchemaTable({ schema }) {
    */
   function renderObject(schemaInput, indent) {
     const openObjectRow = createNormalRow(schemaInput, indent);
-    const closeObjectRow = createLiteralRow(schemaInput.type, indent);
-    const requiredProperties =
-      'required' in schemaInput ? new Set(schemaInput.required) : new Set();
 
     pushRow(openObjectRow);
 
@@ -264,12 +268,18 @@ function SchemaTable({ schema }) {
        * Render each of the property schemas sequentially.
        * Make sure to create a name field for each of the properties'
        * sub-schema so the names are also displayed in the left panel.
-       * (use cloned sub-schema to create new field in order to maintain
-       *  immutability of schema data)
+       * Also, create a set of required properties in order to mark
+       * the properties with a required prefix (*).
        */
       const propertyList = Object.keys(schemaInput.properties);
+      const requiredProperties =
+        'required' in schemaInput ? new Set(schemaInput.required) : new Set();
 
       propertyList.forEach(property => {
+        /**
+         * create a clone sub-schema in order to maintain immutability
+         * of the original schema data.
+         */
         const cloneSubschema = clone(schemaInput.properties[property]);
 
         cloneSubschema.name = property;
@@ -281,6 +291,8 @@ function SchemaTable({ schema }) {
         renderSchema(cloneSubschema, indent + 1);
       });
     }
+
+    const closeObjectRow = createLiteralRow(schemaInput.type, indent);
 
     pushRow(closeObjectRow);
   }
