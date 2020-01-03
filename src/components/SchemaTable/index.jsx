@@ -129,16 +129,20 @@ function SchemaTable({ schema }) {
    * The left row displays a closing bracket of the type while
    * the right row only consists of blank line padding.
    */
-  function createClosingRow(type, indent) {
-    const closeType = {
+  function createLiteralRow(type, indent) {
+    const literalType = {
       array: 'closeArray',
       object: 'closeObject',
+      allOf: 'and',
+      anyOf: 'or',
+      oneOf: 'or',
+      not: 'and',
     }[type];
-    const closingSchema = {
-      type: closeType,
+    const literalSchema = {
+      type: literalType,
     };
 
-    return createNormalRow(closingSchema, indent);
+    return createNormalRow(literalSchema, indent);
   }
 
   /**
@@ -160,7 +164,7 @@ function SchemaTable({ schema }) {
    */
   function renderArray(schemaInput, indent) {
     const openArrayRow = createNormalRow(schemaInput, indent);
-    const closeArrayRow = createClosingRow(schemaInput.type, indent);
+    const closeArrayRow = createLiteralRow(schemaInput.type, indent);
 
     pushRow(openArrayRow);
 
@@ -203,8 +207,23 @@ function SchemaTable({ schema }) {
    * TODO: define renderCombination method
    *       add description comment
    */
-  function renderCombination(schemaInput) {
-    return <React.Fragment>{schemaInput}</React.Fragment>;
+  function renderCombination(schemaInput, indent) {
+    const openCombRow = createNormalRow(schemaInput, indent);
+
+    pushRow(openCombRow);
+
+    /**  */
+    const combType = schemaInput.type;
+    const combOptionList = schemaInput[combType];
+
+    if (combOptionList.length > 0) {
+      /**
+       * Render each of the option schemas sequentially.
+       */
+      combOptionList.forEach(option => {
+        renderSchema(option, indent + 1);
+      });
+    }
   }
 
   /**
@@ -227,7 +246,7 @@ function SchemaTable({ schema }) {
    */
   function renderObject(schemaInput, indent) {
     const openObjectRow = createNormalRow(schemaInput, indent);
-    const closeObjectRow = createClosingRow(schemaInput.type, indent);
+    const closeObjectRow = createLiteralRow(schemaInput.type, indent);
     const requiredProperties =
       'required' in schemaInput ? new Set(schemaInput.required) : new Set();
 
@@ -278,18 +297,25 @@ function SchemaTable({ schema }) {
    * within their render method if the schema has a nested structure.
    */
   function renderSchema(schemaInput, indent = 0) {
-    if (
-      'allOf' in schemaInput ||
-      'anyOf' in schemaInput ||
-      'oneOf' in schemaInput ||
-      'not' in schemaInput
-    ) {
-      renderCombination(schemaInput, indent);
-    } else if ('$ref' in schemaInput) {
+    const combinationTypes = ['allOf', 'anyOf', 'oneOf', 'not'];
+    let schemaType = schemaInput.type;
+    combinationTypes.forEach(type => {
+      if (type in schemaInput) {
+        schemaType = type;
+      }
+    });
+
+    if (combinationTypes.includes(schemaType)) {
+      const cloneSchema = clone(schemaInput);
+
+      cloneSchema.type = schemaType;
+      renderCombination(cloneSchema, indent);
+    }
+    else if ('$ref' in schemaInput) {
       renderRef(schemaInput, indent);
-    } else if (schemaInput.type === 'array') {
+    } else if (schemaType === 'array') {
       renderArray(schemaInput, indent);
-    } else if (schemaInput.type === 'object') {
+    } else if (schemaType === 'object') {
       renderObject(schemaInput, indent);
     } else {
       renderDefault(schemaInput, indent);

@@ -19,6 +19,10 @@ function NormalRightRow({ schema, classes }) {
     'contains',
     'properties',
     'required',
+    'allOf',
+    'anyOf',
+    'oneOf',
+    'not',
   ];
   const keywords = Object.keys(schema).filter(
     key => !skipKeywords.includes(key)
