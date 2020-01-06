@@ -62,6 +62,9 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.grey[300],
     padding: `0 ${theme.spacing(0.5)}px`,
   },
+  comment: {
+    color: theme.palette.text.hint,
+  },
   /**
    * Prefixes used to notate special properties of data types in
    * lines of NormalLeftRow. (ex. 'required', 'contains' keywords)
@@ -108,7 +111,7 @@ function SchemaTable({ schema }) {
     return {
       leftRow: (
         <NormalLeftRow
-          key={leftRows.length + 1}
+          key={`left-row-${leftRows.length + 1}`}
           schema={schemaInput}
           classes={classes}
           indent={indent}
@@ -116,7 +119,7 @@ function SchemaTable({ schema }) {
       ),
       rightRow: (
         <NormalRightRow
-          key={rightRows.length + 1}
+          key={`right-row-${rightRows.length + 1}`}
           schema={schemaInput}
           classes={classes}
         />
@@ -129,16 +132,20 @@ function SchemaTable({ schema }) {
    * The left row displays a closing bracket of the type while
    * the right row only consists of blank line padding.
    */
-  function createClosingRow(type, indent) {
-    const closeType = {
+  function createLiteralRow(type, indent) {
+    const literalType = {
       array: 'closeArray',
       object: 'closeObject',
+      allOf: 'and',
+      anyOf: 'or',
+      oneOf: 'or',
+      not: 'nor',
     }[type];
-    const closingSchema = {
-      type: closeType,
+    const literalSchema = {
+      type: literalType,
     };
 
-    return createNormalRow(closingSchema, indent);
+    return createNormalRow(literalSchema, indent);
   }
 
   /**
@@ -160,7 +167,6 @@ function SchemaTable({ schema }) {
    */
   function renderArray(schemaInput, indent) {
     const openArrayRow = createNormalRow(schemaInput, indent);
-    const closeArrayRow = createClosingRow(schemaInput.type, indent);
 
     pushRow(openArrayRow);
 
@@ -196,15 +202,50 @@ function SchemaTable({ schema }) {
       renderSchema(cloneSubschema, indent + 1);
     }
 
+    const closeArrayRow = createLiteralRow(schemaInput.type, indent);
+
     pushRow(closeArrayRow);
   }
 
   /**
-   * TODO: define renderCombination method
-   *       add description comment
+   * Combination type schemas (allOf, anyOf, oneOf, not) start with
+   * an openCombRow to denote which kind of combination type it defines.
+   * Combination Options are parsed and rendered according to their type
+   * via calling back on the renderSchema() method. The resulting rows are
+   * added sequentially after the openCombRow. In between the option rows
+   * are single rows denoting 'and', 'or', 'nor' keywords to separate options.
    */
-  function renderCombination(schemaInput) {
-    return <React.Fragment>{schemaInput}</React.Fragment>;
+  function renderCombination(schemaInput, indent) {
+    const openCombRow = createNormalRow(schemaInput, indent);
+    const combType = schemaInput.type;
+    const optionIndent = indent + 1;
+
+    pushRow(openCombRow);
+
+    /** If combination type is 'not', render only one option */
+    if (combType === 'not') {
+      renderSchema(schemaInput[combType], optionIndent);
+    } else {
+      /**
+       * else, options are defined as an array.
+       * Render each of the option schemas sequentially.
+       */
+      const combOptionList = schemaInput[combType];
+
+      combOptionList.forEach((option, i) => {
+        /**
+         * If more than one option, create a row with 'or', 'and', 'nor'
+         * in order to separate the options.
+         */
+        if (i > 0) {
+          const optionSeparatorRow = createLiteralRow(combType, optionIndent);
+
+          pushRow(optionSeparatorRow);
+        }
+
+        renderSchema(option, optionIndent);
+      });
+    }
   }
 
   /**
@@ -227,9 +268,6 @@ function SchemaTable({ schema }) {
    */
   function renderObject(schemaInput, indent) {
     const openObjectRow = createNormalRow(schemaInput, indent);
-    const closeObjectRow = createClosingRow(schemaInput.type, indent);
-    const requiredProperties =
-      'required' in schemaInput ? new Set(schemaInput.required) : new Set();
 
     pushRow(openObjectRow);
 
@@ -239,12 +277,18 @@ function SchemaTable({ schema }) {
        * Render each of the property schemas sequentially.
        * Make sure to create a name field for each of the properties'
        * sub-schema so the names are also displayed in the left panel.
-       * (use cloned sub-schema to create new field in order to maintain
-       *  immutability of schema data)
+       * Also, create a set of required properties in order to mark
+       * the properties with a required prefix (*).
        */
       const propertyList = Object.keys(schemaInput.properties);
+      const requiredProperties =
+        'required' in schemaInput ? new Set(schemaInput.required) : new Set();
 
       propertyList.forEach(property => {
+        /**
+         * create a clone sub-schema in order to maintain immutability
+         * of the original schema data.
+         */
         const cloneSubschema = clone(schemaInput.properties[property]);
 
         cloneSubschema.name = property;
@@ -256,6 +300,8 @@ function SchemaTable({ schema }) {
         renderSchema(cloneSubschema, indent + 1);
       });
     }
+
+    const closeObjectRow = createLiteralRow(schemaInput.type, indent);
 
     pushRow(closeObjectRow);
   }
@@ -269,6 +315,28 @@ function SchemaTable({ schema }) {
   }
 
   /**
+   * Create a clone schema with an identified type property.
+   * Since complex schema cases, such as combinations and ref types,
+   * do not specify its particular type, it is necessary to manually include
+   * the type property in order to provide a consistent API when creating rows.
+   * For cases which do not specify types for specific reasons (ex. an option
+   * schema of an 'allOf' combination), just simply return the schema as-is
+   * so that it will be directed to the renderDefault method by default.
+   */
+  function addSchemaType(schemaInput) {
+    const complexTypes = ['allOf', 'anyOf', 'oneOf', 'not', '$ref'];
+    const cloneSchema = clone(schemaInput);
+
+    complexTypes.forEach(type => {
+      if (type in schemaInput) {
+        cloneSchema.type = type;
+      }
+    });
+
+    return cloneSchema;
+  }
+
+  /**
    * Schemas are passed to different render methods according to its
    * specific type (combination, array, object, ref, and default).
    * Each method will create rows with the appropriate format to its
@@ -278,18 +346,21 @@ function SchemaTable({ schema }) {
    * within their render method if the schema has a nested structure.
    */
   function renderSchema(schemaInput, indent = 0) {
-    if (
-      'allOf' in schemaInput ||
-      'anyOf' in schemaInput ||
-      'oneOf' in schemaInput ||
-      'not' in schemaInput
-    ) {
-      renderCombination(schemaInput, indent);
-    } else if ('$ref' in schemaInput) {
+    /**
+     * If schema is complex (combination or ref type),
+     * make sure the schema includes a type property.
+     */
+    const schemaWithType =
+      'type' in schemaInput ? schemaInput : addSchemaType(schemaInput);
+    const schemaType = schemaWithType.type;
+
+    if (['allOf', 'anyOf', 'oneOf', 'not'].includes(schemaType)) {
+      renderCombination(schemaWithType, indent);
+    } else if (schemaType === '$ref') {
       renderRef(schemaInput, indent);
-    } else if (schemaInput.type === 'array') {
+    } else if (schemaType === 'array') {
       renderArray(schemaInput, indent);
-    } else if (schemaInput.type === 'object') {
+    } else if (schemaType === 'object') {
       renderObject(schemaInput, indent);
     } else {
       renderDefault(schemaInput, indent);

@@ -19,6 +19,10 @@ function NormalRightRow({ schema, classes }) {
     'contains',
     'properties',
     'required',
+    'allOf',
+    'anyOf',
+    'oneOf',
+    'not',
   ];
   const keywords = Object.keys(schema).filter(
     key => !skipKeywords.includes(key)
@@ -68,7 +72,7 @@ NormalRightRow.propTypes = {
    */
   schema: shape({
     /** Type of schema or sub-schema */
-    type: string.isRequired,
+    type: string,
   }).isRequired,
   /**
    * Style for rows and lines for schema viewer.

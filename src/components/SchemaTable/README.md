@@ -36,7 +36,7 @@ const schema = require('../../../schemas/basicDataTypes/array/emptyArray.json');
 <SchemaTable schema={schema} />
 ```
 
-## Object Type Schema
+### Object Type Schema
 
 simple object
 ```js
@@ -62,8 +62,33 @@ const schema = require('../../../schemas/basicDataTypes/object/requiredPropertie
 <SchemaTable schema={schema} />
 ```
 
-## Complex Nested Types
+### Complex Nested Types
 ```js
 const schema = require('../../../schemas/demo/list-clients-response.json');
+<SchemaTable schema={schema} />
+```
+
+### Combination Types
+allOf
+```js
+const schema = require('../../../schemas/combinationTypes/allOf.json');
+<SchemaTable schema={schema} />
+```
+
+anyOf
+```js
+const schema = require('../../../schemas/combinationTypes/anyOf.json');
+<SchemaTable schema={schema} />
+```
+
+oneOf
+```js
+const schema = require('../../../schemas/combinationTypes/oneOf.json');
+<SchemaTable schema={schema} />
+```
+
+not
+```js
+const schema = require('../../../schemas/combinationTypes/not.json');
 <SchemaTable schema={schema} />
 ```
