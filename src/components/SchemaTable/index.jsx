@@ -62,6 +62,9 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.grey[300],
     padding: `0 ${theme.spacing(0.5)}px`,
   },
+  comment: {
+    color: theme.palette.text.hint,
+  },
   /**
    * Prefixes used to notate special properties of data types in
    * lines of NormalLeftRow. (ex. 'required', 'contains' keywords)

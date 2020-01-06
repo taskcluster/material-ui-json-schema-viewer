@@ -32,24 +32,31 @@ function NormalLeftRow({ schema, classes, indent }) {
    * Complex types (allOf, anyOf, oneOf, no) use comment notation,
    * while others use highlighted text to illustrate the data type.
    */
-  const bracketTypes = ['array', 'object', 'closeArray', 'closeObject'];
-  const combinationTypes = [
-    'allOf',
-    'anyOf',
-    'oneOf',
-    'not',
-    'and',
-    'or',
-    'nor',
-  ];
-  const typeSymbol =
-    bracketTypes.includes(schema.type) ||
-    combinationTypes.includes(schema.type) ? (
-      {
+  const typeSymbol = createTypeSymbol(schema.type);
+
+  function createTypeSymbol(type) {
+    const bracketTypes = ['array', 'object', 'closeArray', 'closeObject'];
+    const combinationTypes = [
+      'allOf',
+      'anyOf',
+      'oneOf',
+      'not',
+      'and',
+      'or',
+      'nor',
+    ];
+
+    if (bracketTypes.includes(type)) {
+      return {
         array: '[',
         object: '{',
         closeArray: ']',
         closeObject: '}',
+      }[type];
+    }
+
+    if (combinationTypes.includes(type)) {
+      const commentText = {
         allOf: '// All of',
         anyOf: '// Any of',
         oneOf: '// One of',
@@ -57,10 +64,14 @@ function NormalLeftRow({ schema, classes, indent }) {
         and: '// and',
         or: '// or',
         nor: '// nor',
-      }[schema.type]
-    ) : (
-      <code className={classes.code}>{schema.type}</code>
-    );
+      }[type];
+
+      return <span className={classes.comment}>{commentText}</span>;
+    }
+
+    return <code className={classes.code}>{schema.type}</code>;
+  }
+
   /**
    * Define the required prefix (* symbol) if the schema type
    * is a required property of an object.
@@ -145,6 +156,7 @@ NormalLeftRow.propTypes = {
     row: string.isRequired,
     line: string.isRequired,
     code: string.isRequired,
+    comment: string.isRequired,
     prefix: string.isRequired,
   }).isRequired,
   indent: number.isRequired,
