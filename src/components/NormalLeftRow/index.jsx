@@ -3,7 +3,6 @@ import { shape, string, number } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
-import { SKIP_KEYWORDS } from '../../utils/constants';
 
 /**
  * Dynamically generate styles for indentations to be used for
@@ -92,18 +91,6 @@ function NormalLeftRow({ schema, classes, indent }) {
    * This enables the left row to have matching number of lines with
    * the right row and align the lines and heights between the two rows.
    */
-  const blankLinePaddings = [];
-  const keywords = Object.keys(schema).filter(
-    key => !SKIP_KEYWORDS.includes(key)
-  );
-
-  keywords.forEach((keyword, i) => {
-    if (i > 0) {
-      blankLinePaddings.push(
-        <div key={`${keyword} line`} className={classes.line} />
-      );
-    }
-  });
 
   return (
     <div key={schema.type} className={classes.row}>
@@ -116,7 +103,6 @@ function NormalLeftRow({ schema, classes, indent }) {
         {typeSymbol}
         {requiredPrefix}
       </Typography>
-      {blankLinePaddings}
     </div>
   );
 }

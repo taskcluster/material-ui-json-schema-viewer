@@ -10,6 +10,7 @@ export const SKIP_KEYWORDS = [
   '$schema',
   'type',
   'name',
+  'description',
   'items',
   'contains',
   'properties',

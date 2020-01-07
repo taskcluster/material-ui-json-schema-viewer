@@ -1,6 +1,6 @@
 import React from 'react';
 import { shape, string } from 'prop-types';
-import Typography from '@material-ui/core/Typography';
+import Chip from '@material-ui/core/Chip';
 import Tooltip from '../Tooltip';
 import { SKIP_KEYWORDS } from '../../utils/constants';
 
@@ -18,20 +18,21 @@ function NormalRightRow({ schema, classes }) {
       {keywords.length === 0 ? (
         <div className={classes.line} />
       ) : (
-        keywords.map(keyword => {
-          return typeof schema[keyword] === 'object' &&
-            !Array.isArray(schema[keyword]) ? (
-            <Tooltip key={keyword} keyword={keyword} classes={classes} />
-          ) : (
-            <Typography
-              key={keyword}
-              component="div"
-              variant="subtitle2"
-              className={classes.line}>
-              {`${keyword}: ${schema[keyword]}`}
-            </Typography>
-          );
-        })
+        <div className={classes.line}>
+          {keywords.map(keyword => {
+            return typeof schema[keyword] === 'object' &&
+              !Array.isArray(schema[keyword]) ? (
+              <Tooltip key={keyword} keyword={keyword} classes={classes} />
+            ) : (
+              <Chip
+                key={keyword}
+                label={`${keyword}: ${schema[keyword]}`}
+                size="small"
+                variant="outlined"
+              />
+            );
+          })}
+        </div>
       )}
     </div>
   );

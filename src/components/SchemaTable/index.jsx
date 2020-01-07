@@ -61,18 +61,6 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.error.main,
     padding: `0 ${theme.spacing(0.5)}px}`,
   },
-  /**
-   * The text and icon within Tooltip component should maintain
-   * a consistent line height and font size to align vertically.
-   */
-  tooltip: {
-    fontSize: `${theme.typography.subtitle2.fontSize}`,
-    lineHeight: 1,
-  },
-  /** Icon within Tooltip component */
-  icon: {
-    margin: `0 ${theme.spacing(0.5)}px`,
-  },
 }));
 
 function SchemaTable({ schema }) {
