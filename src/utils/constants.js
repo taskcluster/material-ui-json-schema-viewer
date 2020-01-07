@@ -5,7 +5,7 @@
  * illustrated in other parts of the SchemaTable
    (ex. symbols in the left panel)
  */
-const skipKeywords = [
+export const SKIP_KEYWORDS = [
   '$id',
   '$schema',
   'type',
@@ -20,5 +20,3 @@ const skipKeywords = [
   'oneOf',
   'not',
 ];
-
-export default skipKeywords;

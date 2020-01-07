@@ -3,7 +3,7 @@ import { shape, string, number } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
-import skipKeywords from '../../utils/constants';
+import { SKIP_KEYWORDS } from '../../utils/constants';
 
 /**
  * Dynamically generate styles for indentations to be used for
@@ -94,7 +94,7 @@ function NormalLeftRow({ schema, classes, indent }) {
    */
   const blankLinePaddings = [];
   const keywords = Object.keys(schema).filter(
-    key => !skipKeywords.includes(key)
+    key => !SKIP_KEYWORDS.includes(key)
   );
 
   keywords.forEach((keyword, i) => {

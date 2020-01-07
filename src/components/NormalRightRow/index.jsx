@@ -2,7 +2,7 @@ import React from 'react';
 import { shape, string } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '../Tooltip';
-import skipKeywords from '../../utils/constants';
+import { SKIP_KEYWORDS } from '../../utils/constants';
 
 function NormalRightRow({ schema, classes }) {
   /**
@@ -10,7 +10,7 @@ function NormalRightRow({ schema, classes }) {
    * (skip over keywords that are already displayed in other parts)
    */
   const keywords = Object.keys(schema).filter(
-    key => !skipKeywords.includes(key)
+    key => !SKIP_KEYWORDS.includes(key)
   );
 
   return (
