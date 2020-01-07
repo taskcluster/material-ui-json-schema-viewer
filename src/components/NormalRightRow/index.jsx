@@ -2,30 +2,15 @@ import React from 'react';
 import { shape, string } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '../Tooltip';
+import { SKIP_KEYWORDS } from '../../utils/constants';
 
 function NormalRightRow({ schema, classes }) {
   /**
-   * Skip over certain keywords illustrated in other parts of
-   * the SchemaTable to avoid displaying them repeatedly.
-   * (ex. symbols in the left panel or description in right panel)
+   * Filter keywords that should be displayed in the right panel.
+   * (skip over keywords that are already displayed in other parts)
    */
-  const skipKeywords = [
-    '$id',
-    '$schema',
-    'type',
-    'name',
-    'description',
-    'items',
-    'contains',
-    'properties',
-    'required',
-    'allOf',
-    'anyOf',
-    'oneOf',
-    'not',
-  ];
   const keywords = Object.keys(schema).filter(
-    key => !skipKeywords.includes(key)
+    key => !SKIP_KEYWORDS.includes(key)
   );
 
   return (
