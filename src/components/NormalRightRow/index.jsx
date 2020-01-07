@@ -14,37 +14,25 @@ function NormalRightRow({ schema, classes }) {
   );
 
   return (
-    <div className={`${classes.row} ${classes.rightRow}`}>
-      <div className={classes.keywordColumn}>
-        {keywords.length === 0 ? (
-          <div className={classes.line} />
-        ) : (
-          keywords.map(keyword => {
-            return typeof schema[keyword] === 'object' &&
-              !Array.isArray(schema[keyword]) ? (
-              <Tooltip key={keyword} keyword={keyword} classes={classes} />
-            ) : (
-              <Typography
-                key={keyword}
-                component="div"
-                variant="subtitle2"
-                className={classes.line}>
-                {`${keyword}: ${schema[keyword]}`}
-              </Typography>
-            );
-          })
-        )}
-      </div>
-      <div className={classes.descriptionColumn}>
-        {'description' in schema && (
-          <Typography
-            component="div"
-            variant="subtitle2"
-            className={classes.line}>
-            {schema.description}
-          </Typography>
-        )}
-      </div>
+    <div className={classes.row}>
+      {keywords.length === 0 ? (
+        <div className={classes.line} />
+      ) : (
+        keywords.map(keyword => {
+          return typeof schema[keyword] === 'object' &&
+            !Array.isArray(schema[keyword]) ? (
+            <Tooltip key={keyword} keyword={keyword} classes={classes} />
+          ) : (
+            <Typography
+              key={keyword}
+              component="div"
+              variant="subtitle2"
+              className={classes.line}>
+              {`${keyword}: ${schema[keyword]}`}
+            </Typography>
+          );
+        })
+      )}
     </div>
   );
 }
@@ -67,15 +55,6 @@ NormalRightRow.propTypes = {
   classes: shape({
     row: string.isRequired,
     line: string.isRequired,
-    /**
-     * Display the right panel in a two-column grid
-     * : keywordColumn, descriptionColumn
-     */
-    rightRow: string.isRequired,
-    /** Column to display keywords for the schema or sub-schema */
-    keywordColumn: string.isRequired,
-    /** Column to display description for the schema or sub-schema */
-    descriptionColumn: string.isRequired,
   }).isRequired,
 };
 
