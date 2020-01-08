@@ -292,28 +292,6 @@ function SchemaTable({ schema }) {
   }
 
   /**
-   * Create a clone schema with an identified type property.
-   * Since complex schema cases, such as combinations and ref types,
-   * do not specify its particular type, it is necessary to manually include
-   * the type property in order to provide a consistent API when creating rows.
-   * For cases which do not specify types for specific reasons (ex. an option
-   * schema of an 'allOf' combination), just simply return the schema as-is
-   * so that it will be directed to the renderDefault method by default.
-   */
-  function addSchemaType(schemaInput) {
-    const complexTypes = ['allOf', 'anyOf', 'oneOf', 'not', '$ref'];
-    const cloneSchema = clone(schemaInput);
-
-    complexTypes.forEach(type => {
-      if (type in schemaInput) {
-        cloneSchema.type = type;
-      }
-    });
-
-    return cloneSchema;
-  }
-
-  /**
    * Schemas are passed to different render methods according to its
    * specific type (combination, array, object, ref, and default).
    * Each method will create rows with the appropriate format to its
@@ -324,13 +302,31 @@ function SchemaTable({ schema }) {
    */
   function renderSchema(schemaInput, indent = 0) {
     /**
-     * If schema is complex (combination or ref type),
-     * make sure the schema includes a type property.
+     * Create a temporary clone schema to indentify the schema's type.
+     * This ensures the type is directed to the correct render method.
+     * (If schema is complex, either a combination or ref type,
+     *  this makes sure the schema includes a type property.)
      */
     const schemaWithType =
-      'type' in schemaInput ? schemaInput : addSchemaType(schemaInput);
+      'type' in schemaInput
+        ? schemaInput
+        : (function addTypeToSchema(s) {
+            const complexTypes = ['allOf', 'anyOf', 'oneOf', 'not', '$ref'];
+            const cloneSchema = clone(s);
+
+            complexTypes.forEach(type => {
+              if (type in s) {
+                cloneSchema.type = type;
+              }
+            });
+
+            return cloneSchema;
+          })(schemaInput);
     const schemaType = schemaWithType.type;
 
+    /**
+     * Direct the schema to the corresponding render method
+     */
     if (['allOf', 'anyOf', 'oneOf', 'not'].includes(schemaType)) {
       renderCombination(schemaWithType, indent);
     } else if (schemaType === '$ref') {
