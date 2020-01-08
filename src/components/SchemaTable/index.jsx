@@ -27,6 +27,7 @@ const useStyles = makeStyles(theme => ({
   row: {
     borderBottom: `${theme.spacing(0.25)}px solid ${theme.palette.divider}`,
     minHeight: theme.spacing(3),
+    width: '100%',
   },
   lastRow: {
     borderBottom: 'none',

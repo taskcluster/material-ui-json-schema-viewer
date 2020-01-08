@@ -1,39 +1,81 @@
 import React from 'react';
 import { shape, string } from 'prop-types';
+import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
 import Tooltip from '../Tooltip';
-import { SKIP_KEYWORDS } from '../../utils/constants';
+import { SKIP_KEYWORDS, DESCRIPTOR_KEYWORDS } from '../../utils/constants';
 
 function NormalRightRow({ schema, classes }) {
   /**
    * Filter keywords that should be displayed in the right panel.
-   * (skip over keywords that are already displayed in other parts)
+   * (skip over keywords that do not need to be displayed)
    */
-  const keywords = Object.keys(schema).filter(
+  const specKeywords = Object.keys(schema).filter(
     key => !SKIP_KEYWORDS.includes(key)
   );
+  const descriptorKeywords = Object.keys(schema).filter(key =>
+    DESCRIPTOR_KEYWORDS.includes(key)
+  );
+
+  function displaySpecKeyword(keyword) {
+    if (
+      typeof schema[keyword] === 'object' &&
+      !Array.isArray(schema[keyword])
+    ) {
+      return <Tooltip key={keyword} keyword={keyword} classes={classes} />;
+    }
+
+    return (
+      <Chip
+        key={keyword}
+        label={`${keyword}: ${schema[keyword]}`}
+        size="small"
+        variant="outlined"
+      />
+    );
+  }
+
+  function displayDescriptor(keyword) {
+    return (
+      <Typography
+        key={keyword}
+        component="div"
+        variant="subtitle2"
+        className={classes.line}>
+        {`${keyword}: ${schema[keyword]}`}
+      </Typography>
+    );
+  }
+
+  function displayLines(specs, descriptors) {
+    const lines = [];
+
+    if (specs.length === 0 && descriptors.length === 0) {
+      lines.push(<div key="blank-line" className={classes.line} />);
+    }
+
+    if (specs.length > 0) {
+      lines.push(
+        <div key="spec-line" className={classes.line}>
+          {specs.map(keyword => displaySpecKeyword(keyword))}
+        </div>
+      );
+    }
+
+    if (descriptors.length > 0) {
+      if (specs.length > 0) {
+        lines.push(<div key="separator-line" className={classes.line} />);
+      }
+
+      descriptors.forEach(keyword => lines.push(displayDescriptor(keyword)));
+    }
+
+    return lines;
+  }
 
   return (
     <div className={classes.row}>
-      {keywords.length === 0 ? (
-        <div className={classes.line} />
-      ) : (
-        <div className={classes.line}>
-          {keywords.map(keyword => {
-            return typeof schema[keyword] === 'object' &&
-              !Array.isArray(schema[keyword]) ? (
-              <Tooltip key={keyword} keyword={keyword} classes={classes} />
-            ) : (
-              <Chip
-                key={keyword}
-                label={`${keyword}: ${schema[keyword]}`}
-                size="small"
-                variant="outlined"
-              />
-            );
-          })}
-        </div>
-      )}
+      {displayLines(specKeywords, descriptorKeywords)}
     </div>
   );
 }
