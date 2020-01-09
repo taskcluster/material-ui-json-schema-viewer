@@ -53,7 +53,11 @@ function NormalRightRow({ schema, classes }) {
         component="div"
         variant="subtitle2"
         className={classes.line}>
-        {keyword === 'title' ? <strong>{schema[keyword]}</strong> : schema[keyword]}
+        {keyword === 'title' ? (
+          <strong>{schema[keyword]}</strong>
+        ) : (
+          schema[keyword]
+        )}
       </Typography>
     );
   }
