@@ -26,6 +26,31 @@ function NormalRightRow({ schema, classes }) {
    * in order to inform users to refer to the source for more details.
    */
   function displaySpecKeyword(keyword) {
+    /**
+     * Typecast the definition in string format to display properly.
+     */
+    const keyValue = (function keyValueToString(key) {
+      if (Array.isArray(schema[keyword])) {
+        if (schema[keyword].length === 0) {
+          return '[ ]';
+        }
+
+        return schema[keyword];
+      }
+
+      if (
+        typeof schema[keyword] === 'object' &&
+        Object.keys(schema[keyword].length === 0)
+      ) {
+        return '{ }';
+      }
+
+      return schema[key];
+    })(keyword);
+
+    /**
+     * Display chip within tooltip for complex definitions.
+     */
     if (
       typeof schema[keyword] === 'object' &&
       !Array.isArray(schema[keyword])
@@ -36,7 +61,7 @@ function NormalRightRow({ schema, classes }) {
     return (
       <Chip
         key={keyword}
-        label={`${keyword}: ${schema[keyword]}`}
+        label={`${keyword}: ${keyValue}`}
         size="small"
         variant="outlined"
       />
