@@ -50,6 +50,17 @@ export const SKIP_KEYWORDS = [
   '$ref',
   'definitions',
 ];
-
 /** Empty Function to use for default props */
 export const NOOP = () => {};
+/**
+ * 
+ */
+export const TOOLTIP_DESCRIPTIONS = {
+  additionalItems: 'Additional items must match a sub-schema.',
+  additionalProperties: 'Additional properties must match a sub-schema.',
+  dependencies:
+    'The schema of the object may change based on the presence of certain special properties.',
+  propertyNames: 'Names of properties must follow a specified convention.',
+  patternProperties:
+    'Property names or values should match the specified pattern.',
+};

@@ -2,9 +2,14 @@ import React from 'react';
 import { shape, string } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
+import InfoIcon from '@material-ui/icons/Info';
 import Tooltip from '../Tooltip';
 import { treeNode } from '../../utils/prop-types';
-import { SKIP_KEYWORDS, DESCRIPTIVE_KEYWORDS } from '../../utils/constants';
+import {
+  SKIP_KEYWORDS,
+  DESCRIPTIVE_KEYWORDS,
+  TOOLTIP_DESCRIPTIONS,
+} from '../../utils/constants';
 
 function NormalRightRow({ classes, treeNode }) {
   const { schema } = treeNode;
@@ -24,12 +29,34 @@ function NormalRightRow({ classes, treeNode }) {
 
   /**
    * Display keywords defining specifications as chips.
-   * If keyword definition is too complex, display tooltip with info icon
-   * in order to inform users to refer to the source for more details.
    */
   function displaySpecKeyword(keyword) {
     /**
-     * Typecast the definition in string format to display properly.
+     * If keyword's property is defined complex, display the chip within
+     * a tooltip to inform users to refer to the source for more details.
+     */
+    if (
+      typeof schema[keyword] === 'object' &&
+      !Array.isArray(schema[keyword])
+    ) {
+      /** Generate tooltip descriptions to match the keyword. */
+      const tooltipTitle = `${TOOLTIP_DESCRIPTIONS[keyword]} See the JSON-schema source for details.`;
+      const infoIcon = <InfoIcon fontSize="inherit" color="inherit" />;
+
+      return (
+        <Tooltip key={keyword} title={tooltipTitle}>
+          <Chip
+            label={keyword}
+            icon={infoIcon}
+            size="small"
+            variant="outlined"
+          />
+        </Tooltip>
+      );
+    }
+
+    /**
+     * Typecast the keyword's property to string format for property display.
      */
     const keyValue = (function keyValueToString(key) {
       if (Array.isArray(schema[keyword])) {
@@ -49,16 +76,6 @@ function NormalRightRow({ classes, treeNode }) {
 
       return schema[key];
     })(keyword);
-
-    /**
-     * Display chip within tooltip for complex definitions.
-     */
-    if (
-      typeof schema[keyword] === 'object' &&
-      !Array.isArray(schema[keyword])
-    ) {
-      return <Tooltip key={keyword} keyword={keyword} classes={classes} />;
-    }
 
     return (
       <Chip
