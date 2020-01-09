@@ -1,50 +1,110 @@
 import React from 'react';
 import { shape, string } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
+import Chip from '@material-ui/core/Chip';
 import Tooltip from '../Tooltip';
-import { SKIP_KEYWORDS } from '../../utils/constants';
+import { SKIP_KEYWORDS, DESCRIPTIVE_KEYWORDS } from '../../utils/constants';
 
 function NormalRightRow({ schema, classes }) {
   /**
-   * Filter keywords that should be displayed in the right panel.
-   * (skip over keywords that are already displayed in other parts)
+   * Identify keywords that define specifications of the given schema.
+   * (skip over keywords that do not need to be displayed)
    */
-  const keywords = Object.keys(schema).filter(
+  const specKeywords = Object.keys(schema).filter(
     key => !SKIP_KEYWORDS.includes(key)
   );
+  /**
+   * Identify keywords that help describe the given schema.
+   */
+  const descriptorKeywords = Object.keys(schema).filter(key =>
+    DESCRIPTIVE_KEYWORDS.includes(key)
+  );
+
+  /**
+   * Display keywords defining specifications as chips.
+   * If keyword definition is too complex, display tooltip with info icon
+   * in order to inform users to refer to the source for more details.
+   */
+  function displaySpecKeyword(keyword) {
+    if (
+      typeof schema[keyword] === 'object' &&
+      !Array.isArray(schema[keyword])
+    ) {
+      return <Tooltip key={keyword} keyword={keyword} classes={classes} />;
+    }
+
+    return (
+      <Chip
+        key={keyword}
+        label={`${keyword}: ${schema[keyword]}`}
+        size="small"
+        variant="outlined"
+      />
+    );
+  }
+
+  /**
+   * Display a single descriptive keyword in its own line.
+   */
+  function displayDescriptor(keyword) {
+    return (
+      <Typography
+        key={keyword}
+        component="div"
+        variant="subtitle2"
+        className={classes.line}>
+        {keyword === 'title' ? (
+          <strong>{schema[keyword]}</strong>
+        ) : (
+          schema[keyword]
+        )}
+      </Typography>
+    );
+  }
+
+  /**
+   * Create the lines to display in a single right row according
+   * to the schema's specification and descriptive keywords.
+   */
+  function displayLines(specs, descriptors) {
+    const lines = [];
+
+    /** If no keywords necessary, display a single blank line */
+    if (specs.length === 0 && descriptors.length === 0) {
+      lines.push(<div key="blank-line" className={classes.line} />);
+    }
+
+    /**
+     * If specification keywords exist, display each keyword as chip
+     * within a single line.
+     */
+    if (specs.length > 0) {
+      lines.push(
+        <div key="spec-line" className={classes.line}>
+          {specs.map(keyword => displaySpecKeyword(keyword))}
+        </div>
+      );
+    }
+
+    /**
+     * If descriptive keywords exist, display each keyword in its own line.
+     * (if specification keywords also exist, create a blank line to separate
+     *  specifications line and lines for descriptions)
+     */
+    if (descriptors.length > 0) {
+      if (specs.length > 0) {
+        lines.push(<div key="separator-line" className={classes.line} />);
+      }
+
+      descriptors.forEach(keyword => lines.push(displayDescriptor(keyword)));
+    }
+
+    return lines;
+  }
 
   return (
-    <div className={`${classes.row} ${classes.rightRow}`}>
-      <div className={classes.keywordColumn}>
-        {keywords.length === 0 ? (
-          <div className={classes.line} />
-        ) : (
-          keywords.map(keyword => {
-            return typeof schema[keyword] === 'object' &&
-              !Array.isArray(schema[keyword]) ? (
-              <Tooltip key={keyword} keyword={keyword} classes={classes} />
-            ) : (
-              <Typography
-                key={keyword}
-                component="div"
-                variant="subtitle2"
-                className={classes.line}>
-                {`${keyword}: ${schema[keyword]}`}
-              </Typography>
-            );
-          })
-        )}
-      </div>
-      <div className={classes.descriptionColumn}>
-        {'description' in schema && (
-          <Typography
-            component="div"
-            variant="subtitle2"
-            className={classes.line}>
-            {schema.description}
-          </Typography>
-        )}
-      </div>
+    <div className={classes.row}>
+      {displayLines(specKeywords, descriptorKeywords)}
     </div>
   );
 }
@@ -67,15 +127,6 @@ NormalRightRow.propTypes = {
   classes: shape({
     row: string.isRequired,
     line: string.isRequired,
-    /**
-     * Display the right panel in a two-column grid
-     * : keywordColumn, descriptionColumn
-     */
-    rightRow: string.isRequired,
-    /** Column to display keywords for the schema or sub-schema */
-    keywordColumn: string.isRequired,
-    /** Column to display description for the schema or sub-schema */
-    descriptionColumn: string.isRequired,
   }).isRequired,
 };
 
