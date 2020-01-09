@@ -79,7 +79,8 @@ function NormalRightRow({ classes, treeNode }) {
         key={keyword}
         component="div"
         variant="subtitle2"
-        className={classes.line}>
+        className={classes.line}
+        noWrap>
         {keyword === 'title' ? (
           <strong>{schema[keyword]}</strong>
         ) : (
