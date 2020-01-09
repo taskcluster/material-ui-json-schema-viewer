@@ -3,7 +3,7 @@ import { shape, string, number } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
-import { SKIP_KEYWORDS, DESCRIPTOR_KEYWORDS } from '../../utils/constants';
+import { SKIP_KEYWORDS, DESCRIPTIVE_KEYWORDS } from '../../utils/constants';
 
 /**
  * Dynamically generate styles for indentations to be used for
@@ -88,7 +88,7 @@ function NormalLeftRow({ schema, classes, indent }) {
    * the right row and align the lines and heights between the two rows.
    */
   const descriptors = Object.keys(schema).filter(key =>
-    DESCRIPTOR_KEYWORDS.includes(key)
+    DESCRIPTIVE_KEYWORDS.includes(key)
   );
   const blankLinePaddings =
     descriptors.length === 0
@@ -99,15 +99,15 @@ function NormalLeftRow({ schema, classes, indent }) {
             key => !SKIP_KEYWORDS.includes(key)
           );
 
-          /**
-           * If specification keywords exists (displayed as chips in
-           * NormalRightRow), an additional blank line between the chip
-           * line and descriptor lines will be added to visually separate
-           * the lines. Else, must skip over the first keyword since the
-           * type line in NormalLeftRow will substitute as a matching line
-           * for the first line in NormalRightRow.
-           */
+          /** Display a blank line for each descriptor keyword. */
           descriptors.forEach((keyword, i) => {
+            /**
+             * If specification keywords exists (displayed as chips in
+             * NormalRightRow), a blank line should be added before the
+             * descriptor lines to visually separate the lines.
+             * Else, skip over the first descriptor keyword to match
+             * the number of lines in NormalRightRow
+             */
             if (i === 0) {
               if (specifications.length > 0) {
                 lines.push(

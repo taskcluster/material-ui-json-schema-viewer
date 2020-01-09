@@ -27,4 +27,4 @@ export const SKIP_KEYWORDS = [
  * These are typically displayed in the rows of the right panel,
  * separated by a blank line from the displayed chips.
  */
-export const DESCRIPTOR_KEYWORDS = ['description', 'title'];
+export const DESCRIPTIVE_KEYWORDS = ['description', 'title'];

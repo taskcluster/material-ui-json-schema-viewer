@@ -51,6 +51,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.grey[300],
     padding: `0 ${theme.spacing(0.5)}px`,
   },
+  /** Comments within the left panel (used for combination types) */
   comment: {
     color: theme.palette.text.hint,
   },
