@@ -79,7 +79,7 @@ function SchemaTable({ schema }) {
    *
    */
   const treeRoot = new Tree(schema);
-  const [hasTreeChanged, setHasTreeChanged] = useState(false);
+  const [isTreeUpdated, setIsTreeUpdated] = useState(false);
   /**
    * Rows for the left and right column are stored separately
    * so that the left and right panels can render the rows separately.

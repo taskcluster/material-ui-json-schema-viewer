@@ -5,8 +5,8 @@ import TreeNode from './treeNode';
  * int order to
  */
 class RefTreeNode extends TreeNode {
-  constructor(schema) {
-    super(schema);
+  constructor(schema, depth = 0) {
+    super(schema, depth);
     this.isExpanded = false;
     this.reference = undefined; // TODO: parse reference into this field
   }

@@ -17,21 +17,21 @@ class Tree {
    * this method within their own constructor methods if the schema
    * defines a nested structure.
    */
-  createTree(schema) {
+  createTree(schema, depth = 0) {
     const schemaWithType = identifySchemaType(schema);
     const schemaType = schemaWithType.type;
     let treeNode = null;
 
     if (COMBINATION_TYPES.includes(schemaType)) {
-      treeNode = this.createCombinationTree(schemaWithType);
+      treeNode = this.createCombinationTree(schemaWithType, depth);
     } else if (schemaType === '$ref') {
-      treeNode = this.createRefTree(schemaWithType);
+      treeNode = this.createRefTree(schemaWithType, depth);
     } else if (schemaType === 'array') {
-      treeNode = this.createArrayTree(schemaWithType);
+      treeNode = this.createArrayTree(schemaWithType, depth);
     } else if (schemaType === 'object') {
-      treeNode = this.createObjectTree(schemaWithType);
+      treeNode = this.createObjectTree(schemaWithType, depth);
     } else {
-      treeNode = this.createDefaultNode(schemaWithType);
+      treeNode = this.createDefaultNode(schemaWithType, depth);
     }
 
     return treeNode;
@@ -42,7 +42,7 @@ class Tree {
    * and append it to the given rootNode.
    */
   createChild(rootNode, subschema) {
-    const childNode = this.createTree(subschema);
+    const childNode = this.createTree(subschema, rootNode.depth + 1);
 
     rootNode.appendChild(childNode);
   }
@@ -53,13 +53,13 @@ class Tree {
    * back on the createTreeNode method and appended to the combinationType node.
    * The return value will either be a single node or a subtree data structure.
    */
-  createCombinationTree(schema) {
+  createCombinationTree(schema, depth) {
     /**
      * Create a clone schema where all subschemas are removed
      * since subschemas will be contained within the child nodes.
      */
     const cloneSchema = omit(COMBINATION_TYPES, schema);
-    const combTypeNode = new TreeNode(cloneSchema);
+    const combTypeNode = new TreeNode(cloneSchema, depth);
     const combType = schema.type;
 
     /**
@@ -83,8 +83,8 @@ class Tree {
   }
 
   /**  */
-  createRefTree(schema) {
-    const refTypeNode = RefTreeNode(schema);
+  createRefTree(schema, depth) {
+    const refTypeNode = RefTreeNode(schema, depth);
 
     return refTypeNode;
   }
@@ -95,13 +95,13 @@ class Tree {
    * back on the createTreeNode method and appended to the arrayType node.
    * The return value will either be a single node or a subtree data structure.
    */
-  createArrayTree(schema) {
+  createArrayTree(schema, depth) {
     /**
      * Create a clone schema where all subschemas are removed
      * since subschemas will be contained within the child nodes.
      */
     const cloneSchema = omit(['items', 'contains'], schema);
-    const arrayTypeNode = new TreeNode(cloneSchema);
+    const arrayTypeNode = new TreeNode(cloneSchema, depth);
 
     /**
      * Create child nodes only if array items are defined.
@@ -146,13 +146,13 @@ class Tree {
    * back on the createTreeNode method and appended to the objectType node.
    * The return value will either be a single node or a subtree data structure.
    */
-  createObjectTree(schema) {
+  createObjectTree(schema, depth) {
     /**
      * Create a clone schema where all subschemas are removed
      * since subschemas will be contained within the child nodes.
      */
     const cloneSchema = omit(['properties'], schema);
-    const objectTypeNode = new TreeNode(cloneSchema);
+    const objectTypeNode = new TreeNode(cloneSchema, depth);
 
     /**
      * Create child nodes only if object properties are defined.
@@ -191,8 +191,8 @@ class Tree {
    * Create a node for default data type schemas.
    * (boolean, null, number, integer, string)
    */
-  createDefaultNode(schema) {
-    const defaultTypeNode = new TreeNode(schema);
+  createDefaultNode(schema, depth) {
+    const defaultTypeNode = new TreeNode(schema, depth);
 
     return defaultTypeNode;
   }
