@@ -1,4 +1,22 @@
 /**
+ * Keywords used in schema to define combination types.
+ */
+export const COMBINATION_TYPES = ['allOf', 'anyOf', 'oneOf', 'not'];
+
+/**
+ * Keywords used in schema to define complex types.
+ * This includes keywords used to define combination types.
+ */
+export const COMPLEX_TYPES = [...COMBINATION_TYPES, '$ref'];
+
+/**
+ * Keywords used in schema that are descriptors.
+ * These are used to display in the rows of the right panel
+ * in separation with specification keywords by a blank line.
+ */
+export const DESCRIPTIVE_KEYWORDS = ['description', 'title'];
+
+/**
  * Keywords used in schemas that will be skipped over when 
  * creating lines for the rows in the right panel.
  * These are typically skipped over since they are already 
@@ -21,10 +39,3 @@ export const SKIP_KEYWORDS = [
   'oneOf',
   'not',
 ];
-
-/**
- * Keywords used in schema that are descriptors.
- * These are typically displayed in the rows of the right panel,
- * separated by a blank line from the displayed chips.
- */
-export const DESCRIPTIVE_KEYWORDS = ['description', 'title'];

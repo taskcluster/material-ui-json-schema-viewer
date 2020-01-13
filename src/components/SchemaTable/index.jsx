@@ -1,9 +1,11 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { shape, string } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { clone } from 'ramda';
 import NormalLeftRow from '../NormalLeftRow';
 import NormalRightRow from '../NormalRightRow';
+import Tree from '../../utils/tree';
+import { identifySchemaType } from '../../utils/types';
 
 const useStyles = makeStyles(theme => ({
   /** Schema table displays two-column layout */
@@ -71,6 +73,14 @@ function SchemaTable({ schema }) {
    */
   const classes = useStyles();
   /**
+   * Create a tree structure based on the schema.
+   * This will be used a an intermediary data structure
+   * which defines the overall structure of the schemaTable.
+   *
+   */
+  const treeRoot = new Tree(schema);
+  const [hasTreeChanged, setHasTreeChanged] = useState(false);
+  /**
    * Rows for the left and right column are stored separately
    * so that the left and right panels can render the rows separately.
    * This enable the viewer to have a two-column layout with each of
@@ -80,9 +90,9 @@ function SchemaTable({ schema }) {
   const rightRows = [];
 
   /**
-   * Create a single normal row (left and right column each).
+   * Create a single normal row with a left and right column each.
    * The result is stored in an object format in order for the
-   * pushRow() method to easily access each left and right column
+   * pushRow method to easily access each left and right column
    * of the single row and push them to leftRows and rightRows respectively.
    */
   function createNormalRow(schemaInput, indent) {
@@ -303,26 +313,10 @@ function SchemaTable({ schema }) {
    */
   function renderSchema(schemaInput, indent = 0) {
     /**
-     * Create a temporary clone schema to indentify the schema's type.
-     * This ensures the type is directed to the correct render method.
-     * (If schema is complex, either a combination or ref type,
-     *  this makes sure the schema includes a type property.)
+     * Identify the type of the schema so that it is directed to the
+     * correct render method.
      */
-    const schemaWithType =
-      'type' in schemaInput
-        ? schemaInput
-        : (function addTypeToSchema(s) {
-            const complexTypes = ['allOf', 'anyOf', 'oneOf', 'not', '$ref'];
-            const cloneSchema = clone(s);
-
-            complexTypes.forEach(type => {
-              if (type in s) {
-                cloneSchema.type = type;
-              }
-            });
-
-            return cloneSchema;
-          })(schemaInput);
+    const schemaWithType = identifySchemaType(schemaInput);
     const schemaType = schemaWithType.type;
 
     /**
