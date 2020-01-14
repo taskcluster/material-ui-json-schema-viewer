@@ -4,13 +4,22 @@ import { identifySchemaType } from './types';
 import TreeNode from './treeNode';
 import RefTreeNode from './refTreeNode';
 
-class Tree {
+/**
+ * Schema tree data structure which defines the overall
+ * structure the schema table will be rendered based on.
+ * Each of the nodes in the tree will be traversed in
+ * pre-order to effectively transfer the nested structures
+ * into rows with indentations in the schemaTable component.
+ * Particularly, it is useful for dynamically adding or
+ * removing rows when a $ref is expanded or shrunk.
+ */
+class SchemaTree {
   constructor(schema) {
     this.root = this.createTree(schema);
   }
 
   /**
-   * Create a tree data structure based on the given schema.
+   * Create a tree based on the given schema.
    * The schema will be directed to a method in order to
    * create the appropriate tree node depending on its type.
    * Types other than default type schemas may repeatedly call on
@@ -18,23 +27,24 @@ class Tree {
    * defines a nested structure.
    */
   createTree(schema, depth = 0) {
+    /** Identify the type of the schema */
     const schemaWithType = identifySchemaType(schema);
     const schemaType = schemaWithType.type;
-    let treeNode = null;
+    let rootNode = null;
 
     if (COMBINATION_TYPES.includes(schemaType)) {
-      treeNode = this.createCombinationTree(schemaWithType, depth);
+      rootNode = this.createCombinationTree(schemaWithType, depth);
     } else if (schemaType === '$ref') {
-      treeNode = this.createRefTree(schemaWithType, depth);
+      rootNode = this.createRefTree(schemaWithType, depth);
     } else if (schemaType === 'array') {
-      treeNode = this.createArrayTree(schemaWithType, depth);
+      rootNode = this.createArrayTree(schemaWithType, depth);
     } else if (schemaType === 'object') {
-      treeNode = this.createObjectTree(schemaWithType, depth);
+      rootNode = this.createObjectTree(schemaWithType, depth);
     } else {
-      treeNode = this.createDefaultNode(schemaWithType, depth);
+      rootNode = this.createDefaultNode(schemaWithType, depth);
     }
 
-    return treeNode;
+    return rootNode;
   }
 
   /**
@@ -198,4 +208,4 @@ class Tree {
   }
 }
 
-export default Tree;
+export default SchemaTree;

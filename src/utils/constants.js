@@ -10,6 +10,12 @@ export const COMBINATION_TYPES = ['allOf', 'anyOf', 'oneOf', 'not'];
 export const COMPLEX_TYPES = [...COMBINATION_TYPES, '$ref'];
 
 /**
+ * Keywords used in schema to define nested types.
+ * This define a structure for an open row, child rows, and close row.
+ */
+export const NESTED_TYPES = ['object', 'array'];
+
+/**
  * Keywords used in schema that are descriptors.
  * These are used to display in the rows of the right panel
  * in separation with specification keywords by a blank line.
