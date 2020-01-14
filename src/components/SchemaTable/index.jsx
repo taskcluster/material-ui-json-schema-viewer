@@ -1,11 +1,9 @@
-import React, { Fragment, useState } from 'react';
-import { shape, string } from 'prop-types';
+import React from 'react';
+import { instanceOf, func } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { clone } from 'ramda';
 import NormalLeftRow from '../NormalLeftRow';
 import NormalRightRow from '../NormalRightRow';
 import Tree from '../../utils/tree';
-import { identifySchemaType } from '../../utils/types';
 
 const useStyles = makeStyles(theme => ({
   /** Schema table displays two-column layout */
@@ -67,19 +65,11 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function SchemaTable({ schema }) {
+function SchemaTable({ schemaTree, setSchemaTree }) {
   /**
    * Generate classes to define overall style for the schema table.
    */
   const classes = useStyles();
-  /**
-   * Create a tree structure based on the schema.
-   * This will be used a an intermediary data structure
-   * which defines the overall structure of the schemaTable.
-   *
-   */
-  const treeRoot = new Tree(schema);
-  const [isTreeUpdated, setIsTreeUpdated] = useState(false);
   /**
    * Rows for the left and right column are stored separately
    * so that the left and right panels can render the rows separately.
@@ -146,218 +136,25 @@ function SchemaTable({ schema }) {
     rightRows.push(row.rightRow);
   }
 
-  /**
-   * Array type schemas start with an openArrayRow and are closed off
-   * with a closeArrayRow, which both display brackets to indicate an array.
-   * Array items are parsed and rendered according to their type via
-   * calling back on the renderSchema() method. The resulting rows are
-   * added sequentially in between the opening and closing rows.
-   */
-  function renderArray(schemaInput, indent) {
-    const openArrayRow = createNormalRow(schemaInput, indent);
-
-    pushRow(openArrayRow);
-
-    /** Render array items only if defined */
-    if ('items' in schemaInput) {
-      /**
-       * If array items are defined by tuple vaidation (each item may
-       * have a different schema and the order of items is important),
-       * render each of the item schemas sequentially.
-       */
-      if (Array.isArray(schemaInput.items)) {
-        schemaInput.items.forEach(item => {
-          renderSchema(item, indent + 1);
-        });
-      } else {
-        /**
-         * else, items are defined by list vaidation (each item matches
-         *  the same schema), render the item schema only once.
-         */
-        renderSchema(schemaInput.items, indent + 1);
-      }
-    }
-
-    /**
-     * Render contains keyword if defined.
-     * (create a subschema with 'contains' key set to true in order to
-     *  use the contains symbol in NormalLeftRow)
-     */
-    if ('contains' in schemaInput) {
-      const cloneSubschema = clone(schemaInput.contains);
-
-      cloneSubschema.contains = true;
-      renderSchema(cloneSubschema, indent + 1);
-    }
-
-    const closeArrayRow = createLiteralRow(schemaInput.type, indent);
-
-    pushRow(closeArrayRow);
-  }
-
-  /**
-   * Combination type schemas (allOf, anyOf, oneOf, not) start with
-   * an openCombRow to denote which kind of combination type it defines.
-   * Combination Options are parsed and rendered according to their type
-   * via calling back on the renderSchema() method. The resulting rows are
-   * added sequentially after the openCombRow. In between the option rows
-   * are single rows denoting 'and', 'or', 'nor' keywords to separate options.
-   */
-  function renderCombination(schemaInput, indent) {
-    const openCombRow = createNormalRow(schemaInput, indent);
-    const combType = schemaInput.type;
-    const optionIndent = indent + 1;
-
-    pushRow(openCombRow);
-
-    /** If combination type is 'not', render only one option */
-    if (combType === 'not') {
-      renderSchema(schemaInput[combType], optionIndent);
-    } else {
-      /**
-       * else, options are defined as an array.
-       * Render each of the option schemas sequentially.
-       */
-      const combOptionList = schemaInput[combType];
-
-      combOptionList.forEach((option, i) => {
-        /**
-         * If more than one option, create a row with 'or', 'and', 'nor'
-         * in order to separate the options.
-         */
-        if (i > 0) {
-          const optionSeparatorRow = createLiteralRow(combType, optionIndent);
-
-          pushRow(optionSeparatorRow);
-        }
-
-        renderSchema(option, optionIndent);
-      });
-    }
-  }
-
-  /**
-   * Default data type schemas (boolean, null, number, integer, string)
-   * are parsed to create 'NormalLeftRow' and 'NormalRightRow' components.
-   * These will then be stored into 'leftRows' and 'rightRows' arrays each.
-   */
-  function renderDefault(schemaInput, indent) {
-    const normalRow = createNormalRow(schemaInput, indent);
-
-    pushRow(normalRow);
-  }
-
-  /**
-   * Object type schemas start with an openObjectRow and are closed off with
-   * a closeObjectRow, both displaying curly brackets to indicate an object.
-   * Object properties are parsed and rendered according to their type via
-   * calling back on the renderSchema() method. The resulting rows are
-   * added sequentially in between the opening and closing rows.
-   */
-  function renderObject(schemaInput, indent) {
-    const openObjectRow = createNormalRow(schemaInput, indent);
-
-    pushRow(openObjectRow);
-
-    /** Render object properties only if defined */
-    if ('properties' in schemaInput) {
-      /**
-       * Render each of the property schemas sequentially.
-       * Make sure to create a name field for each of the properties'
-       * sub-schema so the names are also displayed in the left panel.
-       * Also, create a set of required properties in order to mark
-       * the properties with a required prefix (*).
-       */
-      const propertyList = Object.keys(schemaInput.properties);
-      const requiredProperties =
-        'required' in schemaInput ? new Set(schemaInput.required) : new Set();
-
-      propertyList.forEach(property => {
-        /**
-         * create a clone sub-schema in order to maintain immutability
-         * of the original schema data.
-         */
-        const cloneSubschema = clone(schemaInput.properties[property]);
-
-        cloneSubschema.name = property;
-
-        if (requiredProperties.has(property)) {
-          cloneSubschema.required = true;
-        }
-
-        renderSchema(cloneSubschema, indent + 1);
-      });
-    }
-
-    const closeObjectRow = createLiteralRow(schemaInput.type, indent);
-
-    pushRow(closeObjectRow);
-  }
-
-  /**
-   * TODO: define renderRef method
-   *       add description comment
-   */
-  function renderRef(schemaInput) {
-    return <React.Fragment>{schemaInput}</React.Fragment>;
-  }
-
-  /**
-   * Schemas are passed to different render methods according to its
-   * specific type (combination, array, object, ref, and default).
-   * Each method will create rows with the appropriate format to its
-   * type and push the rows into 'leftRows' and 'rightRows' respectively.
-   * The rows will then be rendered within the left and right panels.
-   * Types other than default schemas may repeatedly call this method
-   * within their render method if the schema has a nested structure.
-   */
-  function renderSchema(schemaInput, indent = 0) {
-    /**
-     * Identify the type of the schema so that it is directed to the
-     * correct render method.
-     */
-    const schemaWithType = identifySchemaType(schemaInput);
-    const schemaType = schemaWithType.type;
-
-    /**
-     * Direct the schema to the corresponding render method
-     */
-    if (['allOf', 'anyOf', 'oneOf', 'not'].includes(schemaType)) {
-      renderCombination(schemaWithType, indent);
-    } else if (schemaType === '$ref') {
-      renderRef(schemaInput, indent);
-    } else if (schemaType === 'array') {
-      renderArray(schemaInput, indent);
-    } else if (schemaType === 'object') {
-      renderObject(schemaInput, indent);
-    } else {
-      renderDefault(schemaInput, indent);
-    }
-
-    return (
-      <div className={classes.wrapper}>
-        <div className={classes.leftPanel}>{leftRows}</div>
-        <div className={classes.rightPanel}>{rightRows}</div>
-      </div>
-    );
-  }
-
-  return <Fragment>{renderSchema(schema)}</Fragment>;
+  return (
+    <div className={classes.wrapper}>
+      <div className={classes.leftPanel}>{leftRows}</div>
+      <div className={classes.rightPanel}>{rightRows}</div>
+    </div>
+  );
 }
 
 SchemaTable.propTypes = {
-  /** Schema input given to render */
-  schema: shape({
-    /** Type of schema */
-    type: string,
-  }),
-};
-
-SchemaTable.defaultProps = {
-  /** Null type schema is set as default prop */
-  schema: {
-    type: 'null',
-  },
+  /** 
+   * Schema tree structure defining the overall structure
+   * for the schema table component.
+   */
+  schemaTree: instanceOf(Tree).isRequired,
+  /**
+   * Function to update schemaTree structure.
+   * Used specifically for expanding or shrinking a $ref.
+   */
+  setSchemaTree: func.isRequired,
 };
 
 export default React.memo(SchemaTable);
