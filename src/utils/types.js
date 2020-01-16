@@ -7,19 +7,20 @@ import { COMPLEX_TYPES } from './constants';
  * do not specify a type property, it is necessary to identify
  * its type and append a type property.
  * If type is not specified purposely, leave schema without type property.
+ *
+ * Also, make a deep copy of the schema to ensure that the reference isn't
+ * altered by unnecessary
  */
-export function identifySchemaType(schemaInput) {
-  if (!('type' in schemaInput)) {
-    const cloneSchema = clone(schemaInput);
+export function sanitizeSchema(schema) {
+  const cloneSchema = clone(schema);
 
+  if (!('type' in cloneSchema)) {
     COMPLEX_TYPES.forEach(type => {
-      if (type in schemaInput) {
+      if (type in cloneSchema) {
         cloneSchema.type = type;
       }
     });
-
-    return cloneSchema;
   }
 
-  return schemaInput;
+  return cloneSchema;
 }

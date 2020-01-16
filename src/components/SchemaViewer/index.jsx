@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { shape, string } from 'prop-types';
 import SchemaTable from '../SchemaTable';
-import SchemaTree from '../../utils/schemaTree';
+import { createTree } from '../../utils/schemaTree';
 
 function SchemaViewer({ schema }) {
   /**
@@ -12,7 +12,7 @@ function SchemaViewer({ schema }) {
    * be updated in order to re-create a table where ref rows are
    * either inserted or removed from the current schema table.
    */
-  const [schemaTree, setSchemaTree] = useState(new SchemaTree(schema));
+  const [schemaTree, setSchemaTree] = useState(createTree(schema));
 
   return <SchemaTable schemaTree={schemaTree} setSchemaTree={setSchemaTree} />;
 }
