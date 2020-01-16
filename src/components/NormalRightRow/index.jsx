@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback, Fragment } from 'react';
 import { shape, string } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
@@ -39,7 +39,9 @@ function NormalRightRow({ classes, treeNode }) {
       typeof schema[keyword] === 'object' &&
       !Array.isArray(schema[keyword])
     ) {
-      /** Generate tooltip descriptions to match the keyword. */
+      /**
+       * Generate tooltip descriptions to match the keyword.
+       */
       const tooltipTitle = `${TOOLTIP_DESCRIPTIONS[keyword]} See the JSON-schema source for details.`;
       const infoIcon = <InfoIcon fontSize="inherit" color="inherit" />;
 
@@ -56,7 +58,7 @@ function NormalRightRow({ classes, treeNode }) {
     }
 
     /**
-     * Typecast the keyword's property to string format for property display.
+     * Typecast the keyword's property to string format for proper display.
      */
     const keyValue = (function keyValueToString(key) {
       if (Array.isArray(schema[keyword])) {
@@ -91,18 +93,49 @@ function NormalRightRow({ classes, treeNode }) {
    * Display a single descriptive keyword in its own line.
    */
   function displayDescriptor(keyword) {
+    /**
+     * Create a state and callback ref to track the component's
+     * width measurements. (using a callback ref ensures that
+     * changes to the current ref componen is notified)
+     */
+    const [isTextOverflow, setIsTextOverflow] = useState(false);
+    const measuredRef = useCallback(element => {
+      if (element !== null) {
+        if (element.scrollWidth > element.offsetWidth) {
+          setIsTextOverflow(true);
+        }
+      }
+    }, []);
+    const descriptorContent =
+      keyword === 'title' ? (
+        <strong>{schema[keyword]}</strong>
+      ) : (
+          schema[keyword]
+        );
+
+    if (isTextOverflow) {
+      return (
+        <Tooltip key={keyword} title={descriptorContent}>
+          <div className={classes.line}>
+            <Typography
+              component="div"
+              variant="subtitle2"
+              ref={measuredRef}
+              noWrap>
+              {descriptorContent}
+            </Typography>
+          </div>
+        </Tooltip>
+      );
+    }
     return (
       <Typography
         key={keyword}
         component="div"
         variant="subtitle2"
         className={classes.line}
-        noWrap>
-        {keyword === 'title' ? (
-          <strong>{schema[keyword]}</strong>
-        ) : (
-          schema[keyword]
-        )}
+        ref={measuredRef}>
+        {descriptorContent}
       </Typography>
     );
   }

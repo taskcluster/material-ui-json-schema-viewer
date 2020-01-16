@@ -53,7 +53,7 @@ export const SKIP_KEYWORDS = [
 /** Empty Function to use for default props */
 export const NOOP = () => {};
 /**
- * 
+ *
  */
 export const TOOLTIP_DESCRIPTIONS = {
   additionalItems: 'Additional items must match a sub-schema.',
