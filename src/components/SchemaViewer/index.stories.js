@@ -43,6 +43,11 @@ combinationSchemas.anyOf = require('../../../schemas/combinationTypes/anyOf.json
 combinationSchemas.oneOf = require('../../../schemas/combinationTypes/oneOf.json');
 combinationSchemas.not = require('../../../schemas/combinationTypes/not.json');
 
+const refSchemas = {};
+
+refSchemas.simpleReference = require('../../../schemas/refTypes/simpleReference.json');
+refSchemas.circularReference = require('../../../schemas/refTypes/circularReference.json');
+
 export const defaultTypes = () => (
   <Fragment>
     <h3>Boolean</h3>
@@ -95,5 +100,13 @@ export const combinationTypes = () => (
     <SchemaViewer schema={combinationSchemas.oneOf} />
     <h3>not</h3>
     <SchemaViewer schema={combinationSchemas.not} />
+  </Fragment>
+);
+export const refTypes = () => (
+  <Fragment>
+    <h3>Simple Reference</h3>
+    <SchemaViewer schema={refSchemas.simpleReference} />
+    <h3>Circular Reference</h3>
+    <SchemaViewer schema={refSchemas.circularReference} />
   </Fragment>
 );

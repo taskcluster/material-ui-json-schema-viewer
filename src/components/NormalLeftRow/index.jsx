@@ -3,6 +3,9 @@ import { shape, string, number } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import PlusIcon from '@material-ui/icons/AddCircleOutline';
+import MinusIcon from '@material-ui/icons/RemoveCircleOutline';
 import {
   SKIP_KEYWORDS,
   DESCRIPTIVE_KEYWORDS,
@@ -20,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function NormalLeftRow({ schema, classes, indent }) {
+function NormalLeftRow({ schema, classes, indent, isRefType }) {
   /**
    * Dynamically generate indent styles according to the given
    * indent props.
@@ -80,6 +83,26 @@ function NormalLeftRow({ schema, classes, indent }) {
       <span className={classes.prefix}>⊃</span>
     ) : null;
   /**
+   *
+   */
+  const refButton = isRefType
+    ? (function createRefButton(isExpanded) {
+        if (isExpanded) {
+          return (
+            <IconButton aria-label="shrink-ref">
+              <MinusIcon />
+            </IconButton>
+          );
+        }
+
+        return (
+          <IconButton aria-label="expand-ref">
+            <PlusIcon />
+          </IconButton>
+        );
+      })(isRefType.isExpanded)
+    : null;
+  /**
    * Create blank line paddings if descriptor keywords exists.
    * This enables the left row to have matching number of lines with
    * the right row and align the lines and heights between the two rows.
@@ -134,6 +157,7 @@ function NormalLeftRow({ schema, classes, indent }) {
         {name && `${name}: `}
         {typeSymbol}
         {requiredPrefix}
+        {isRefType && refButton}
       </Typography>
       {blankLinePaddings}
     </div>

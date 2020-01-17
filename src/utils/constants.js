@@ -42,4 +42,5 @@ export const SKIP_KEYWORDS = [
   'oneOf',
   'not',
   '$ref',
+  'definitions',
 ];
