@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import NormalLeftRow from '../NormalLeftRow';
 import NormalRightRow from '../NormalRightRow';
 import { COMBINATION_TYPES, NESTED_TYPES } from '../../utils/constants';
-import { createTree } from '../../utils/schemaTree';
+import { createSchemaTree } from '../../utils/schemaTree';
 
 const useStyles = makeStyles(theme => ({
   /** Schema table displays two-column layout */
@@ -73,9 +73,10 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
   const classes = useStyles();
   /**
    * Rows for the left and right columns are stored separately
-   * so that the left and right panels can render the rows separately.
-   * This enable the viewer to have a two-column layout with each of
-   * the columns having its own horizontal scroll.
+   * so that the table can create a two-column layout with each of
+   * the columns (named 'panels') having its own horizontal scroll.
+   * This way, the left and right panels can render the rows separately
+   * in their own containers.
    */
   const leftPanelRows = [];
   const rightPanelRows = [];
@@ -84,7 +85,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
    * Create a single normal row with a left and right column each.
    * The result is stored in an object format in order for the
    * pushRow method to push the left and right row of a single row
-   * to the leftRows and rightRows arrays respectively at the same time.
+   * into the leftPanelRows and rightPanelRows arrays respectively.
    */
   function createNormalRow(treeNode) {
     const { schema, depth } = treeNode;
@@ -109,10 +110,12 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
   }
 
   /**
-   * Create a row only for the purpose to display literal symbols.
-   * Nested types (arrays and objects) create a row to display a
-   * closing bracket, while combination types (allOf, anyOf, oneOf,
-   * not) create a row to visually separate options.
+   * Create a literal row for displaying descriptive rows.
+   * This is only used to create rows for the following:
+   * - a closing row for nested types (arrays and objects) to display a
+   *   close bracket symbol
+   * - a separator row for combination types (allOf, anyOf, oneOf, not)
+   *   to visually separate options.
    */
   function createLiteralRow(treeNode) {
     const literalSchema = {
@@ -125,7 +128,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
         not: 'nor',
       }[treeNode.schema.type],
     };
-    const literalTreeNode = createTree(literalSchema, treeNode.depth);
+    const literalTreeNode = createSchemaTree(literalSchema, treeNode.depth);
 
     return createNormalRow(literalTreeNode);
   }
@@ -133,9 +136,8 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
   function createRefRow(treeNode) {}
 
   /**
-   * Takes a single row as input, created from createNormalRow()
-   * method, and pushes the left column and right column of the
-   * row into the leftPanelRows and rightPanelRows respectively.
+   * Push a single row's left part and right part into
+   * the leftPanelRows and rightPanelRows respectively.
    */
   function pushRow(row) {
     leftPanelRows.push(row.leftRow);
@@ -143,10 +145,10 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
   }
 
   /**
-   * Traverse a tree or subtree in pre-order to create rows.
-   * A row based on the root node of the tree will be created in all cases.
-   * If the root node has children, this method may be called recursively
-   * to create rows for the subtree structures.
+   * Traverse a tree or subtree in pre-order in order to create rows.
+   * First, a row based on the root node will be created.
+   * Then, if the root node has children, this method may be called
+   * recursively to create rows for the subtree structures.
    */
   function renderNodeToRows(rootNode) {
     const schemaType = rootNode.schema.type;
@@ -190,17 +192,17 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
   }
 
   /**
-   * Create and render a table with two-columns to represent
-   * the data structure and details of the JSON schema based
-   * on the schemaTree's overall structure.
+   * Create and render a table with two-columns based on
+   * the schemaTree's overall structure.
    */
   function renderTreeToTable(schemaTreeInput) {
     /**
      * Create left and right rows each for the schema table by traversing
-     * the schemaTree starting from the root node.
-     * The resulting rows will be stored in leftPanelRows and rightPanelRows
-     * array. Which will then, ultimately be rendered within the leftPanal
-     * and rightPanel repsecitvley to create horizonal scrolls for each panels.
+     * the schemaTree starting from the root node. The resulting rows will
+     * be stored in leftPanelRows and rightPanelRows array each.
+     * Which will then, ultimately be rendered within the leftPanal and
+     * rightPanel respectively to create a two-column layout with each of
+     * the columns having horizonal scrolls.
      */
     renderNodeToRows(schemaTreeInput);
 
