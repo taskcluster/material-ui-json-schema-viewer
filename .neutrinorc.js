@@ -6,23 +6,24 @@ module.exports = {
   use: [
     reactLint({
       rules: {
+        /**
+         * Ignores reference to functions used before the function declaration. 
+         * Since function declarations are hoisted, this is considered safe.
+         */
         'no-use-before-define': ['error', { 
-          /**
-           * Ignores reference to functions used before the function declaration. 
-           * Since function declarations are hoisted, this is considered safe.
-           */
           functions: false,
         }],
         'import/prefer-default-export': ['off'],
+        /**
+         * Allow both '.jsx' and '.js' file extensions to contain JSX
+         * ('.js' files are necessary for stories)
+         */
+        'react/jsx-filename-extension': ['error', { 
+          'extensions': ['.js', '.jsx'] 
+        }],
       },
     }),
     reactComponents(),
     jest(),
-    (neutrino) => {
-      neutrino.register('styleguide', () => ({
-        webpackConfig: neutrino.config.toConfig(),
-        skipComponentsWithoutExample: true,
-      }));
-    },
   ]
 };

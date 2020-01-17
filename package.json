@@ -14,8 +14,8 @@
     "lint": "eslint --cache --format codeframe --ext mjs,jsx,js src",
     "test": "jest",
     "test:watch": "jest --watch",
-    "styleguide": "styleguidist server",
-    "deploy": "styleguidist build && gh-pages --remote upstream -d styleguide"
+    "storybook": "start-storybook",
+    "deploy": "build-storybook -c .storybook -o storybook && gh-pages --remote upstream -d storybook"
   },
   "devDependencies": {
     "@material-ui/core": "^4.7.1",
@@ -23,13 +23,14 @@
     "@mozilla-frontend-infra/react-lint": "^2.0.1",
     "@neutrinojs/jest": "9.0.0-rc.5",
     "@neutrinojs/react-components": "9.0.0-rc.5",
+    "@storybook/react": "^5.2.8",
+    "babel-loader": "^8.0.6",
     "eslint": "^6.7.2",
     "gh-pages": "^2.1.1",
     "jest": "^24.9.0",
     "neutrino": "9.0.0-rc.5",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-styleguidist": "^10.2.1",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.9.0"
