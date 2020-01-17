@@ -3,7 +3,12 @@ import { shape, string, number } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
-import { SKIP_KEYWORDS, DESCRIPTIVE_KEYWORDS } from '../../utils/constants';
+import {
+  SKIP_KEYWORDS,
+  DESCRIPTIVE_KEYWORDS,
+  COMBINATION_TYPES,
+  NESTED_TYPES,
+} from '../../utils/constants';
 
 /**
  * Dynamically generate styles for indentations to be used for
@@ -34,16 +39,8 @@ function NormalLeftRow({ schema, classes, indent }) {
    * the rest simply use highlighted text to illustrate the data type.
    */
   const typeSymbol = (function createTypeSymbol(type) {
-    const bracketTypes = ['array', 'object', 'closeArray', 'closeObject'];
-    const combinationTypes = [
-      'allOf',
-      'anyOf',
-      'oneOf',
-      'not',
-      'and',
-      'or',
-      'nor',
-    ];
+    const bracketTypes = [...NESTED_TYPES, 'closeArray', 'closeObject'];
+    const combinationTypes = [...COMBINATION_TYPES, 'and', 'or', 'nor'];
 
     if (bracketTypes.includes(type)) {
       return {
@@ -93,7 +90,7 @@ function NormalLeftRow({ schema, classes, indent }) {
   const blankLinePaddings =
     descriptors.length === 0
       ? []
-      : (function countPaddingLines(schemaInput) {
+      : (function createPaddingLines(schemaInput) {
           const lines = [];
           const specifications = Object.keys(schemaInput).filter(
             key => !SKIP_KEYWORDS.includes(key)
@@ -156,9 +153,8 @@ NormalLeftRow.propTypes = {
     name: string,
   }).isRequired,
   /**
-   * Style for rows and lines for schema viewer.
-   * Necessary to maintain consistency with right panel's
-   * rows and lines.
+   * Style for rows and lines for left rows of the schema table.
+   * (necessary to maintain consistency with right panel's rows and lines)
    */
   classes: shape({
     row: string.isRequired,
@@ -167,6 +163,7 @@ NormalLeftRow.propTypes = {
     comment: string.isRequired,
     prefix: string.isRequired,
   }).isRequired,
+  /** Style for indentation to represent nested structure */
   indent: number.isRequired,
 };
 
