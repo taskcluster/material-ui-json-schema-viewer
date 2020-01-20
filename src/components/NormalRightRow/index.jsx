@@ -1,11 +1,15 @@
 import React from 'react';
-import { shape, string } from 'prop-types';
+import { shape, string, number, bool } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
 import Tooltip from '../Tooltip';
 import { SKIP_KEYWORDS, DESCRIPTIVE_KEYWORDS } from '../../utils/constants';
 
-function NormalRightRow({ schema, classes }) {
+function NormalRightRow({ classes, treeNode }) {
+  /**
+   * Deconstruct the properties of the given treeNode to use for rendering.
+   */
+  const { schema } = treeNode;
   /**
    * Identify keywords that define specifications of the given schema.
    * (skip over keywords that do not need to be displayed)
@@ -136,15 +140,6 @@ function NormalRightRow({ schema, classes }) {
 
 NormalRightRow.propTypes = {
   /**
-   * Schema input given to render.
-   * May also be a sub-schema in case for array items,
-   * object properties or more complex schemas.
-   */
-  schema: shape({
-    /** Type of schema or sub-schema */
-    type: string,
-  }).isRequired,
-  /**
    * Style for rows and lines for schema viewer.
    * Necessary to maintain consistency with right panel's
    * rows and lines.
@@ -152,6 +147,21 @@ NormalRightRow.propTypes = {
   classes: shape({
     row: string.isRequired,
     line: string.isRequired,
+  }).isRequired,
+  treeNode: shape({
+    /**
+     * Schema input given to render. May also be a sub-schema in case
+     * for array items, object properties or more complex schemas.
+     */
+    schema: shape({
+      /** Type of schema or sub-schema */
+      type: string,
+      /** Name of schema or sub-schema */
+      name: string,
+    }).isRequired,
+    /** Style for indentation to represent nested structure */
+    depth: number.isRequired,
+    isExpanded: bool,
   }).isRequired,
 };
 

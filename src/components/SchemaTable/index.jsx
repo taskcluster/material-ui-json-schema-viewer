@@ -87,26 +87,21 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
    * pushRow method to push the left and right row of a single row
    * into the leftPanelRows and rightPanelRows arrays respectively.
    */
-  function createSingleRow(treeNode) {
-    const { schema, depth } = treeNode;
-    const isRefType =
-      '$ref' in schema ? { isExpanded: treeNode.isExpanded } : null;
-
+  function createSingleRow(treeNode, updateTreeFunc = null) {
     return {
       leftRow: (
         <NormalLeftRow
           key={`left-row-${leftPanelRows.length + 1}`}
-          schema={schema}
           classes={classes}
-          indent={depth}
-          isRefType={isRefType}
+          treeNode={treeNode}
+          updateTree={updateTreeFunc}
         />
       ),
       rightRow: (
         <NormalRightRow
           key={`right-row-${rightPanelRows.length + 1}`}
-          schema={schema}
           classes={classes}
+          treeNode={treeNode}
         />
       ),
     };
@@ -142,13 +137,13 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
    *
    */
   function createRefRow(refTreeNode) {
-    const { isExpanded } = refTreeNode;
+    const { isExpanded, schema } = refTreeNode;
 
     if (!isExpanded) {
-      return createSingleRow(refTreeNode);
+      return createSingleRow(refTreeNode, setSchemaTree);
     }
 
-    return createSingleRow(refTreeNode.schema.$ref);
+    return createSingleRow(schema.$ref, setSchemaTree);
   }
 
   /**
