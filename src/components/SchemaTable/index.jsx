@@ -126,7 +126,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
         not: 'nor',
       }[treeNode.schema.type],
     };
-    const literalTreeNode = createSchemaTree(literalSchema, treeNode.depth);
+    const literalTreeNode = createSchemaTree(literalSchema, treeNode.path);
 
     return createSingleRow(literalTreeNode);
   }

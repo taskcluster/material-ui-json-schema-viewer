@@ -27,12 +27,13 @@ function NormalLeftRow({ classes, treeNode }) {
   /**
    * Deconstruct the properties of the given treeNode to use for rendering.
    */
-  const { schema, depth, isExpanded } = treeNode;
+  const { schema, path, isExpanded } = treeNode;
   /**
    * Dynamically generate indent styles according to the given
    * depth of the treeNode props.
    */
-  const styles = useStyles(depth);
+  const indentSize = path.length;
+  const styles = useStyles(indentSize);
   /**
    * Define the name to illustrate the schema or sub-schema.
    * If a name property is not defined within the schema,

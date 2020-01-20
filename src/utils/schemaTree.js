@@ -7,11 +7,11 @@ import { COMBINATION_TYPES, COMPLEX_TYPES } from './constants';
  * {
  *   schema: ..       // the schema the node is representing
  *   children: [..]   // further objects of the same structure (for subschemas)
- *   depth: ..        // the depth of the current node (for indentation)
+ *   path: [..]       // the path from root to node (for $refs and indentation)
  *   isExpanded: ..   // whether the node is expanded (only for ref type nodes)
  * }
  */
-export function createSchemaTree(schema, depth = 0) {
+export function createSchemaTree(schema, path = []) {
   /**
    * Create a root node object for the tree/subtree based on the schema.
    * (make sure that nodes store only sanitized schemas)
@@ -19,7 +19,7 @@ export function createSchemaTree(schema, depth = 0) {
   const rootNode = {
     schema: sanitizeSchema(schema),
     children: [],
-    depth,
+    path,
   };
   const schemaType = rootNode.schema.type;
 
@@ -79,8 +79,8 @@ export function sanitizeSchema(schema) {
  * Create a child node based on the given subschema and append it to
  * the rootNode. (the child node may be a single node or a subtree)
  */
-export function createChildNode(rootNode, subschema) {
-  const childNode = createSchemaTree(subschema, rootNode.depth + 1);
+export function createChildNode(rootNode, subschema, childIndex) {
+  const childNode = createSchemaTree(subschema, [...rootNode.path, childIndex]);
 
   rootNode.children.push(childNode);
 }
@@ -101,14 +101,14 @@ export function createCombinationTree(rootNode) {
   if (Array.isArray(schema[combType])) {
     const optionList = schema[combType];
 
-    optionList.forEach(subschema => {
-      createChildNode(rootNode, subschema);
+    optionList.forEach((subschema, childIndex) => {
+      createChildNode(rootNode, subschema, childIndex);
     });
   } else {
     /**
      * else, if only one option exists, create one child node and append.
      */
-    createChildNode(rootNode, schema[combType]);
+    createChildNode(rootNode, schema[combType], 0);
   }
 }
 
@@ -130,15 +130,15 @@ export function createArrayTree(rootNode) {
      * create array items as child nodes in sequential order.
      */
     if (Array.isArray(schema.items)) {
-      schema.items.forEach(subschema => {
-        createChildNode(rootNode, subschema);
+      schema.items.forEach((subschema, childIndex) => {
+        createChildNode(rootNode, subschema, childIndex);
       });
     } else {
       /**
        * else, items are defined by list vaidation (each item matches
        * the same schema), create only one child node.
        */
-      createChildNode(rootNode, schema.items);
+      createChildNode(rootNode, schema.items, 0);
     }
   }
 
@@ -149,9 +149,10 @@ export function createArrayTree(rootNode) {
    */
   if ('contains' in schema) {
     const subschema = schema.contains;
+    const childIndex = rootNode.children.length;
 
     subschema.contains = true;
-    createChildNode(rootNode, subschema);
+    createChildNode(rootNode, subschema, childIndex);
   }
 }
 
@@ -180,7 +181,7 @@ export function createObjectTree(rootNode) {
      * Make sure to add a name and required field for each of the subschemas
      * so that they are displayed accordingly when creating schemaTable rows.
      */
-    propertyList.forEach(property => {
+    propertyList.forEach((property, childIndex) => {
       const subschema = schema.properties[property];
 
       subschema.name = property;
@@ -189,7 +190,7 @@ export function createObjectTree(rootNode) {
         subschema.required = true;
       }
 
-      createChildNode(rootNode, subschema);
+      createChildNode(rootNode, subschema, childIndex);
     });
   }
 }
