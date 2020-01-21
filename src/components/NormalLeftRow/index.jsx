@@ -91,24 +91,23 @@ function NormalLeftRow({ classes, treeNode, updateTreeFunc }) {
    * If given treeNode is $ref type, create $ref button for expanding or
    * shrinking depending on the isExpanded state.
    */
-  const refButton =
-    '$ref' in schema
-      ? (function createRefButton(expandState) {
-          if (expandState) {
-            return (
-              <IconButton aria-label="shrink-ref" onClick={updateTreeFunc}>
-                <MinusIcon />
-              </IconButton>
-            );
-          }
-
+  const refButton =  updateTreeFunc
+    ? (function createRefButton(isExpanded) {
+        if (isExpanded) {
           return (
-            <IconButton aria-label="expand-ref" onClick={updateTreeFunc}>
-              <PlusIcon />
+            <IconButton aria-label="shrink-ref" onClick={updateTreeFunc}>
+              <MinusIcon />
             </IconButton>
           );
-        })(isExpanded)
-      : null;
+        }
+
+        return (
+          <IconButton aria-label="expand-ref" onClick={updateTreeFunc}>
+            <PlusIcon />
+          </IconButton>
+        );
+      })(isExpanded)
+    : null;
   /**
    * Create blank line paddings if descriptor keywords exists.
    * This enables the left row to have matching number of lines with

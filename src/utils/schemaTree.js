@@ -8,8 +8,10 @@ import { COMBINATION_TYPES, COMPLEX_TYPES } from './constants';
  *   schema: ..       // the schema the node is representing
  *   children: [..]   // further objects of the same structure (for subschemas)
  *   path: [..]       // the path from root to node, array of child indexes in
- *                       sequential order (for $refs and indentation)
- *                       ex. [1, 0, 2] = root.children[1].children[0].children[2]
+ *                       sequential order (for $refs and indentation level)
+ *                       ex. [1, 0] = node at root.children[1].children[0]
+ *                                    also has depth of 1 for indent size.
+ *   reference: ..    // the default ref schema (only for ref type nodes)
  *   isExpanded: ..   // whether the node is expanded (only for ref type nodes)
  * }
  */
@@ -26,11 +28,13 @@ export function createSchemaTree(schema, path = []) {
   const schemaType = rootNode.schema.type;
 
   /**
-   * If schema is a ref type, add an 'isExpanded' property
-   * to indicate whether a certain refNode is expanded or not.
-   * By default, the refNode's isExpanded is set to false for shrunk form.
+   * If schema has a $ref, add additional property fields:
+   * - reference: the default $ref schema node to refer to when fetching
+   *              a reference or shrinking a ref node
+   * - isExpanded: to store the state of the ref node (false by default)
    */
-  if (schemaType === '$ref') {
+  if ('$ref' in rootNode.schema) {
+    rootNode.reference = clone(rootNode);
     rootNode.isExpanded = false;
   }
 
@@ -198,23 +202,29 @@ export function createObjectTree(rootNode) {
 }
 
 /**
- * TODO: add feature to fetch $refs in separate files or urls
+ *
  */
 function fetchRefSchema(schemaTree, refString) {
   const [source, definitionPath] = refString.split('#');
 
-  if (source.length === 0) {
-    const paths = definitionPath.split('/');
-    let ptr = schemaTree.schema;
-
-    paths.forEach((parameter, i) => {
-      if (i > 0) {
-        ptr = ptr[parameter];
-      }
-    });
-
-    return ptr;
+  /**
+   * Find the source for the reference
+   * TODO: add feature to fetch $refs in separate files or urls
+   */
+  if (source.length > 0) {
   }
+
+  /** Find the definition within the source */
+  const parameters = definitionPath.split('/');
+  let ptr = schemaTree.schema;
+
+  parameters.forEach(parameter => {
+    if (parameter.length > 0) {
+      ptr = ptr[parameter];
+    }
+  });
+
+  return ptr;
 }
 
 /**
@@ -222,14 +232,13 @@ function fetchRefSchema(schemaTree, refString) {
  */
 export function expandRefNode(schemaTree, refNode) {
   const cloneTree = clone(schemaTree);
-
-  /** Find the corresponding refNode in the cloned tree */
   let nodePtr = cloneTree;
+
   refNode.path.forEach(childIndex => {
     nodePtr = nodePtr.children[childIndex];
   });
 
-  /** 
+  /**
    * Update the isExpanded state of the ref tree node
    * so that the ref row will now display an expanded version.
    */
@@ -241,8 +250,12 @@ export function expandRefNode(schemaTree, refNode) {
    * to cache the referenced schema in the ref node.
    */
   if (typeof nodePtr.schema.$ref === 'string') {
-    const expandedRefSchema = fetchRefSchema(schemaTree, refNode.schema.$ref);
-    nodePtr.schema.$ref = createSchemaTree(expandedRefSchema, refNode.path);
+    const refString = refNode.reference.schema.$ref;
+    const expandedRefSchema = fetchRefSchema(schemaTree, refString);
+    const refSchemaTree = createSchemaTree(expandedRefSchema, refNode.path);
+
+    nodePtr.schema = refSchemaTree.schema;
+    nodePtr.children = refSchemaTree.children;
     console.log(nodePtr);
   }
 
@@ -250,12 +263,12 @@ export function expandRefNode(schemaTree, refNode) {
 }
 
 /**
- * Create a deep copy of the  the given refNode's
+ *
  */
 export function shrinkRefNode(schemaTree, refNode) {
   const cloneTree = clone(schemaTree);
-
   let nodePtr = cloneTree;
+
   refNode.path.forEach(childIndex => {
     nodePtr = nodePtr.children[childIndex];
   });

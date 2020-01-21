@@ -92,7 +92,6 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
    * into the leftPanelRows and rightPanelRows arrays respectively.
    */
   function createSingleRow(treeNode, updateTreeFunc = null) {
-    console.log
     return {
       leftRow: (
         <NormalLeftRow
@@ -143,20 +142,21 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
    *
    */
   function createRefRow(refTreeNode) {
-    const { isExpanded, schema } = refTreeNode;
+    const { schema, isExpanded, reference } = refTreeNode;
 
     /**
-     * If given ref node does not have expanded state,
+     * If ref node is not expanded (which is the default state),
      * create a single row (left row & right row) where the $ref
-     * is displayed in collapsed form with a button for expansion.
-     * Make sure to pass a function to update the state of the schema tree.
+     * is displayed in collapsed form. Pass a function to update
+     * the schema tree when the expand button is clicked.
      */
     if (!isExpanded) {
       const expandRefFunc = () => {
         setSchemaTree(expandRefNode(schemaTree, refTreeNode));
       };
 
-      const defaultRefRow = createSingleRow(refTreeNode, expandRefFunc);
+      const defaultRefRow = createSingleRow(reference, expandRefFunc);
+
       return defaultRefRow;
     }
 
@@ -166,11 +166,10 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
      * Make sure to also pass a function to update the state of the
      * schema tree to use when button for shrink is clicked.
      */
-    const shrinkRefFunc = () => setSchemaTree(schemaTree =>
-      shrinkRefNode(schemaTree, refTreeNode)
-    );
+    const shrinkRefFunc = () =>
+      setSchemaTree(schemaTree => shrinkRefNode(schemaTree, refTreeNode));
+    const expandedRefRow = createSingleRow(refTreeNode, shrinkRefFunc);
 
-    const expandedRefRow = createSingleRow(schema.$ref, shrinkRefFunc);
     return expandedRefRow;
   }
 
@@ -190,14 +189,14 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
    * recursively to create rows for the subtree structures.
    */
   function renderNodeToRows(rootNode) {
-    const schemaType = rootNode.schema.type;
+    const { schema, reference } = rootNode;
     /**
-     * Create a row based on the root node
+     * Create a row based on the rootNode
+     * (if it contains a 'reference' field, create a ref row
      */
-    const rootNodeRow =
-      'isExpanded' in rootNode
-        ? createRefRow(rootNode)
-        : createSingleRow(rootNode);
+    const rootNodeRow = reference
+      ? createRefRow(rootNode)
+      : createSingleRow(rootNode);
 
     pushRow(rootNodeRow);
 
@@ -210,7 +209,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
        * If root node's schema defines a combination type,
        * add separator rows in between the option rows
        */
-      if (COMBINATION_TYPES.includes(schemaType) && i > 0) {
+      if (COMBINATION_TYPES.includes(schema.type) && i > 0) {
         const separatorRow = createLiteralRow(rootNode);
 
         pushRow(separatorRow);
@@ -223,7 +222,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
      * If root node's schema defines a nested types,
      * add a close row at the end to close off the nested structure
      */
-    if (NESTED_TYPES.includes(schemaType)) {
+    if (NESTED_TYPES.includes(schema.type)) {
       const closeRow = createLiteralRow(rootNode);
 
       pushRow(closeRow);
