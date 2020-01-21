@@ -1,4 +1,4 @@
-import { clone } from 'ramda';
+import { clone, assocPath } from 'ramda';
 import { COMBINATION_TYPES, COMPLEX_TYPES } from './constants';
 
 /**
@@ -7,7 +7,9 @@ import { COMBINATION_TYPES, COMPLEX_TYPES } from './constants';
  * {
  *   schema: ..       // the schema the node is representing
  *   children: [..]   // further objects of the same structure (for subschemas)
- *   path: [..]       // the path from root to node (for $refs and indentation)
+ *   path: [..]       // the path from root to node, array of child indexes in
+ *                       sequential order (for $refs and indentation)
+ *                       ex. [1, 0, 2] = root.children[1].children[0].children[2]
  *   isExpanded: ..   // whether the node is expanded (only for ref type nodes)
  * }
  */
@@ -193,4 +195,71 @@ export function createObjectTree(rootNode) {
       createChildNode(rootNode, subschema, childIndex);
     });
   }
+}
+
+/**
+ * TODO: add feature to fetch $refs in separate files or urls
+ */
+function fetchRefSchema(schemaTree, refString) {
+  const [source, definitionPath] = refString.split('#');
+
+  if (source.length === 0) {
+    const paths = definitionPath.split('/');
+    let ptr = schemaTree.schema;
+
+    paths.forEach((parameter, i) => {
+      if (i > 0) {
+        ptr = ptr[parameter];
+      }
+    });
+
+    return ptr;
+  }
+}
+
+/**
+ *
+ */
+export function expandRefNode(schemaTree, refNode) {
+  const cloneTree = clone(schemaTree);
+
+  /** Find the corresponding refNode in the cloned tree */
+  let nodePtr = cloneTree;
+  refNode.path.forEach(childIndex => {
+    nodePtr = nodePtr.children[childIndex];
+  });
+
+  /** 
+   * Update the isExpanded state of the ref tree node
+   * so that the ref row will now display an expanded version.
+   */
+  nodePtr.isExpanded = true;
+
+  /**
+   * If ref tree node does not hold a referenced schema,
+   * dynamically fetch the schema and store in $ref property
+   * to cache the referenced schema in the ref node.
+   */
+  if (typeof nodePtr.schema.$ref === 'string') {
+    const expandedRefSchema = fetchRefSchema(schemaTree, refNode.schema.$ref);
+    nodePtr.schema.$ref = createSchemaTree(expandedRefSchema, refNode.path);
+    console.log(nodePtr);
+  }
+
+  return cloneTree;
+}
+
+/**
+ * Create a deep copy of the  the given refNode's
+ */
+export function shrinkRefNode(schemaTree, refNode) {
+  const cloneTree = clone(schemaTree);
+
+  let nodePtr = cloneTree;
+  refNode.path.forEach(childIndex => {
+    nodePtr = nodePtr.children[childIndex];
+  });
+  nodePtr.isExpanded = false;
+
+  return cloneTree;
 }

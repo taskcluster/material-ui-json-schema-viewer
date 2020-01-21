@@ -1,5 +1,5 @@
 import React from 'react';
-import { shape, string, number, bool } from 'prop-types';
+import { shape, string, arrayOf, number, bool, func } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function NormalLeftRow({ classes, treeNode }) {
+function NormalLeftRow({ classes, treeNode, updateTreeFunc }) {
   /**
    * Deconstruct the properties of the given treeNode to use for rendering.
    */
@@ -96,14 +96,14 @@ function NormalLeftRow({ classes, treeNode }) {
       ? (function createRefButton(expandState) {
           if (expandState) {
             return (
-              <IconButton aria-label="shrink-ref">
+              <IconButton aria-label="shrink-ref" onClick={updateTreeFunc}>
                 <MinusIcon />
               </IconButton>
             );
           }
 
           return (
-            <IconButton aria-label="expand-ref">
+            <IconButton aria-label="expand-ref" onClick={updateTreeFunc}>
               <PlusIcon />
             </IconButton>
           );
@@ -198,9 +198,14 @@ NormalLeftRow.propTypes = {
       name: string,
     }).isRequired,
     /** Style for indentation to represent nested structure */
-    depth: number.isRequired,
+    path: arrayOf(number).isRequired,
     isExpanded: bool,
   }).isRequired,
+  updateTreeFunc: func,
+};
+
+NormalLeftRow.defaultProps = {
+  updateTreeFunc: () => {},
 };
 
 export default React.memo(NormalLeftRow);

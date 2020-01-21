@@ -1,5 +1,5 @@
 import React from 'react';
-import { shape, string, number, bool } from 'prop-types';
+import { shape, string, arrayOf, number, bool } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
 import Tooltip from '../Tooltip';
@@ -160,7 +160,7 @@ NormalRightRow.propTypes = {
       name: string,
     }).isRequired,
     /** Style for indentation to represent nested structure */
-    depth: number.isRequired,
+    path: arrayOf(number).isRequired,
     isExpanded: bool,
   }).isRequired,
 };

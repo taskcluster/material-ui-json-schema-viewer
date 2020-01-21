@@ -4,7 +4,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import NormalLeftRow from '../NormalLeftRow';
 import NormalRightRow from '../NormalRightRow';
 import { COMBINATION_TYPES, NESTED_TYPES } from '../../utils/constants';
-import { createSchemaTree } from '../../utils/schemaTree';
+import {
+  createSchemaTree,
+  expandRefNode,
+  shrinkRefNode,
+} from '../../utils/schemaTree';
 
 const useStyles = makeStyles(theme => ({
   /** Schema table displays two-column layout */
@@ -88,13 +92,14 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
    * into the leftPanelRows and rightPanelRows arrays respectively.
    */
   function createSingleRow(treeNode, updateTreeFunc = null) {
+    console.log
     return {
       leftRow: (
         <NormalLeftRow
           key={`left-row-${leftPanelRows.length + 1}`}
           classes={classes}
           treeNode={treeNode}
-          updateTree={updateTreeFunc}
+          updateTreeFunc={updateTreeFunc}
         />
       ),
       rightRow: (
@@ -132,6 +137,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
   }
 
   /**
+   * Create a
    * Depending on the refTreeNode's 'isExpanded' state,
    * create a shrunk version of a refRow.
    *
@@ -139,11 +145,33 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
   function createRefRow(refTreeNode) {
     const { isExpanded, schema } = refTreeNode;
 
+    /**
+     * If given ref node does not have expanded state,
+     * create a single row (left row & right row) where the $ref
+     * is displayed in collapsed form with a button for expansion.
+     * Make sure to pass a function to update the state of the schema tree.
+     */
     if (!isExpanded) {
-      return createSingleRow(refTreeNode, setSchemaTree);
+      const expandRefFunc = () => {
+        setSchemaTree(expandRefNode(schemaTree, refTreeNode));
+      };
+
+      const defaultRefRow = createSingleRow(refTreeNode, expandRefFunc);
+      return defaultRefRow;
     }
 
-    return createSingleRow(schema.$ref, setSchemaTree);
+    /**
+     * Else, given ref node has expanded state,
+     * create a single row based on the fetched $ref definition.
+     * Make sure to also pass a function to update the state of the
+     * schema tree to use when button for shrink is clicked.
+     */
+    const shrinkRefFunc = () => setSchemaTree(schemaTree =>
+      shrinkRefNode(schemaTree, refTreeNode)
+    );
+
+    const expandedRefRow = createSingleRow(schema.$ref, shrinkRefFunc);
+    return expandedRefRow;
   }
 
   /**
@@ -167,7 +195,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
      * Create a row based on the root node
      */
     const rootNodeRow =
-      schemaType === '$ref'
+      'isExpanded' in rootNode
         ? createRefRow(rootNode)
         : createSingleRow(rootNode);
 
