@@ -3,12 +3,8 @@ import { shape, string, array, number, func } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import NormalLeftRow from '../NormalLeftRow';
 import NormalRightRow from '../NormalRightRow';
+import { createSchemaTree } from '../../utils/schemaTree';
 import { COMBINATION_TYPES, NESTED_TYPES } from '../../utils/constants';
-import {
-  createSchemaTree,
-  expandRefNode,
-  shrinkRefNode,
-} from '../../utils/schemaTree';
 
 const useStyles = makeStyles(theme => ({
   /** Schema table displays two-column layout */
@@ -91,14 +87,17 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
    * pushRow method to push the left and right row of a single row
    * into the leftPanelRows and rightPanelRows arrays respectively.
    */
-  function createSingleRow(treeNode, updateTreeFunc = null) {
+  function createSingleRow(treeNode, refType = 'none') {
+    const updateFunc = refType === 'none' ? null : setSchemaTree;
+
     return {
       leftRow: (
         <NormalLeftRow
           key={`left-row-${leftPanelRows.length + 1}`}
           classes={classes}
           treeNode={treeNode}
-          updateTreeFunc={updateTreeFunc}
+          refType={refType}
+          setSchemaTree={updateFunc}
         />
       ),
       rightRow: (
@@ -120,6 +119,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
    *   to visually separate options.
    */
   function createLiteralRow(treeNode) {
+    const { schema, path } = treeNode;
     const literalSchema = {
       type: {
         array: 'closeArray',
@@ -128,49 +128,11 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
         anyOf: 'or',
         oneOf: 'or',
         not: 'nor',
-      }[treeNode.schema.type],
+      }[schema.type],
     };
-    const literalTreeNode = createSchemaTree(literalSchema, treeNode.path);
+    const literalTreeNode = createSchemaTree(literalSchema, path);
 
     return createSingleRow(literalTreeNode);
-  }
-
-  /**
-   * Create a
-   * Depending on the refTreeNode's 'isExpanded' state,
-   * create a shrunk version of a refRow.
-   *
-   */
-  function createRefRow(refTreeNode) {
-    const { schema, isExpanded, reference } = refTreeNode;
-
-    /**
-     * If ref node is not expanded (which is the default state),
-     * create a single row (left row & right row) where the $ref
-     * is displayed in collapsed form. Pass a function to update
-     * the schema tree when the expand button is clicked.
-     */
-    if (!isExpanded) {
-      const expandRefFunc = () => {
-        setSchemaTree(expandRefNode(schemaTree, refTreeNode));
-      };
-
-      const defaultRefRow = createSingleRow(reference, expandRefFunc);
-
-      return defaultRefRow;
-    }
-
-    /**
-     * Else, given ref node has expanded state,
-     * create a single row based on the fetched $ref definition.
-     * Make sure to also pass a function to update the state of the
-     * schema tree to use when button for shrink is clicked.
-     */
-    const shrinkRefFunc = () =>
-      setSchemaTree(schemaTree => shrinkRefNode(schemaTree, refTreeNode));
-    const expandedRefRow = createSingleRow(refTreeNode, shrinkRefFunc);
-
-    return expandedRefRow;
   }
 
   /**
@@ -188,44 +150,77 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
    * Then, if the root node has children, this method may be called
    * recursively to create rows for the subtree structures.
    */
-  function renderNodeToRows(rootNode) {
-    const { schema, reference } = rootNode;
+  function renderNodeToRows(rootNode, refType = 'none') {
+    /**
+     * 
+     */
+    if ('isExpanded' in rootNode) {
+      renderRefNodeToRows(rootNode);
+      return;
+    }
+
     /**
      * Create a row based on the rootNode
-     * (if it contains a 'reference' field, create a ref row
      */
-    const rootNodeRow = reference
-      ? createRefRow(rootNode)
-      : createSingleRow(rootNode);
+    const { schema, path, children } = rootNode;
+    const rootNodeRow = createSingleRow(rootNode, refType);
 
     pushRow(rootNodeRow);
+    /**
+   * If the root node has children (indicating a nested structure),
+   * create rows for each of the child nodes using recursion.
+   */
+    if (children) {
+      children.forEach((childNode, i) => {
+        /**
+         * If root node's schema defines a combination type,
+         * add separator rows in between the option rows
+         */
+        if (COMBINATION_TYPES.includes(schema.type) && i > 0) {
+          const separatorRow = createLiteralRow(rootNode);
+
+          pushRow(separatorRow);
+        }
+
+        renderNodeToRows(childNode);
+      });
+    }
 
     /**
-     * If the root node has children (indicating a nested structure),
-     * create rows for each of the child nodes using recursion.
-     */
-    rootNode.children.forEach((childNode, i) => {
-      /**
-       * If root node's schema defines a combination type,
-       * add separator rows in between the option rows
-       */
-      if (COMBINATION_TYPES.includes(schema.type) && i > 0) {
-        const separatorRow = createLiteralRow(rootNode);
-
-        pushRow(separatorRow);
-      }
-
-      renderNodeToRows(childNode);
-    });
-
-    /**
-     * If root node's schema defines a nested types,
-     * add a close row at the end to close off the nested structure
+     * If root node's schema defines a nested structure,
+     * add a row at the end to close off the nested structure
      */
     if (NESTED_TYPES.includes(schema.type)) {
       const closeRow = createLiteralRow(rootNode);
 
       pushRow(closeRow);
+    }
+  }
+
+  /**
+   * Create a
+   * Depending on the refTreeNode's 'isExpanded' state,
+   * create a shrunk version of a refRow.
+   *
+   */
+  function renderRefNodeToRows(refTreeNode) {
+    const { defaultNode, expandedNode, isExpanded } = refTreeNode;
+    const refType = isExpanded ? 'expanded' : 'default';
+
+    /**
+     * If ref node has shrunk state, which is the default,
+     * create a single row based on the defaultNode structure
+     * defined within the ref node.
+     */
+    if (!isExpanded) {
+      const refRow = createSingleRow(defaultNode, refType);
+      pushRow(refRow);
+    } else {
+      /**
+       * Else, the ref node has expanded state,
+       * create rows based on the expandedNode structure.
+       */
+      renderNodeToRows(expandedNode, refType);
     }
   }
 

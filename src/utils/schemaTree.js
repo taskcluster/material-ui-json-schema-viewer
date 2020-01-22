@@ -2,17 +2,24 @@ import { clone, assocPath } from 'ramda';
 import { COMBINATION_TYPES, COMPLEX_TYPES } from './constants';
 
 /**
- * Generate a tree that illustrates the recursive data structure
- * of a schema. Each nodes defines the following structure:
+ * Generate a tree that illustrates the recursive structure of a schema.
+ * A single node within the tree defines the following structure:
  * {
  *   schema: ..       // the schema the node is representing
- *   children: [..]   // further objects of the same structure (for subschemas)
+ *   children: [..]   // node objects of the same structure (for subschemas)
  *   path: [..]       // the path from root to node, array of child indexes in
  *                       sequential order (for $refs and indentation level)
  *                       ex. [1, 0] = node at root.children[1].children[0]
  *                                    also has depth of 1 for indent size.
- *   reference: ..    // the default ref schema (only for ref type nodes)
- *   isExpanded: ..   // whether the node is expanded (only for ref type nodes)
+ * }
+ *
+ * If node is a ref node, it may have a difference structure:
+ * {
+ *   defaultNode: ..  // the default node structure when a $ref is shrinked
+ *                       (a node object as illustrated above)
+ *   expandedNode: .. // the expanded node strucutre when a $ref is expanded
+ *                       (a node object as illustrated above)
+ *   isExpanded: ..   // whether the node is expanded or not
  * }
  */
 export function createSchemaTree(schema, path = []) {
@@ -25,24 +32,26 @@ export function createSchemaTree(schema, path = []) {
     children: [],
     path,
   };
-  const schemaType = rootNode.schema.type;
 
   /**
-   * If schema has a $ref, add additional property fields:
-   * - reference: the default $ref schema node to refer to when fetching
-   *              a reference or shrinking a ref node
-   * - isExpanded: to store the state of the ref node (false by default)
+   * If schema is a $ref type, create a ref node object instead.
+   * (By default, 'isExpanded' is false to render ref row in collapsed form)
    */
   if ('$ref' in rootNode.schema) {
-    rootNode.reference = clone(rootNode);
-    rootNode.isExpanded = false;
+    return {
+      defaultNode: rootNode,
+      expandedNode: null,
+      isExpanded: false,
+    };
   }
 
   /**
    * Depending on whether the schema has a nested structure,
    * create children nodes according to its type and append them
-   * sequentially to the root node.
+   * sequentially as children to the root node.
    */
+  const schemaType = rootNode.schema.type;
+
   if (COMBINATION_TYPES.includes(schemaType)) {
     createCombinationTree(rootNode);
   } else if (schemaType === 'array') {
@@ -67,7 +76,7 @@ export function sanitizeSchema(schema) {
 
   /**
    * Make sure schemas have a type property for identification.
-   * (for complex type schemas which do not specify 'type' properties)
+   * (since complex type schemas do not specify 'type' properties)
    * If the type is not specified purposely, leave type property out.
    */
   if (!('type' in cloneSchema)) {
@@ -202,7 +211,9 @@ export function createObjectTree(rootNode) {
 }
 
 /**
- *
+ * Fetch the reference schema defined by the refString (value of $ref).
+ * This is mainly used to dynamically fetch a ref schema when expanding
+ * a ref row.
  */
 function fetchRefSchema(schemaTree, refString) {
   const [source, definitionPath] = refString.split('#');
@@ -228,42 +239,50 @@ function fetchRefSchema(schemaTree, refString) {
 }
 
 /**
- *
+ * Update the refNode's state to expanded form.
+ * The refDefaultNode parameter refers to the refNode's defaultNode.
  */
-export function expandRefNode(schemaTree, refNode) {
+export function expandRefNode(schemaTree, refDefaultNode) {
+  /**
+   * Create a clone of the original schemaTree in order to maintain
+   * immutability. Traverse the clone tree using the refDefaultNode's
+   * path to find the corresponding ref node within the clone tree.
+   * 'nodePtr' will ultimately point to the refNode that holds the following
+   * : defaultNode, expandedNode, isExpanded fields
+   */
   const cloneTree = clone(schemaTree);
   let nodePtr = cloneTree;
 
-  refNode.path.forEach(childIndex => {
+  refDefaultNode.path.forEach(childIndex => {
     nodePtr = nodePtr.children[childIndex];
   });
 
   /**
-   * Update the isExpanded state of the ref tree node
-   * so that the ref row will now display an expanded version.
+   * Update the isExpanded state of the ref tree node so that
+   * the ref row will now display an expanded version instead.
    */
   nodePtr.isExpanded = true;
 
   /**
-   * If ref tree node does not hold a referenced schema,
-   * dynamically fetch the schema and store in $ref property
-   * to cache the referenced schema in the ref node.
+   * If ref tree node has never referenced the $ref schema before,
+   * dynamically fetch the schema and store in expandedNode field
+   * in order to cache the referenced schema within the ref node.
    */
-  if (typeof nodePtr.schema.$ref === 'string') {
-    const refString = refNode.reference.schema.$ref;
+  if (!nodePtr.expandedNode) {
+    const refString = refDefaultNode.schema.$ref;
     const expandedRefSchema = fetchRefSchema(schemaTree, refString);
-    const refSchemaTree = createSchemaTree(expandedRefSchema, refNode.path);
 
-    nodePtr.schema = refSchemaTree.schema;
-    nodePtr.children = refSchemaTree.children;
-    console.log(nodePtr);
+    nodePtr.expandedNode = createSchemaTree(expandedRefSchema, refDefaultNode.path);
   }
 
   return cloneTree;
 }
 
 /**
- *
+ * Update the refNode's state to shrunk form.
+ * In order to maintain immutability for the schemaTree, the update
+ * is only reflected on a clone of the schemaTree while the original
+ * schemaTree remains the same.
  */
 export function shrinkRefNode(schemaTree, refNode) {
   const cloneTree = clone(schemaTree);
@@ -272,6 +291,11 @@ export function shrinkRefNode(schemaTree, refNode) {
   refNode.path.forEach(childIndex => {
     nodePtr = nodePtr.children[childIndex];
   });
+
+  /**
+   * Update the isExpanded state of the ref tree node so that
+   * the ref row will now display a shrinked version instead.
+   */
   nodePtr.isExpanded = false;
 
   return cloneTree;

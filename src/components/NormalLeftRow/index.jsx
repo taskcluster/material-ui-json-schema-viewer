@@ -1,11 +1,12 @@
 import React from 'react';
-import { shape, string, arrayOf, number, bool, func } from 'prop-types';
+import { shape, string, arrayOf, number, array, func } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import PlusIcon from '@material-ui/icons/AddCircleOutline';
 import MinusIcon from '@material-ui/icons/RemoveCircleOutline';
+import { expandRefNode, shrinkRefNode } from '../../utils/schemaTree';
 import {
   SKIP_KEYWORDS,
   DESCRIPTIVE_KEYWORDS,
@@ -23,11 +24,11 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function NormalLeftRow({ classes, treeNode, updateTreeFunc }) {
+function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
   /**
    * Deconstruct the properties of the given treeNode to use for rendering.
    */
-  const { schema, path, isExpanded } = treeNode;
+  const { schema, path } = treeNode;
   /**
    * Dynamically generate indent styles according to the given
    * depth of the treeNode props.
@@ -91,23 +92,35 @@ function NormalLeftRow({ classes, treeNode, updateTreeFunc }) {
    * If given treeNode is $ref type, create $ref button for expanding or
    * shrinking depending on the isExpanded state.
    */
-  const refButton =  updateTreeFunc
-    ? (function createRefButton(isExpanded) {
-        if (isExpanded) {
-          return (
-            <IconButton aria-label="shrink-ref" onClick={updateTreeFunc}>
-              <MinusIcon />
-            </IconButton>
-          );
-        }
+  const refButton = (function createRefButton(refType) {
+    if (refType === 'none') {
+      return null;
+    }
 
-        return (
-          <IconButton aria-label="expand-ref" onClick={updateTreeFunc}>
-            <PlusIcon />
-          </IconButton>
-        );
-      })(isExpanded)
-    : null;
+    /** 
+     * If row is an expanded ref row, create a button for shrinking the ref.
+     */
+    if (refType === 'expanded') {
+      return (
+        <IconButton
+          aria-label="shrink-ref"
+          onClick={() => setSchemaTree(prev => shrinkRefNode(prev, treeNode))}>
+          <MinusIcon />
+        </IconButton>
+      );
+    }
+
+    /** 
+     * Else, the row is a shrunk ref row, create a button for expanding the ref.
+     */
+    return (
+      <IconButton
+        aria-label="expand-ref"
+        onClick={() => setSchemaTree(prev => expandRefNode(prev, treeNode))}>
+        <PlusIcon />
+      </IconButton>
+    );
+  })(refType);
   /**
    * Create blank line paddings if descriptor keywords exists.
    * This enables the left row to have matching number of lines with
@@ -196,15 +209,16 @@ NormalLeftRow.propTypes = {
       /** Name of schema or sub-schema */
       name: string,
     }).isRequired,
-    /** Style for indentation to represent nested structure */
+    /** Path from root to current tree node */
     path: arrayOf(number).isRequired,
-    isExpanded: bool,
+    children: array,
   }).isRequired,
-  updateTreeFunc: func,
+  refType: string.isRequired,
+  setSchemaTree: func,
 };
 
 NormalLeftRow.defaultProps = {
-  updateTreeFunc: () => {},
+  setSchemaTree: () => {},
 };
 
 export default React.memo(NormalLeftRow);
