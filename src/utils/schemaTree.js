@@ -211,9 +211,8 @@ export function createObjectTree(rootNode) {
 }
 
 /**
- * Fetch the reference schema defined by the refString (value of $ref).
- * This is mainly used to dynamically fetch a ref schema when expanding
- * a ref row.
+ * Fetch the reference schema defined by the refString
+ * @param {*} refString: value of $ref field within a schema
  */
 function fetchRefSchema(schemaTree, refString) {
   const [source, definitionPath] = refString.split('#');
@@ -240,17 +239,20 @@ function fetchRefSchema(schemaTree, refString) {
 
 /**
  * Update the refNode's state to expanded form.
- * The refDefaultNode parameter refers to the refNode's defaultNode.
+ * @param {*} refDefaultNode: a refNode's defaultNode field
  */
 export function expandRefNode(schemaTree, refDefaultNode) {
   /**
-   * Create a clone of the original schemaTree in order to maintain
-   * immutability. Traverse the clone tree using the refDefaultNode's
-   * path to find the corresponding ref node within the clone tree.
-   * 'nodePtr' will ultimately point to the refNode that holds the following
-   * : defaultNode, expandedNode, isExpanded fields
+   * Create a clone of the schemaTree to maintain immutability.
    */
   const cloneTree = clone(schemaTree);
+
+  /**
+   * Traverse the clone tree using the refDefaultNode's path
+   * to find the corresponding ref node within the clone tree.
+   * ('nodePtr' ultimately points to a refNode with a structure
+   *   of defaultNode, expandedNode, isExpanded fields)
+   */
   let nodePtr = cloneTree;
 
   refDefaultNode.path.forEach(childIndex => {
@@ -258,7 +260,7 @@ export function expandRefNode(schemaTree, refDefaultNode) {
   });
 
   /**
-   * Update the isExpanded state of the ref tree node so that
+   * Update the 'isExpanded' state of the ref node so that
    * the ref row will now display an expanded version instead.
    */
   nodePtr.isExpanded = true;
@@ -279,22 +281,30 @@ export function expandRefNode(schemaTree, refDefaultNode) {
 }
 
 /**
- * Update the refNode's state to shrunk form.
- * In order to maintain immutability for the schemaTree, the update
- * is only reflected on a clone of the schemaTree while the original
- * schemaTree remains the same.
+ * Update the refNode's state to collapsed form.
+ * @param {*} refDefaultNode: a refNode's defaultNode field
  */
-export function shrinkRefNode(schemaTree, refNode) {
+export function shrinkRefNode(schemaTree, refDefaultNode) {
+  /**
+   * Create a clone of the schemaTree to maintain immutability.
+   */
   const cloneTree = clone(schemaTree);
+
+  /**
+   * Traverse the clone tree using the refDefaultNode's path
+   * to find the corresponding ref node within the clone tree.
+   * ('nodePtr' ultimately points to a refNode with a structure
+   *   of defaultNode, expandedNode, isExpanded fields)
+   */
   let nodePtr = cloneTree;
 
-  refNode.path.forEach(childIndex => {
+  refDefaultNode.path.forEach(childIndex => {
     nodePtr = nodePtr.children[childIndex];
   });
 
   /**
-   * Update the isExpanded state of the ref tree node so that
-   * the ref row will now display a shrinked version instead.
+   * Update the 'isExpanded' state of the ref node so that
+   * the ref row will now display a collapsed version instead.
    */
   nodePtr.isExpanded = false;
 
