@@ -25,13 +25,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
-  /**
-   * Deconstruct the properties of the given treeNode to use for rendering.
-   */
   const { schema, path } = treeNode;
   /**
-   * Dynamically generate indent styles according to the given
-   * depth of the treeNode props.
+   * Dynamically generate indent styles using the length of the path.
+   * (length of path = depth of the current treeNode)
    */
   const indentSize = path.length;
   const styles = useStyles(indentSize);
@@ -89,16 +86,17 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
       <span className={classes.prefix}>⊃</span>
     ) : null;
   /**
-   * If given treeNode is $ref type, create $ref button for expanding or
-   * shrinking depending on the isExpanded state.
+   * If given treeNode is $ref type, create $ref button for expanding
+   * or shrinking the row depending on the the refType prop.
    */
   const refButton = (function createRefButton(refType) {
+    /** If the row is not a ref row, do not display a button */
     if (refType === 'none') {
       return null;
     }
 
     /** 
-     * If row is an expanded ref row, create a button for shrinking the ref.
+     * If row is an expanded ref row, create a button for collapsing the ref.
      */
     if (refType === 'expanded') {
       return (
@@ -111,7 +109,7 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
     }
 
     /** 
-     * Else, the row is a shrunk ref row, create a button for expanding the ref.
+     * Else, the row is a collapsed ref row, create a button for expanding the ref.
      */
     return (
       <IconButton
@@ -196,11 +194,11 @@ NormalLeftRow.propTypes = {
     prefix: string.isRequired,
   }).isRequired,
   /**
-   * Object to denote tree node data structure for a certain schema.
+   * Tree node object data structure.
    */
   treeNode: shape({
     /**
-     * Schema input given to render. May also be a sub-schema in case
+     * Schema given to render upon. May also be a sub-schema in case
      * for array items, object properties or more complex schemas.
      */
     schema: shape({
@@ -209,11 +207,27 @@ NormalLeftRow.propTypes = {
       /** Name of schema or sub-schema */
       name: string,
     }).isRequired,
-    /** Path from root to current tree node */
+    /**
+     * Path from root to current tree node.
+     * Necessary in order to calculate the indent size.
+     */
     path: arrayOf(number).isRequired,
+    /** children nodes of the current node */
     children: array,
   }).isRequired,
+  /**
+   * String for identification of row. Can be one of the following:
+   * 'none': the row is not a ref row, so no button is necessary.
+   * 'default': the row is a ref row in collapsed form.
+   *            A plus button will be displayed in order to expand the $ref.
+   * 'expanded': the row is a ref row in expanded form.
+   *             A minus button will be displayed in order to srhink the $ref.
+   */
   refType: string.isRequired,
+  /**
+   * The method to set the state of the schemaTree.
+   * Only necessary for ref rows.
+   */
   setSchemaTree: func,
 };
 

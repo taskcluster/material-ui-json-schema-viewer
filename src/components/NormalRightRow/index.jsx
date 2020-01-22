@@ -6,9 +6,6 @@ import Tooltip from '../Tooltip';
 import { SKIP_KEYWORDS, DESCRIPTIVE_KEYWORDS } from '../../utils/constants';
 
 function NormalRightRow({ classes, treeNode }) {
-  /**
-   * Deconstruct the properties of the given treeNode to use for rendering.
-   */
   const { schema } = treeNode;
   /**
    * Identify keywords that define specifications of the given schema.
@@ -148,9 +145,12 @@ NormalRightRow.propTypes = {
     row: string.isRequired,
     line: string.isRequired,
   }).isRequired,
+  /**
+   * Tree node object data structure.
+   */
   treeNode: shape({
     /**
-     * Schema input given to render. May also be a sub-schema in case
+     * Schema given to render upon. May also be a sub-schema in case
      * for array items, object properties or more complex schemas.
      */
     schema: shape({
@@ -159,9 +159,9 @@ NormalRightRow.propTypes = {
       /** Name of schema or sub-schema */
       name: string,
     }).isRequired,
-    /** Style for indentation to represent nested structure */
-    path: arrayOf(number).isRequired,
-    isExpanded: bool,
+    path: arrayOf(number),
+    /** children nodes of the current node */
+    children: array,
   }).isRequired,
 };
 
