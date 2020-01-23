@@ -1,4 +1,4 @@
-import { clone, assocPath } from 'ramda';
+import { clone } from 'ramda';
 import { COMBINATION_TYPES, COMPLEX_TYPES } from './constants';
 
 /**
@@ -216,14 +216,12 @@ export function createObjectTree(rootNode) {
  */
 function fetchRefSchema(schemaTree, refString) {
   const [source, definitionPath] = refString.split('#');
-
   /**
    * Find the source for the reference
    * TODO: add feature to fetch $refs in separate files or urls
-   */
   if (source.length > 0) {
   }
-
+   */
   /** Find the definition within the source */
   const parameters = definitionPath.split('/');
   let ptr = schemaTree.schema;
@@ -246,7 +244,6 @@ export function expandRefNode(schemaTree, refDefaultNode) {
    * Create a clone of the schemaTree to maintain immutability.
    */
   const cloneTree = clone(schemaTree);
-
   /**
    * Traverse the clone tree using the refDefaultNode's path
    * to find the corresponding ref node within the clone tree.
@@ -274,7 +271,10 @@ export function expandRefNode(schemaTree, refDefaultNode) {
     const refString = refDefaultNode.schema.$ref;
     const expandedRefSchema = fetchRefSchema(schemaTree, refString);
 
-    nodePtr.expandedNode = createSchemaTree(expandedRefSchema, refDefaultNode.path);
+    nodePtr.expandedNode = createSchemaTree(
+      expandedRefSchema,
+      refDefaultNode.path
+    );
   }
 
   return cloneTree;
@@ -289,7 +289,6 @@ export function shrinkRefNode(schemaTree, refDefaultNode) {
    * Create a clone of the schemaTree to maintain immutability.
    */
   const cloneTree = clone(schemaTree);
-
   /**
    * Traverse the clone tree using the refDefaultNode's path
    * to find the corresponding ref node within the clone tree.

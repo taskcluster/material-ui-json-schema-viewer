@@ -1,8 +1,9 @@
 import React from 'react';
-import { shape, string, arrayOf, number, bool } from 'prop-types';
+import { shape, string } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
 import Tooltip from '../Tooltip';
+import { treeNode } from '../../utils/prop-types';
 import { SKIP_KEYWORDS, DESCRIPTIVE_KEYWORDS } from '../../utils/constants';
 
 function NormalRightRow({ classes, treeNode }) {
@@ -148,21 +149,7 @@ NormalRightRow.propTypes = {
   /**
    * Tree node object data structure.
    */
-  treeNode: shape({
-    /**
-     * Schema given to render upon. May also be a sub-schema in case
-     * for array items, object properties or more complex schemas.
-     */
-    schema: shape({
-      /** Type of schema or sub-schema */
-      type: string,
-      /** Name of schema or sub-schema */
-      name: string,
-    }).isRequired,
-    path: arrayOf(number),
-    /** children nodes of the current node */
-    children: array,
-  }).isRequired,
+  treeNode: treeNode.isRequired,
 };
 
 export default React.memo(NormalRightRow);

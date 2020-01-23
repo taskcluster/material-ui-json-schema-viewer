@@ -44,3 +44,6 @@ export const SKIP_KEYWORDS = [
   '$ref',
   'definitions',
 ];
+
+/** Empty Function to use for default props */
+export const NOOP = () => {};

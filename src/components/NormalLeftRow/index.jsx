@@ -1,17 +1,19 @@
 import React from 'react';
-import { shape, string, arrayOf, number, array, func } from 'prop-types';
+import { shape, string, oneOf, func } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import PlusIcon from '@material-ui/icons/AddCircleOutline';
 import MinusIcon from '@material-ui/icons/RemoveCircleOutline';
+import { treeNode } from '../../utils/prop-types';
 import { expandRefNode, shrinkRefNode } from '../../utils/schemaTree';
 import {
   SKIP_KEYWORDS,
   DESCRIPTIVE_KEYWORDS,
   COMBINATION_TYPES,
   NESTED_TYPES,
+  NOOP,
 } from '../../utils/constants';
 
 /**
@@ -95,7 +97,7 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
       return null;
     }
 
-    /** 
+    /**
      * If row is an expanded ref row, create a button for collapsing the ref.
      */
     if (refType === 'expanded') {
@@ -108,8 +110,9 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
       );
     }
 
-    /** 
-     * Else, the row is a collapsed ref row, create a button for expanding the ref.
+    /**
+     * Else, the row is a collapsed ref row,
+     * create a button for expanding the ref.
      */
     return (
       <IconButton
@@ -196,25 +199,7 @@ NormalLeftRow.propTypes = {
   /**
    * Tree node object data structure.
    */
-  treeNode: shape({
-    /**
-     * Schema given to render upon. May also be a sub-schema in case
-     * for array items, object properties or more complex schemas.
-     */
-    schema: shape({
-      /** Type of schema or sub-schema */
-      type: string,
-      /** Name of schema or sub-schema */
-      name: string,
-    }).isRequired,
-    /**
-     * Path from root to current tree node.
-     * Necessary in order to calculate the indent size.
-     */
-    path: arrayOf(number).isRequired,
-    /** children nodes of the current node */
-    children: array,
-  }).isRequired,
+  treeNode: treeNode.isRequired,
   /**
    * String for identification of row. Can be one of the following:
    * 'none': the row is not a ref row, so no button is necessary.
@@ -223,7 +208,7 @@ NormalLeftRow.propTypes = {
    * 'expanded': the row is a ref row in expanded form.
    *             A minus button will be displayed in order to srhink the $ref.
    */
-  refType: string.isRequired,
+  refType: oneOf(['none', 'default', 'expanded']).isRequired,
   /**
    * The method to set the state of the schemaTree.
    * Only necessary for ref rows.
@@ -232,7 +217,7 @@ NormalLeftRow.propTypes = {
 };
 
 NormalLeftRow.defaultProps = {
-  setSchemaTree: () => {},
+  setSchemaTree: NOOP,
 };
 
 export default React.memo(NormalLeftRow);

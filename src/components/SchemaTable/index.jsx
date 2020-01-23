@@ -152,24 +152,26 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
    */
   function renderNodeToRows(rootNode, refType = 'none') {
     /**
-     * 
+     *
      */
     if ('isExpanded' in rootNode) {
       renderRefNodeToRows(rootNode);
+
       return;
     }
 
     /**
      * Create a row based on the rootNode
      */
-    const { schema, path, children } = rootNode;
+    const { schema, children } = rootNode;
     const rootNodeRow = createSingleRow(rootNode, refType);
 
     pushRow(rootNodeRow);
+
     /**
-   * If the root node has children (indicating a nested structure),
-   * create rows for each of the child nodes using recursion.
-   */
+     * If the root node has children (indicating a nested structure),
+     * create rows for each of the child nodes using recursion.
+     */
     if (children) {
       children.forEach((childNode, i) => {
         /**
@@ -214,6 +216,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
      */
     if (!isExpanded) {
       const refRow = createSingleRow(defaultNode, refType);
+
       pushRow(refRow);
     } else {
       /**
