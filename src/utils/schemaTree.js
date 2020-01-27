@@ -50,7 +50,7 @@ export function createSchemaTree(schema, path = []) {
    * create children nodes according to its type and append them
    * sequentially as children to the root node.
    */
-  const schemaType = rootNode.schema.type;
+  const schemaType = rootNode.schema._type || rootNode.schema.type;
 
   if (COMBINATION_TYPES.includes(schemaType)) {
     createCombinationTree(rootNode);
@@ -76,13 +76,13 @@ export function sanitizeSchema(schema) {
 
   /**
    * Make sure schemas have a type property for identification.
-   * (since complex type schemas do not specify 'type' properties)
+   * (since complex type schemas do not specify '_type' properties)
    * If the type is not specified purposely, leave type property out.
    */
   if (!('type' in cloneSchema)) {
     COMPLEX_TYPES.forEach(type => {
       if (type in cloneSchema) {
-        cloneSchema.type = type;
+        cloneSchema._type = type;
       }
     });
   }
@@ -93,6 +93,7 @@ export function sanitizeSchema(schema) {
 /**
  * Create a child node based on the given subschema and append it to
  * the rootNode. (the child node may be a single node or a subtree)
+ * @param {*} childIndex: the index of the child node (will be appended to its path)
  */
 export function createChildNode(rootNode, subschema, childIndex) {
   const childNode = createSchemaTree(subschema, [...rootNode.path, childIndex]);
@@ -107,7 +108,7 @@ export function createChildNode(rootNode, subschema, childIndex) {
  */
 export function createCombinationTree(rootNode) {
   const { schema } = rootNode;
-  const combType = schema.type;
+  const combType = schema._type;
 
   /**
    * If there are multiple options (defined in array form),

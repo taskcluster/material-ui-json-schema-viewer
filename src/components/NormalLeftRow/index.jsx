@@ -46,6 +46,7 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
    * Complex types (allOf, anyOf, oneOf, no) use comment notation,
    * the rest simply use highlighted text to illustrate the data type.
    */
+  const schemaType = schema._type || schema.type;
   const typeSymbol = (function createTypeSymbol(type) {
     const bracketTypes = [...NESTED_TYPES, 'closeArray', 'closeObject'];
     const combinationTypes = [...COMBINATION_TYPES, 'and', 'or', 'nor'];
@@ -74,7 +75,7 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
     }
 
     return <code className={classes.code}>{type}</code>;
-  })(schema.type);
+  })(schemaType);
   /**
    * Define the required prefix (*) if the schema type
    * is a required property of an object.

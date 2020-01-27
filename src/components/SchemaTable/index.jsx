@@ -120,6 +120,8 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
    */
   function createLiteralRow(treeNode) {
     const { schema, path } = treeNode;
+    const schemaType = schema._type || schema.type;
+
     const literalSchema = {
       type: {
         array: 'closeArray',
@@ -128,7 +130,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
         anyOf: 'or',
         oneOf: 'or',
         not: 'nor',
-      }[schema.type],
+      }[schemaType],
     };
     const literalTreeNode = createSchemaTree(literalSchema, path);
 
@@ -152,7 +154,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
    */
   function renderNodeToRows(rootNode, refType = 'none') {
     /**
-     *
+     * If rootNode is a $ref type, render rows based on ref node.
      */
     if ('isExpanded' in rootNode) {
       renderRefNodeToRows(rootNode);
@@ -164,6 +166,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
      * Create a row based on the rootNode
      */
     const { schema, children } = rootNode;
+    const schemaType = schema._type || schema.type;
     const rootNodeRow = createSingleRow(rootNode, refType);
 
     pushRow(rootNodeRow);
@@ -178,7 +181,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
          * If root node's schema defines a combination type,
          * add separator rows in between the option rows
          */
-        if (COMBINATION_TYPES.includes(schema.type) && i > 0) {
+        if (COMBINATION_TYPES.includes(schemaType) && i > 0) {
           const separatorRow = createLiteralRow(rootNode);
 
           pushRow(separatorRow);
@@ -192,7 +195,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
      * If root node's schema defines a nested structure,
      * add a row at the end to close off the nested structure
      */
-    if (NESTED_TYPES.includes(schema.type)) {
+    if (NESTED_TYPES.includes(schemaType)) {
       const closeRow = createLiteralRow(rootNode);
 
       pushRow(closeRow);
