@@ -1,9 +1,20 @@
 import React from 'react';
-import { shape, string, number } from 'prop-types';
+import { shape, string, oneOf, func } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
-import { SKIP_KEYWORDS, DESCRIPTIVE_KEYWORDS } from '../../utils/constants';
+import IconButton from '@material-ui/core/IconButton';
+import PlusIcon from '@material-ui/icons/AddCircleOutline';
+import MinusIcon from '@material-ui/icons/RemoveCircleOutline';
+import { treeNode } from '../../utils/prop-types';
+import { expandRefNode, shrinkRefNode } from '../../utils/schemaTree';
+import {
+  SKIP_KEYWORDS,
+  DESCRIPTIVE_KEYWORDS,
+  COMBINATION_TYPES,
+  NESTED_TYPES,
+  NOOP,
+} from '../../utils/constants';
 
 /**
  * Dynamically generate styles for indentations to be used for
@@ -15,12 +26,14 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function NormalLeftRow({ schema, classes, indent }) {
+function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
+  const { schema, path } = treeNode;
   /**
-   * Dynamically generate indent styles according to the given
-   * indent props.
+   * Dynamically generate indent styles using the length of the path.
+   * (length of path = depth of the current treeNode)
    */
-  const styles = useStyles(indent);
+  const indentSize = path.length;
+  const styles = useStyles(indentSize);
   /**
    * Define the name to illustrate the schema or sub-schema.
    * If a name property is not defined within the schema,
@@ -34,16 +47,8 @@ function NormalLeftRow({ schema, classes, indent }) {
    * the rest simply use highlighted text to illustrate the data type.
    */
   const typeSymbol = (function createTypeSymbol(type) {
-    const bracketTypes = ['array', 'object', 'closeArray', 'closeObject'];
-    const combinationTypes = [
-      'allOf',
-      'anyOf',
-      'oneOf',
-      'not',
-      'and',
-      'or',
-      'nor',
-    ];
+    const bracketTypes = [...NESTED_TYPES, 'closeArray', 'closeObject'];
+    const combinationTypes = [...COMBINATION_TYPES, 'and', 'or', 'nor'];
 
     if (bracketTypes.includes(type)) {
       return {
@@ -83,6 +88,41 @@ function NormalLeftRow({ schema, classes, indent }) {
       <span className={classes.prefix}>⊃</span>
     ) : null;
   /**
+   * If given treeNode is $ref type, create $ref button for expanding
+   * or shrinking the row depending on the the refType prop.
+   */
+  const refButton = (function createRefButton(refType) {
+    /** If the row is not a ref row, do not display a button */
+    if (refType === 'none') {
+      return null;
+    }
+
+    /**
+     * If row is an expanded ref row, create a button for collapsing the ref.
+     */
+    if (refType === 'expanded') {
+      return (
+        <IconButton
+          aria-label="shrink-ref"
+          onClick={() => setSchemaTree(prev => shrinkRefNode(prev, treeNode))}>
+          <MinusIcon />
+        </IconButton>
+      );
+    }
+
+    /**
+     * Else, the row is a collapsed ref row,
+     * create a button for expanding the ref.
+     */
+    return (
+      <IconButton
+        aria-label="expand-ref"
+        onClick={() => setSchemaTree(prev => expandRefNode(prev, treeNode))}>
+        <PlusIcon />
+      </IconButton>
+    );
+  })(refType);
+  /**
    * Create blank line paddings if descriptor keywords exists.
    * This enables the left row to have matching number of lines with
    * the right row and align the lines and heights between the two rows.
@@ -93,7 +133,7 @@ function NormalLeftRow({ schema, classes, indent }) {
   const blankLinePaddings =
     descriptors.length === 0
       ? []
-      : (function countPaddingLines(schemaInput) {
+      : (function createPaddingLines(schemaInput) {
           const lines = [];
           const specifications = Object.keys(schemaInput).filter(
             key => !SKIP_KEYWORDS.includes(key)
@@ -137,6 +177,7 @@ function NormalLeftRow({ schema, classes, indent }) {
         {name && `${name}: `}
         {typeSymbol}
         {requiredPrefix}
+        {refButton}
       </Typography>
       {blankLinePaddings}
     </div>
@@ -145,20 +186,8 @@ function NormalLeftRow({ schema, classes, indent }) {
 
 NormalLeftRow.propTypes = {
   /**
-   * Schema input given to render.
-   * May also be a sub-schema in case for array items,
-   * object properties or more complex schemas.
-   */
-  schema: shape({
-    /** Type of schema or sub-schema */
-    type: string,
-    /** Name of schema or sub-schema */
-    name: string,
-  }).isRequired,
-  /**
-   * Style for rows and lines for schema viewer.
-   * Necessary to maintain consistency with right panel's
-   * rows and lines.
+   * Style for rows and lines for left rows of the schema table.
+   * (necessary to maintain consistency with right panel's rows and lines)
    */
   classes: shape({
     row: string.isRequired,
@@ -167,7 +196,28 @@ NormalLeftRow.propTypes = {
     comment: string.isRequired,
     prefix: string.isRequired,
   }).isRequired,
-  indent: number.isRequired,
+  /**
+   * Tree node object data structure.
+   */
+  treeNode: treeNode.isRequired,
+  /**
+   * String for identification of row. Can be one of the following:
+   * 'none': the row is not a ref row, so no button is necessary.
+   * 'default': the row is a ref row in collapsed form.
+   *            A plus button will be displayed in order to expand the $ref.
+   * 'expanded': the row is a ref row in expanded form.
+   *             A minus button will be displayed in order to srhink the $ref.
+   */
+  refType: oneOf(['none', 'default', 'expanded']).isRequired,
+  /**
+   * The method to set the state of the schemaTree.
+   * Only necessary for ref rows.
+   */
+  setSchemaTree: func,
+};
+
+NormalLeftRow.defaultProps = {
+  setSchemaTree: NOOP,
 };
 
 export default React.memo(NormalLeftRow);

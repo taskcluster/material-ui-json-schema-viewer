@@ -1,3 +1,3 @@
-import SchemaTable from './SchemaTable';
+import SchemaViewer from './SchemaViewer';
 
-export default { SchemaTable };
+export default { SchemaViewer };
