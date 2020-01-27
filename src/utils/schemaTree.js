@@ -1,5 +1,5 @@
 import { clone } from 'ramda';
-import { COMBINATION_TYPES, COMPLEX_TYPES } from './constants';
+import { COMBINATION_TYPES, COMPLEX_TYPES, CUSTOM_KEYWORDS } from './constants';
 
 /**
  * Generate a tree that illustrates the recursive structure of a schema.
@@ -300,10 +300,26 @@ export function expandRefNode(schemaTree, refDefaultNode) {
     const refString = refDefaultNode.schema.$ref;
     const expandedRefSchema = fetchRefSchema(schemaTree, refString);
 
+    /**
+     * Create a subschema tree based on the fetched ref schema
+     * and store the result within the expandedNode field.
+     */
     refNode.expandedNode = createSchemaTree(
       expandedRefSchema,
       refDefaultNode.path
     );
+
+    /**
+     * If the ref node's default node has custom fields,
+     * also include those same fields within the expanded node.
+     */
+    const customKeywords = CUSTOM_KEYWORDS.filter(key => key !== '_type');
+
+    customKeywords.forEach(keyword => {
+      if (keyword in refDefaultNode.schema) {
+        refNode.expandedNode.schema[keyword] = refDefaultNode.schema[keyword];
+      }
+    });
   }
 
   return cloneTree;

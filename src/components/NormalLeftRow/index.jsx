@@ -39,13 +39,7 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
    * If a name property is not defined within the schema,
    * set it to null in order to not display any name.
    */
-  const name = (function findName(schema) {
-    if (schema._name) return schema._name;
-
-    if (schema.name) return schema.name;
-
-    return null;
-  })(schema);
+  const name = schema._name || schema.name || null;
   /**
    * Define the type symbol for the schema or sub-schema's type
    * Types requiring nested structures use the according bracket symbol,
