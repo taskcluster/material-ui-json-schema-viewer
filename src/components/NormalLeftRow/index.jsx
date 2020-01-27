@@ -4,8 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import PlusIcon from '@material-ui/icons/AddCircleOutline';
-import MinusIcon from '@material-ui/icons/RemoveCircleOutline';
+import ExpandIcon from '@material-ui/icons/ArrowRightRounded';
+import ShrinkIcon from '@material-ui/icons/ArrowLeftRounded';
 import { treeNode } from '../../utils/prop-types';
 import { expandRefNode, shrinkRefNode } from '../../utils/schemaTree';
 import {
@@ -105,7 +105,7 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
         <IconButton
           aria-label="shrink-ref"
           onClick={() => setSchemaTree(prev => shrinkRefNode(prev, treeNode))}>
-          <MinusIcon />
+          <ShrinkIcon fontSize="large"/>
         </IconButton>
       );
     }
@@ -118,7 +118,7 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
       <IconButton
         aria-label="expand-ref"
         onClick={() => setSchemaTree(prev => expandRefNode(prev, treeNode))}>
-        <PlusIcon />
+        <ExpandIcon fontSize="large"/>
       </IconButton>
     );
   })(refType);
