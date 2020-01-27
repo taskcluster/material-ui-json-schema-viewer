@@ -136,7 +136,8 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
         not: 'nor',
       }[schemaType],
     };
-    const literalTreeNode = createSchemaTree(literalSchema, path);
+    const literalPath = COMBINATION_TYPES.includes(schemaType) ? [...path, 0] : path;
+    const literalTreeNode = createSchemaTree(literalSchema, literalPath);
 
     return createSingleRow(literalTreeNode);
   }
