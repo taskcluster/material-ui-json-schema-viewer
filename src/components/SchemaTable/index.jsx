@@ -88,7 +88,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
    * into the leftPanelRows and rightPanelRows arrays respectively.
    */
   function createSingleRow(treeNode, refType = 'none') {
-    /** 
+    /**
      * If the row to create is a refType (either 'default' or 'expanded'),
      * make sure to pass 'setSchemaTree' method to change the state of the
      * schemaTree. Else, pass null as prop instead.
@@ -151,7 +151,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
   }
 
   /**
-   * Create rows by traversing the tree structure, 
+   * Create rows by traversing the tree structure,
    * starting from the rootNode, in pre-order.
    * First, a single row based on the root node will be created.
    * Then, if the root node has children, this method may be called
@@ -209,7 +209,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
 
   /**
    * Depending on the refTreeNode's 'isExpanded' state,
-   * create either a default collapsed version of a refRow 
+   * create either a default collapsed version of a refRow
    * or an expanded version of possibly multiple rows.
    */
   function renderRefNodeToRows(refTreeNode) {

@@ -167,7 +167,7 @@ export function createArrayTree(rootNode) {
     const subschema = schema.contains;
     const childIndex = rootNode.children.length;
 
-    subschema.contains = true;
+    subschema._contains = true;
     createChildNode(rootNode, subschema, childIndex);
   }
 }
@@ -200,10 +200,10 @@ export function createObjectTree(rootNode) {
     propertyList.forEach((property, childIndex) => {
       const subschema = schema.properties[property];
 
-      subschema.name = property;
+      subschema._name = property;
 
       if (requiredList.has(property)) {
-        subschema.required = true;
+        subschema._required = true;
       }
 
       createChildNode(rootNode, subschema, childIndex);
