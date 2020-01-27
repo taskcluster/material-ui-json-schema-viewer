@@ -13,6 +13,11 @@ module.exports = {
         'no-use-before-define': ['error', { 
           functions: false,
         }],
+        /**
+         * Allow dangling underscores in identifiers.
+         * This is specifically enabled to use custom fields in the schemas.
+         */
+        'no-underscore-dangle': ['off'],
         'import/prefer-default-export': ['off'],
         /**
          * Allow both '.jsx' and '.js' file extensions to contain JSX

@@ -88,6 +88,11 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
    * into the leftPanelRows and rightPanelRows arrays respectively.
    */
   function createSingleRow(treeNode, refType = 'none') {
+    /** 
+     * If the row to create is a refType (either 'default' or 'expanded'),
+     * make sure to pass 'setSchemaTree' method to change the state of the
+     * schemaTree. Else, pass null as prop instead.
+     */
     const updateFunc = refType === 'none' ? null : setSchemaTree;
 
     return {
@@ -113,15 +118,14 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
   /**
    * Create a literal row for displaying descriptive rows.
    * This is only used to create rows for the following:
-   * - a closing row for nested types (arrays and objects) to display a
+   * * a closing row for nested types (arrays and objects) to display a
    *   close bracket symbol
-   * - a separator row for combination types (allOf, anyOf, oneOf, not)
+   * * a separator row for combination types (allOf, anyOf, oneOf, not)
    *   to visually separate options.
    */
   function createLiteralRow(treeNode) {
     const { schema, path } = treeNode;
     const schemaType = schema._type || schema.type;
-
     const literalSchema = {
       type: {
         array: 'closeArray',
@@ -147,8 +151,9 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
   }
 
   /**
-   * Traverse a tree or subtree in pre-order in order to create rows.
-   * First, a row based on the root node will be created.
+   * Create rows by traversing the tree structure, 
+   * starting from the rootNode, in pre-order.
+   * First, a single row based on the root node will be created.
    * Then, if the root node has children, this method may be called
    * recursively to create rows for the subtree structures.
    */
@@ -163,7 +168,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
     }
 
     /**
-     * Create a row based on the rootNode
+     * Create a single row based on the rootNode.
      */
     const { schema, children } = rootNode;
     const schemaType = schema._type || schema.type;
@@ -203,10 +208,9 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
   }
 
   /**
-   * Create a
    * Depending on the refTreeNode's 'isExpanded' state,
-   * create a shrunk version of a refRow.
-   *
+   * create either a default collapsed version of a refRow 
+   * or an expanded version of possibly multiple rows.
    */
   function renderRefNodeToRows(refTreeNode) {
     const { defaultNode, expandedNode, isExpanded } = refTreeNode;

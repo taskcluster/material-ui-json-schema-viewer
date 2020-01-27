@@ -93,7 +93,7 @@ export function sanitizeSchema(schema) {
 /**
  * Create a child node based on the given subschema and append it to
  * the rootNode. (the child node may be a single node or a subtree)
- * @param {*} childIndex: the index of the child node (will be appended to its path)
+ * @param {*} childIndex: index of the child node (used for its path)
  */
 export function createChildNode(rootNode, subschema, childIndex) {
   const childNode = createSchemaTree(subschema, [...rootNode.path, childIndex]);
