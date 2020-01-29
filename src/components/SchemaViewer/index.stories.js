@@ -47,6 +47,7 @@ combinationSchemas.not = require('../../../schemas/combinationTypes/not.json');
 const refSchemas = {};
 
 refSchemas.simpleReference = require('../../../schemas/refTypes/simpleReference.json');
+refSchemas.urlReference = require('../../../schemas/refTypes/urlReference.json');
 refSchemas.circularReference = require('../../../schemas/refTypes/circularReference.json');
 
 const miscellaneousSchemas = {};
@@ -120,6 +121,8 @@ export const refTypes = () => (
   <Fragment>
     <h3>Simple Reference</h3>
     <SchemaViewer schema={refSchemas.simpleReference} />
+    <h3>URI Reference (fetch $ref based on URI)</h3>
+    <SchemaViewer schema={refSchemas.urlReference} />
     <h3>Circular Reference</h3>
     <SchemaViewer schema={refSchemas.circularReference} />
   </Fragment>

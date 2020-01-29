@@ -226,15 +226,19 @@ export function createObjectTree(rootNode) {
  */
 function fetchRefSchema(schemaTree, refString) {
   const [source, definitionPath] = refString.split('#');
+
   /**
    * Find the source for the reference
    * TODO: add feature to fetch $refs in separate files or urls
+   */ 
+  let ptr = null;
   if (source.length > 0) {
+    ptr = require(source);
+    console.log(ptr);
   }
-   */
+  ptr = schemaTree.schema;
   /** Find the definition within the source */
   const parameters = definitionPath.split('/');
-  let ptr = schemaTree.schema;
 
   parameters.forEach(parameter => {
     if (parameter.length > 0) {
