@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import SchemaViewer from './index';
 
 export default {
@@ -136,3 +137,33 @@ export const demo = () => (
     <SchemaViewer schema={demoSchemas.workerList} />
   </Fragment>
 );
+
+export const customThemes = () => {
+  const darkTheme = createMuiTheme({
+    palette: {
+      type: 'dark',
+    },
+  });
+  const colorfulTheme = createMuiTheme({
+    palette: {
+      text: {
+        primary: '#ffc107',
+      },
+      background: {
+        default: '#eceff1',
+      }
+    },
+  });
+  return (
+    <Fragment>
+      <h3>Dark Theme</h3>
+      <ThemeProvider theme={darkTheme}>
+        <SchemaViewer schema={objectSchemas.complexObjectExample} />
+      </ThemeProvider>
+      <h3>Colorful Theme</h3>
+      <ThemeProvider theme={colorfulTheme}>
+        <SchemaViewer schema={objectSchemas.complexObjectExample} />
+      </ThemeProvider>
+    </Fragment>
+  );
+}
