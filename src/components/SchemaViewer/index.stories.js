@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import SchemaViewer from './index';
 
 export default {
@@ -47,6 +48,14 @@ const refSchemas = {};
 
 refSchemas.simpleReference = require('../../../schemas/refTypes/simpleReference.json');
 refSchemas.circularReference = require('../../../schemas/refTypes/circularReference.json');
+
+const demoSchemas = {};
+
+demoSchemas.hookStatus = require('../../../schemas/demo/hook-status.json');
+demoSchemas.listClients = require('../../../schemas/demo/list-clients-response.json');
+demoSchemas.metaData = require('../../../schemas/demo/metadata-metaschema.json');
+demoSchemas.workerFull = require('../../../schemas/demo/worker-full.json');
+demoSchemas.workerList = require('../../../schemas/demo/worker-list.json');
 
 export const defaultTypes = () => (
   <Fragment>
@@ -110,3 +119,51 @@ export const refTypes = () => (
     <SchemaViewer schema={refSchemas.circularReference} />
   </Fragment>
 );
+
+export const demo = () => (
+  <Fragment>
+    <h2>Demo of Taskcluster Schemas</h2>
+    <h3>Hook Status</h3>
+    <p>example of use of object, combination, default types</p>
+    <SchemaViewer schema={demoSchemas.hookStatus} />
+    <h3>List Clients Response</h3>
+    <p>example of use of object, array, default types</p>
+    <SchemaViewer schema={demoSchemas.listClients} />
+    <h3>Metadata Metaschema</h3>
+    <p>example of use of combination, array, $ref types</p>
+    <SchemaViewer schema={demoSchemas.metaData} />
+    <h3>Worker List</h3>
+    <p>example of use of object, $ref types</p>
+    <SchemaViewer schema={demoSchemas.workerList} />
+  </Fragment>
+);
+
+export const customThemes = () => {
+  const darkTheme = createMuiTheme({
+    palette: {
+      type: 'dark',
+    },
+  });
+  const colorfulTheme = createMuiTheme({
+    palette: {
+      text: {
+        primary: '#ffc107',
+      },
+      background: {
+        default: '#eceff1',
+      }
+    },
+  });
+  return (
+    <Fragment>
+      <h3>Dark Theme</h3>
+      <ThemeProvider theme={darkTheme}>
+        <SchemaViewer schema={objectSchemas.complexObjectExample} />
+      </ThemeProvider>
+      <h3>Colorful Theme</h3>
+      <ThemeProvider theme={colorfulTheme}>
+        <SchemaViewer schema={objectSchemas.complexObjectExample} />
+      </ThemeProvider>
+    </Fragment>
+  );
+}
