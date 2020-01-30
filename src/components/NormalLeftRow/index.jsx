@@ -118,45 +118,50 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
    * This enables the left row to have matching number of lines with
    * the right row and align the lines and heights between the two rows.
    */
-  const descriptors = Object.keys(schema).filter(key =>
-    DESCRIPTIVE_KEYWORDS.includes(key)
-  );
-  const blankLinePaddings =
-    descriptors.length === 0
-      ? []
-      : (function createPaddingLines(schemaInput) {
-          const lines = [];
-          const specifications = Object.keys(schemaInput).filter(
-            key => !SKIP_KEYWORDS.includes(key)
-          );
+  const blankLinePaddings = (function createPaddingLines(schemaInput) {
+    /**
+     * Check for descriptor and specification keywords.
+     * * specification: displayed as chips in the first line of NormalRightRow
+     * * descriptors: displayed in the next sequential lines of NormalRightRow
+     */
+    const descriptors = Object.keys(schema).filter(key =>
+      DESCRIPTIVE_KEYWORDS.includes(key)
+    );
+    const specifications = Object.keys(schemaInput).filter(
+      key => !SKIP_KEYWORDS.includes(key)
+    );
+    /**
+     * If there are not descriptor keywords to display,
+     * there is no need for any blank line paddings.
+     */
+    const lines = [];
 
-          /** Display a blank line for each descriptor keyword. */
-          descriptors.forEach((keyword, i) => {
-            /**
-             * If specification keywords exists (displayed as chips in
-             * NormalRightRow), a blank line should be added before the
-             * descriptor lines to visually separate the lines.
-             * Else, skip over the first descriptor keyword to match
-             * the number of lines in NormalRightRow
-             */
-            if (i === 0) {
-              if (specifications.length > 0) {
-                lines.push(
-                  <div key="separator-line" className={classes.line} />
-                );
-                lines.push(
-                  <div key={`${keyword}-line`} className={classes.line} />
-                );
-              }
-            } else {
-              lines.push(
-                <div key={`${keyword}-line`} className={classes.line} />
-              );
-            }
-          });
+    if (descriptors.length === 0) {
+      return lines;
+    }
 
-          return lines;
-        })(schema);
+    /** Create a blank line for each descriptor keyword. */
+    descriptors.forEach((keyword, i) => {
+      /**
+       * For the first descriptor keyword,
+       * if specification keywords exists, a blank line should be added
+       * to visually separate the specification line and descriptor line.
+       * Else, no specifications exists, skip over the first descriptor
+       * keyword so that the lines match the number of lines in NormalRightRow
+       */
+      if (i === 0) {
+        if (specifications.length > 0) {
+          lines.push(<div key="separator-line" className={classes.line} />);
+          lines.push(<div key={`${keyword}-line`} className={classes.line} />);
+        }
+      } else {
+        /** Create blank lines for all the following descriptor keywords */
+        lines.push(<div key={`${keyword}-line`} className={classes.line} />);
+      }
+    });
+
+    return lines;
+  })(schema);
 
   return (
     <div key={schema.type} className={classes.row} onClick={onRefClick}>
