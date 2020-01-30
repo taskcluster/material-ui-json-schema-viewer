@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { shape, string } from 'prop-types';
+import { shape, string, oneOfType, node } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '../Tooltip';
 
@@ -8,7 +8,7 @@ import Tooltip from '../Tooltip';
  * If the content text overflows, returns a line component with
  * the text ellipsed and tooltip is used to display full text instead.
  */
-function OverflowLine({ classes, text }) {
+function OverflowLine({ classes, content }) {
   /**
    * Track the textOverflow state depending on the component's
    * width size relative to the text's length.
@@ -30,14 +30,14 @@ function OverflowLine({ classes, text }) {
 
   if (isTextOverflow) {
     return (
-      <Tooltip title={text}>
+      <Tooltip title={content}>
         <div className={classes.line}>
           <Typography
             component="div"
             variant="subtitle2"
             ref={measuredRef}
             noWrap>
-            {text}
+            {content}
           </Typography>
         </div>
       </Tooltip>
@@ -50,7 +50,7 @@ function OverflowLine({ classes, text }) {
       variant="subtitle2"
       className={classes.line}
       ref={measuredRef}>
-      {text}
+      {content}
     </Typography>
   );
 }
@@ -63,7 +63,13 @@ OverflowLine.propTypes = {
   classes: shape({
     line: string.isRequired,
   }).isRequired,
-  text: string.isRequired,
+  /**
+   * Content to be displayed.
+   */
+  content: oneOfType([
+    node,
+    string,
+  ]).isRequired,
 };
 
 export default React.memo(OverflowLine);

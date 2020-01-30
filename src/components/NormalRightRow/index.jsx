@@ -100,7 +100,7 @@ function NormalRightRow({ classes, treeNode }) {
         schema[keyword]
       );
 
-    return <OverflowLine key={keyword} text={descriptorContent} />;
+    return <OverflowLine key={keyword} classes={classes} content={descriptorContent} />;
   }
 
   /**
