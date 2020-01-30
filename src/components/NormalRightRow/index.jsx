@@ -1,9 +1,9 @@
-import React, { useState, useCallback, Fragment } from 'react';
+import React from 'react';
 import { shape, string } from 'prop-types';
-import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
 import InfoIcon from '@material-ui/icons/Info';
 import Tooltip from '../Tooltip';
+import OverflowLine from '../OverflowLine';
 import { treeNode } from '../../utils/prop-types';
 import {
   SKIP_KEYWORDS,
@@ -93,51 +93,14 @@ function NormalRightRow({ classes, treeNode }) {
    * Display a single descriptive keyword in its own line.
    */
   function displayDescriptor(keyword) {
-    /**
-     * Create a state and callback ref to track the component's
-     * width measurements. (using a callback ref ensures that
-     * changes to the current ref componen is notified)
-     */
-    const [isTextOverflow, setIsTextOverflow] = useState(false);
-    const measuredRef = useCallback(element => {
-      if (element !== null) {
-        if (element.scrollWidth > element.offsetWidth) {
-          setIsTextOverflow(true);
-        }
-      }
-    }, []);
     const descriptorContent =
       keyword === 'title' ? (
         <strong>{schema[keyword]}</strong>
       ) : (
-          schema[keyword]
-        );
-
-    if (isTextOverflow) {
-      return (
-        <Tooltip key={keyword} title={descriptorContent}>
-          <div className={classes.line}>
-            <Typography
-              component="div"
-              variant="subtitle2"
-              ref={measuredRef}
-              noWrap>
-              {descriptorContent}
-            </Typography>
-          </div>
-        </Tooltip>
+        schema[keyword]
       );
-    }
-    return (
-      <Typography
-        key={keyword}
-        component="div"
-        variant="subtitle2"
-        className={classes.line}
-        ref={measuredRef}>
-        {descriptorContent}
-      </Typography>
-    );
+
+    return <OverflowLine key={keyword} text={descriptorContent} />;
   }
 
   /**
@@ -190,7 +153,7 @@ function NormalRightRow({ classes, treeNode }) {
 NormalRightRow.propTypes = {
   /**
    * Style for rows and lines for schema viewer.
-   * Necessary to maintain consistency with right panel's
+   * Necessary to maintain consistency with left panel's
    * rows and lines.
    */
   classes: shape({

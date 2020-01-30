@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
    *  on how many keywords the given schema or sub-schema defines)
    */
   line: {
-    display: 'flex',	
+    display: 'flex',
     alignItems: 'center',
     whiteSpace: 'nowrap',
     height: theme.spacing(3.5),
