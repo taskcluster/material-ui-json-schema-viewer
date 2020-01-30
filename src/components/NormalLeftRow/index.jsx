@@ -88,40 +88,31 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
       <span className={classes.prefix}>⊃</span>
     ) : null;
   /**
-   * If given treeNode is $ref type, create $ref button for expanding
+   * If treeNode is $ref type, create $ref icon button for expanding
    * or shrinking the row depending on the the refType prop.
    */
-  const refButton = (function createRefButton(refType) {
-    /** If the row is not a ref row, do not display a button */
-    if (refType === 'none') {
-      return null;
-    }
-
-    /**
-     * If row is an expanded ref row, create a button for collapsing the ref.
-     */
-    if (refType === 'expanded') {
-      return (
-        <IconButton
-          aria-label="shrink-ref"
-          onClick={() => setSchemaTree(prev => shrinkRefNode(prev, treeNode))}>
-          <ShrinkIcon fontSize="large"/>
-        </IconButton>
-      );
-    }
-
-    /**
-     * Else, the row is a collapsed ref row,
-     * create a button for expanding the ref.
-     */
-    return (
-      <IconButton
-        aria-label="expand-ref"
-        onClick={() => setSchemaTree(prev => expandRefNode(prev, treeNode))}>
-        <ExpandIcon fontSize="large"/>
+  const refIcon = {
+    none: null,
+    default: (
+      <IconButton aria-label="expand-ref">
+        <ExpandIcon fontSize="large" />
       </IconButton>
-    );
-  })(refType);
+    ),
+    expanded: (
+      <IconButton aria-label="shrink-ref">
+        <ShrinkIcon fontSize="large" />
+      </IconButton>
+    ),
+  }[refType];
+  /**
+   * If treeNode is $ref type, create ref expand/shrink action
+   * to be used to expand or collapse a row depending on the refType prop.
+   */
+  const onRefClick = {
+    none: () => {},
+    default: () => setSchemaTree(prev => expandRefNode(prev, treeNode)),
+    expanded: () => setSchemaTree(prev => shrinkRefNode(prev, treeNode)),
+  }[refType];
   /**
    * Create blank line paddings if descriptor keywords exists.
    * This enables the left row to have matching number of lines with
@@ -168,7 +159,7 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
         })(schema);
 
   return (
-    <div key={schema.type} className={classes.row}>
+    <div key={schema.type} className={classes.row} onClick={onRefClick}>
       <Typography
         component="div"
         variant="subtitle2"
@@ -177,7 +168,7 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
         {name && `${name}: `}
         {typeSymbol}
         {requiredPrefix}
-        {refButton}
+        {refIcon}
       </Typography>
       {blankLinePaddings}
     </div>
