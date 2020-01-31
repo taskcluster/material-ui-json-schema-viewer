@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandIcon from '@material-ui/icons/ArrowRightRounded';
-import ShrinkIcon from '@material-ui/icons/ArrowLeftRounded';
+import ShrinkIcon from '@material-ui/icons/ArrowDropDownRounded';
 import { treeNode } from '../../utils/prop-types';
 import { expandRefNode, shrinkRefNode } from '../../utils/schemaTree';
 import {
