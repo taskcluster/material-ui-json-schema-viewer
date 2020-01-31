@@ -22,10 +22,9 @@ function NormalRightRow({ classes, treeNode }) {
   );
   /**
    * Identify keywords that help describe the given schema.
+   * (maintain order specified in DESCRIPTIVE_KEYWORDS)
    */
-  const descriptorKeywords = Object.keys(schema).filter(key =>
-    DESCRIPTIVE_KEYWORDS.includes(key)
-  );
+  const descriptorKeywords = DESCRIPTIVE_KEYWORDS.filter(key => key in schema);
 
   /**
    * Display keywords defining specifications as chips.
@@ -129,10 +128,12 @@ function NormalRightRow({ classes, treeNode }) {
 
     /**
      * If descriptive keywords exist, display each keyword in its own line.
-     * (if specification keywords also exist, create a blank line to separate
-     *  specifications line and lines for descriptions)
      */
     if (descriptors.length > 0) {
+      /**
+       * If specification keywords also exist, create a blank line to separate
+       * specifications line and lines for descriptions.
+       */
       if (specs.length > 0) {
         lines.push(<div key="separator-line" className={classes.line} />);
       }
