@@ -93,7 +93,7 @@ export function sanitizeSchema(schema) {
    * (for consistency with object type subschema's '_name' properties)
    */
   if ('name' in cloneSchema) {
-    cloneSchema._name = name;
+    cloneSchema._name = cloneSchema.name;
   }
 
   return cloneSchema;

@@ -99,7 +99,13 @@ function NormalRightRow({ classes, treeNode }) {
         schema[keyword]
       );
 
-    return <OverflowLine key={keyword} classes={classes} content={descriptorContent} />;
+    return (
+      <OverflowLine
+        key={keyword}
+        classes={classes}
+        content={descriptorContent}
+      />
+    );
   }
 
   /**
@@ -117,16 +123,35 @@ function NormalRightRow({ classes, treeNode }) {
     }
 
     /**
-     * If specification keywords exist, display each keyword as chip
-     * within a single line in alphabetic order.
+     * If specification keywords exist, display each keyword as a chip.
      */
     if (specs.length > 0) {
+      /**
+       * Group alphabetically sorted keywords in sizes of three
+       * so that a single line may only contain a max of 3 chips.
+       */
+      const specKeywordLines = [[]];
+
       specs.sort();
-      lines.push(
-        <div key="spec-line" className={classes.line}>
-          {specs.map(keyword => displaySpecKeyword(keyword))}
-        </div>
-      );
+      specs.forEach((keyword, i) => {
+        const lineIndex = Math.trunc(i / 3);
+
+        if (lineIndex > specKeywordLines.length - 1) {
+          specKeywordLines.push([]);
+        }
+
+        specKeywordLines[lineIndex].push(keyword);
+      });
+
+      specKeywordLines.forEach(keywordGroup => {
+        lines.push(
+          <div
+            key={`spec-line-${keywordGroup.toString()}`}
+            className={classes.line}>
+            {keywordGroup.map(keyword => displaySpecKeyword(keyword))}
+          </div>
+        );
+      });
     }
 
     /**

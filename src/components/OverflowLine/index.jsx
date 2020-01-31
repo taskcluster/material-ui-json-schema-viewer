@@ -66,10 +66,7 @@ OverflowLine.propTypes = {
   /**
    * Content to be displayed.
    */
-  content: oneOfType([
-    node,
-    string,
-  ]).isRequired,
+  content: oneOfType([node, string]).isRequired,
 };
 
 export default React.memo(OverflowLine);
