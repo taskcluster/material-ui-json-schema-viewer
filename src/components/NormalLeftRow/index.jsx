@@ -4,8 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import PlusIcon from '@material-ui/icons/AddCircleOutline';
-import MinusIcon from '@material-ui/icons/RemoveCircleOutline';
+import ExpandIcon from '@material-ui/icons/ArrowRightRounded';
+import ShrinkIcon from '@material-ui/icons/ArrowDropDownRounded';
 import { treeNode } from '../../utils/prop-types';
 import { expandRefNode, shrinkRefNode } from '../../utils/schemaTree';
 import {
@@ -88,87 +88,83 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
       <span className={classes.prefix}>⊃</span>
     ) : null;
   /**
-   * If given treeNode is $ref type, create $ref button for expanding
+   * If treeNode is $ref type, create $ref icon button for expanding
    * or shrinking the row depending on the the refType prop.
    */
-  const refButton = (function createRefButton(refType) {
-    /** If the row is not a ref row, do not display a button */
-    if (refType === 'none') {
-      return null;
-    }
-
-    /**
-     * If row is an expanded ref row, create a button for collapsing the ref.
-     */
-    if (refType === 'expanded') {
-      return (
-        <IconButton
-          aria-label="shrink-ref"
-          onClick={() => setSchemaTree(prev => shrinkRefNode(prev, treeNode))}>
-          <MinusIcon />
-        </IconButton>
-      );
-    }
-
-    /**
-     * Else, the row is a collapsed ref row,
-     * create a button for expanding the ref.
-     */
-    return (
-      <IconButton
-        aria-label="expand-ref"
-        onClick={() => setSchemaTree(prev => expandRefNode(prev, treeNode))}>
-        <PlusIcon />
+  const refIcon = {
+    none: null,
+    default: (
+      <IconButton aria-label="expand-ref">
+        <ExpandIcon fontSize="large" />
       </IconButton>
-    );
-  })(refType);
+    ),
+    expanded: (
+      <IconButton aria-label="shrink-ref">
+        <ShrinkIcon fontSize="large" />
+      </IconButton>
+    ),
+  }[refType];
+  /**
+   * If treeNode is $ref type, create ref expand/shrink action
+   * to be used to expand or collapse a row depending on the refType prop.
+   */
+  const onRefClick = {
+    none: () => {},
+    default: () => setSchemaTree(prev => expandRefNode(prev, treeNode)),
+    expanded: () => setSchemaTree(prev => shrinkRefNode(prev, treeNode)),
+  }[refType];
   /**
    * Create blank line paddings if descriptor keywords exists.
    * This enables the left row to have matching number of lines with
    * the right row and align the lines and heights between the two rows.
    */
-  const descriptors = Object.keys(schema).filter(key =>
-    DESCRIPTIVE_KEYWORDS.includes(key)
-  );
-  const blankLinePaddings =
-    descriptors.length === 0
-      ? []
-      : (function createPaddingLines(schemaInput) {
-          const lines = [];
-          const specifications = Object.keys(schemaInput).filter(
-            key => !SKIP_KEYWORDS.includes(key)
-          );
+  const blankLinePaddings = (function createPaddingLines(schemaInput) {
+    /**
+     * Check for descriptor and specification keywords.
+     * * specification: displayed as chips in the first line of NormalRightRow
+     * * descriptors: displayed in the next sequential lines of NormalRightRow
+     */
+    const descriptors = Object.keys(schema).filter(key =>
+      DESCRIPTIVE_KEYWORDS.includes(key)
+    );
+    const specifications = Object.keys(schemaInput).filter(
+      key => !SKIP_KEYWORDS.includes(key)
+    );
+    /**
+     * If there are not descriptor keywords to display,
+     * there is no need for any blank line paddings.
+     */
+    const lines = [];
 
-          /** Display a blank line for each descriptor keyword. */
-          descriptors.forEach((keyword, i) => {
-            /**
-             * If specification keywords exists (displayed as chips in
-             * NormalRightRow), a blank line should be added before the
-             * descriptor lines to visually separate the lines.
-             * Else, skip over the first descriptor keyword to match
-             * the number of lines in NormalRightRow
-             */
-            if (i === 0) {
-              if (specifications.length > 0) {
-                lines.push(
-                  <div key="separator-line" className={classes.line} />
-                );
-                lines.push(
-                  <div key={`${keyword}-line`} className={classes.line} />
-                );
-              }
-            } else {
-              lines.push(
-                <div key={`${keyword}-line`} className={classes.line} />
-              );
-            }
-          });
+    if (descriptors.length === 0) {
+      return lines;
+    }
 
-          return lines;
-        })(schema);
+    /** Create a blank line for each descriptor keyword. */
+    descriptors.forEach((keyword, i) => {
+      /**
+       * For the first descriptor keyword,
+       * if specification keywords exists, a blank line should be added
+       * to visually separate the specification line and descriptor line.
+       * Else, no specifications exists, skip over the first descriptor
+       * keyword so that the lines match the number of lines in NormalRightRow
+       */
+      if (i === 0) {
+        if (specifications.length > 0) {
+          lines.push(<div key="separator-line" className={classes.line} />);
+          lines.push(<div key={`${keyword}-line`} className={classes.line} />);
+        }
+      } else {
+        /** Create blank lines for all the following descriptor keywords */
+        lines.push(<div key={`${keyword}-line`} className={classes.line} />);
+      }
+    });
+
+    return lines;
+  })(schema);
 
   return (
-    <div key={schema.type} className={classes.row}>
+    <div key={schema.type} className={classes.row} onClick={onRefClick}>
       <Typography
         component="div"
         variant="subtitle2"
@@ -177,7 +173,7 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
         {name && `${name}: `}
         {typeSymbol}
         {requiredPrefix}
-        {refButton}
+        {refIcon}
       </Typography>
       {blankLinePaddings}
     </div>
