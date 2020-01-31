@@ -105,6 +105,8 @@ function NormalRightRow({ classes, treeNode }) {
   /**
    * Create the lines to display in a single right row according
    * to the schema's specification and descriptive keywords.
+   * @param {Array} specs specification keywords in schema
+   * @param {Array} descriptors descriptive keywords in schema
    */
   function displayLines(specs, descriptors) {
     const lines = [];
@@ -116,9 +118,10 @@ function NormalRightRow({ classes, treeNode }) {
 
     /**
      * If specification keywords exist, display each keyword as chip
-     * within a single line.
+     * within a single line in alphabetic order.
      */
     if (specs.length > 0) {
+      specs.sort();
       lines.push(
         <div key="spec-line" className={classes.line}>
           {specs.map(keyword => displaySpecKeyword(keyword))}
