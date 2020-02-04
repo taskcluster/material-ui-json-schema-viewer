@@ -65,4 +65,6 @@ export const TOOLTIP_DESCRIPTIONS = {
   propertyNames: 'Names of properties must follow a specified convention.',
   patternProperties:
     'Property names or values should match the specified pattern.',
+  required: 'Required property',
+  contains: 'Only needs to validate against one or more items in the array.',
 };
