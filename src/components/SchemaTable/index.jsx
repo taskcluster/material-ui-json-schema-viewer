@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react';
-import { shape, string, array, number, func } from 'prop-types';
+import { func } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import NormalLeftRow from '../NormalLeftRow';
 import NormalRightRow from '../NormalRightRow';
+import { treeNode } from '../../utils/prop-types';
 import { createSchemaTree } from '../../utils/schemaTree';
 import { COMBINATION_TYPES, NESTED_TYPES } from '../../utils/constants';
 
@@ -266,14 +267,7 @@ SchemaTable.propTypes = {
    * Schema tree structure defining the overall structure
    * for the schema table component.
    */
-  schemaTree: shape({
-    schema: shape({
-      /** Type of schema */
-      type: string,
-    }),
-    children: array,
-    depth: number,
-  }).isRequired,
+  schemaTree: treeNode.isRequired,
   /**
    * Function to update schemaTree structure.
    * Used specifically for expanding or shrinking a $ref.
