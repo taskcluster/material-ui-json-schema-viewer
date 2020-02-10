@@ -1,11 +1,13 @@
 import React, { useState, Fragment } from 'react';
 import Header from '../Header';
+import React, { useState } from 'react';
+import { shape, string, arrayOf } from 'prop-types';
 import SchemaTable from '../SchemaTable';
 import SourceView from '../SourceView';
 import { schema } from '../../utils/prop-types';
 import { createSchemaTree } from '../../utils/schemaTree';
 
-function SchemaViewer({ schema }) {
+function SchemaViewer({ schema, references }) {
   /**
    * Create a tree structure based on the given schema.
    * This acts as an intermediary data structure to define the overall
@@ -35,7 +37,7 @@ function SchemaViewer({ schema }) {
       {sourceMode ? (
         <SourceView schema={schema} />
       ) : (
-        <SchemaTable schemaTree={schemaTree} setSchemaTree={setSchemaTree} />
+        <SchemaTable schemaTree={schemaTree} setSchemaTree={setSchemaTree} refs={references}/>
       )}
     </Fragment>
   );
@@ -44,6 +46,7 @@ function SchemaViewer({ schema }) {
 SchemaViewer.propTypes = {
   /** Schema input given to render */
   schema,
+  references: arrayOf(schema),
 };
 
 SchemaViewer.defaultProps = {
@@ -51,6 +54,11 @@ SchemaViewer.defaultProps = {
   schema: {
     type: 'null',
   },
+  references: [
+    {
+      type: 'null',
+    },
+  ],
 };
 
 export default React.memo(SchemaViewer);
