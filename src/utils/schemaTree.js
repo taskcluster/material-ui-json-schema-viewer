@@ -344,6 +344,11 @@ function fetchRefSchema(refString, references) {
    */
   let ptr = references[source];
 
+  /**
+   * TODO: if can't find source, add error message to $ref
+   *       same with when can't find definition
+   */
+
   /** Find the definition within the source */
   const parameters = definitionPath.split('/');
 

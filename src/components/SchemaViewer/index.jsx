@@ -27,7 +27,7 @@ function SchemaViewer({ schema, references }) {
    * in ($id, schema) key-value format. This will be used as a database
    * to which the schema viewer can refer to when expanding a $ref.
    */
-  const refMap = references.reduce((acc, schema) => {
+  const referenceMap = references.reduce((acc, schema) => {
     return { ...acc, [schema.$id]: schema };
   }, {});
 
@@ -45,7 +45,7 @@ function SchemaViewer({ schema, references }) {
       {sourceMode ? (
         <SourceView schema={schema} />
       ) : (
-        <SchemaTable schemaTree={schemaTree} setSchemaTree={setSchemaTree} references={refMap}/>
+        <SchemaTable schemaTree={schemaTree} setSchemaTree={setSchemaTree} references={referenceMap}/>
       )}
     </Fragment>
   );
