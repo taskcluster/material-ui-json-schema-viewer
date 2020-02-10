@@ -1,6 +1,7 @@
 import React from 'react';
 import { bool, func } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { schema } from '../../utils/prop-types';
 
@@ -12,9 +13,11 @@ const useStyles = makeStyles(theme => ({
     marginBottom: `${theme.spacing(1)}px`,
   },
   title: {
-    marginTop: 0,
+    margin: 0,
   },
-  button: {},
+  button: {
+    margin: 0,
+  },
 }));
 
 function Header({ schema, sourceMode, toggleMode }) {
@@ -25,14 +28,21 @@ function Header({ schema, sourceMode, toggleMode }) {
 
   return (
     <div className={classes.container}>
-      <h4 className={classes.title}>
+      <Typography
+        component="div"
+        variant="h6"
+        className={classes.title}>
         {schema.title}
         {` `}
-        <Button className={classes.button} onClick={() => toggleMode()}>
+        <Button className={classes.button} size="small" onClick={() => toggleMode()}>
           {sourceMode ? 'hide' : 'show'} source
         </Button>
-      </h4>
-      {/* <Markdown>{schema.description}</Markdown> -> markdown-it package */}
+      </Typography>
+      <Typography
+        component="div"
+        variant="subtitle2">
+          {schema.description}
+      </Typography>
     </div>
   );
 }
