@@ -125,7 +125,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
    */
   function createLiteralRow(treeNode) {
     const { schema, path } = treeNode;
-    const schemaType = schema._type || schema.type;
+    const schemaType = schema._type;
     const literalSchema = {
       type: {
         array: 'closeArray',
@@ -172,7 +172,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
      * Create a single row based on the rootNode.
      */
     const { schema, children } = rootNode;
-    const schemaType = schema._type || schema.type;
+    const schemaType = schema._type;
     const rootNodeRow = createSingleRow(rootNode, refType);
 
     pushRow(rootNodeRow);

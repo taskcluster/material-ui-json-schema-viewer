@@ -50,7 +50,7 @@ export function createSchemaTree(schema, path = []) {
    * create children nodes according to its type and append them
    * sequentially as children to the root node.
    */
-  const schemaType = rootNode.schema._type || rootNode.schema.type;
+  const schemaType = rootNode.schema._type;
 
   if (COMBINATION_TYPES.includes(schemaType)) {
     createCombinationTree(rootNode);
@@ -75,16 +75,25 @@ export function sanitizeSchema(schema) {
   const cloneSchema = clone(schema);
 
   /**
-   * Make sure schemas have a type property for identification.
-   * (since complex type schemas do not specify '_type' properties)
-   * If the type is not specified purposely, leave type property out.
+   * Make sure schema has a '_type' property for identification.
+   * If the type is not specified purposely, leave property undefined.
    */
-  if (!('type' in cloneSchema)) {
+  if ('type' in cloneSchema) {
+    cloneSchema._type = cloneSchema.type;
+  } else {
     COMPLEX_TYPES.forEach(type => {
       if (type in cloneSchema) {
         cloneSchema._type = type;
       }
     });
+  }
+
+  /** 
+   * If name property exists, create a '_name' property with same value.
+   * (for consistency with object type subschema's '_name' properties)
+   */
+  if ('name' in cloneSchema) {
+    cloneSchema._name = name;
   }
 
   return cloneSchema;

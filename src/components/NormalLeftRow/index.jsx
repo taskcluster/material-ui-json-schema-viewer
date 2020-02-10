@@ -36,17 +36,15 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
   const styles = useStyles(indentSize);
   /**
    * Define the name to illustrate the schema or sub-schema.
-   * If a name property is not defined within the schema,
-   * set it to null in order to not display any name.
    */
-  const name = schema._name || schema.name || null;
+  const name = schema._name;
   /**
    * Define the type symbol for the schema or sub-schema's type
    * Types requiring nested structures use the according bracket symbol,
    * Complex types (allOf, anyOf, oneOf, no) use comment notation,
    * the rest simply use highlighted text to illustrate the data type.
    */
-  const schemaType = schema._type || schema.type;
+  const schemaType = schema._type;
   const typeSymbol = (function createTypeSymbol(type) {
     const bracketTypes = [...NESTED_TYPES, 'closeArray', 'closeObject'];
     const combinationTypes = [...COMBINATION_TYPES, 'and', 'or', 'nor'];
