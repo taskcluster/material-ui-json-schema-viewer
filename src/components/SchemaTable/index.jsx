@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { func } from 'prop-types';
+import { func, object } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import NormalLeftRow from '../NormalLeftRow';
 import NormalRightRow from '../NormalRightRow';
@@ -82,7 +82,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function SchemaTable({ schemaTree, setSchemaTree }) {
+function SchemaTable({ schemaTree, setSchemaTree, references }) {
   /**
    * Generate classes to define overall style for the schema table.
    */
@@ -110,6 +110,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
      * schemaTree. Else, pass null as prop instead.
      */
     const updateFunc = refType === 'none' ? null : setSchemaTree;
+    const refs = refType === 'none' ? null : references;
 
     return {
       leftRow: (
@@ -119,6 +120,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
           treeNode={treeNode}
           refType={refType}
           setSchemaTree={updateFunc}
+          references={refs}
         />
       ),
       rightRow: (
@@ -283,6 +285,11 @@ SchemaTable.propTypes = {
    * Used specifically for expanding or shrinking a $ref.
    */
   setSchemaTree: func.isRequired,
+  /**
+   * Object where all schemas are stored so that the table
+   * can reference to for dereferencing $ref schemas.
+   */
+  references: object.isRequired,
 };
 
 export default React.memo(SchemaTable);

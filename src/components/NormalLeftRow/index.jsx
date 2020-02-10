@@ -1,5 +1,5 @@
 import React from 'react';
-import { shape, string, oneOf, func } from 'prop-types';
+import { shape, string, oneOf, func, object } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
@@ -31,7 +31,13 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
+function NormalLeftRow({
+  classes,
+  treeNode,
+  refType,
+  setSchemaTree,
+  references,
+}) {
   const { schema, path } = treeNode;
   /**
    * Dynamically generate indent styles using the length of the path.
@@ -160,7 +166,7 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
    */
   const onRefClick = {
     none: () => {},
-    default: () => setSchemaTree(prev => expandRefNode(prev, treeNode)),
+    default: () => setSchemaTree(prev => expandRefNode(prev, treeNode, references)),
     expanded: () => setSchemaTree(prev => shrinkRefNode(prev, treeNode)),
   }[refType];
   /**
@@ -262,10 +268,17 @@ NormalLeftRow.propTypes = {
    * Only necessary for ref rows.
    */
   setSchemaTree: func,
+  /**
+   * Object where all schemas are stored so that the table
+   * can reference to for dereferencing $ref schemas.
+   * Only necessary for ref rows.
+   */
+  references: object,
 };
 
 NormalLeftRow.defaultProps = {
   setSchemaTree: NOOP,
+  references: {},
 };
 
 export default React.memo(NormalLeftRow);

@@ -22,6 +22,14 @@ function SchemaViewer({ schema, references }) {
    * If the mode is set to a source mode, displays the schema source instead.
    */
   const [sourceMode, setSourceMode] = useState(false);
+  /** 
+   * Create a reference map where all the references schemas are stored
+   * in ($id, schema) key-value format. This will be used as a database
+   * to which the schema viewer can refer to when expanding a $ref.
+   */
+  const refMap = references.reduce((acc, schema) => {
+    return { ...acc, [schema.$id]: schema };
+  }, {});
 
   function handleViewToggle() {
     setSourceMode(prev => !prev);
@@ -37,7 +45,7 @@ function SchemaViewer({ schema, references }) {
       {sourceMode ? (
         <SourceView schema={schema} />
       ) : (
-        <SchemaTable schemaTree={schemaTree} setSchemaTree={setSchemaTree} refs={references}/>
+        <SchemaTable schemaTree={schemaTree} setSchemaTree={setSchemaTree} references={refMap}/>
       )}
     </Fragment>
   );

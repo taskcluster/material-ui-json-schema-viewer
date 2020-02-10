@@ -221,34 +221,6 @@ export function createObjectTree(rootNode) {
 }
 
 /**
- * Fetch the reference schema defined by the refString
- * @param {*} refString: value of $ref field within a schema
- */
-function fetchRefSchema(schemaTree, refString) {
-  const [source, definitionPath] = refString.split('#');
-  /**
-   * Find the source for the reference
-   * TODO: add feature to fetch $refs in separate files or urls
-   */
-  let ptr = null;
-
-  if (source.length > 0) {
-  }
-
-  ptr = schemaTree.schema;
-  /** Find the definition within the source */
-  const parameters = definitionPath.split('/');
-
-  parameters.forEach(parameter => {
-    if (parameter.length > 0) {
-      ptr = ptr[parameter];
-    }
-  });
-
-  return ptr;
-}
-
-/**
  * Create a clone of the original schemaTree so that the schemaTree
  * object can be updated without mutating the original schemaTree.
  * Also, create a reference pointer to the corresponding ref node
@@ -285,13 +257,36 @@ export function findRefNodeClone(schemaTree, refDefaultNode) {
 }
 
 /**
+ * Update the refNode's state to collapsed form.
+ * (creates a new schemaTree object to maintain immutability
+ *  of the original schemaTree state)
+ * @param {*} refDefaultNode a refNode's defaultNode field
+ * @returns {Object} a schemaTree clone with refNode updated
+ */
+export function shrinkRefNode(schemaTree, refDefaultNode) {
+  /**
+   * Create a clone tree and find the corresponding clone ref node.
+   */
+  const [cloneTree, refNode] = findRefNodeClone(schemaTree, refDefaultNode);
+
+  /**
+   * Update the 'isExpanded' state of the ref node so that
+   * the ref row will now display a collapsed version instead.
+   */
+  refNode.isExpanded = false;
+
+  return cloneTree;
+}
+
+/**
  * Update the refNode's state to expanded form.
  * (creates a new schemaTree object to maintain immutability
  *  of the original schemaTree state)
- * @param {*} refDefaultNode: a refNode's defaultNode field
- * @returns {Object} A schemaTree clone with refNode updated
+ * @param {*} refDefaultNode a refNode's defaultNode field
+ * @param {Object} references an object of schema references (schema.$id: schema)
+ * @returns {Object} a schemaTree clone with refNode updated
  */
-export function expandRefNode(schemaTree, refDefaultNode) {
+export function expandRefNode(schemaTree, refDefaultNode, references) {
   /**
    * Create a clone tree and find the corresponding clone ref node.
    */
@@ -310,7 +305,7 @@ export function expandRefNode(schemaTree, refDefaultNode) {
    */
   if (!refNode.expandedNode) {
     const refString = refDefaultNode.schema.$ref;
-    const expandedRefSchema = fetchRefSchema(schemaTree, refString);
+    const expandedRefSchema = fetchRefSchema(refString, references);
 
     /**
      * Create a subschema tree based on the fetched ref schema
@@ -338,23 +333,25 @@ export function expandRefNode(schemaTree, refDefaultNode) {
 }
 
 /**
- * Update the refNode's state to collapsed form.
- * (creates a new schemaTree object to maintain immutability
- *  of the original schemaTree state)
- * @param {*} refDefaultNode: a refNode's defaultNode field
- * @returns {Object} A schemaTree clone with refNode updated
+ * Fetch the reference schema defined by the refString
+ * @param {*} refString value of $ref field within a schema
+ * @param {Object} references an object of schema references (schema.$id: schema)
  */
-export function shrinkRefNode(schemaTree, refDefaultNode) {
+function fetchRefSchema(refString, references) {
+  const [source, definitionPath] = refString.split('#');
   /**
-   * Create a clone tree and find the corresponding clone ref node.
+   * Find the source for the reference
    */
-  const [cloneTree, refNode] = findRefNodeClone(schemaTree, refDefaultNode);
+  let ptr = references[source];
 
-  /**
-   * Update the 'isExpanded' state of the ref node so that
-   * the ref row will now display a collapsed version instead.
-   */
-  refNode.isExpanded = false;
+  /** Find the definition within the source */
+  const parameters = definitionPath.split('/');
 
-  return cloneTree;
+  parameters.forEach(parameter => {
+    if (parameter.length > 0) {
+      ptr = ptr[parameter];
+    }
+  });
+
+  return ptr;
 }
