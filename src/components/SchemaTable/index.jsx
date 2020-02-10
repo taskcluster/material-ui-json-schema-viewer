@@ -88,6 +88,11 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
    * into the leftPanelRows and rightPanelRows arrays respectively.
    */
   function createSingleRow(treeNode, refType = 'none') {
+    /**
+     * If the row to create is a refType (either 'default' or 'expanded'),
+     * make sure to pass 'setSchemaTree' method to change the state of the
+     * schemaTree. Else, pass null as prop instead.
+     */
     const updateFunc = refType === 'none' ? null : setSchemaTree;
 
     return {
@@ -113,13 +118,14 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
   /**
    * Create a literal row for displaying descriptive rows.
    * This is only used to create rows for the following:
-   * - a closing row for nested types (arrays and objects) to display a
+   * * a closing row for nested types (arrays and objects) to display a
    *   close bracket symbol
-   * - a separator row for combination types (allOf, anyOf, oneOf, not)
+   * * a separator row for combination types (allOf, anyOf, oneOf, not)
    *   to visually separate options.
    */
   function createLiteralRow(treeNode) {
     const { schema, path } = treeNode;
+    const schemaType = schema._type;
     const literalSchema = {
       type: {
         array: 'closeArray',
@@ -128,9 +134,10 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
         anyOf: 'or',
         oneOf: 'or',
         not: 'nor',
-      }[schema.type],
+      }[schemaType],
     };
-    const literalTreeNode = createSchemaTree(literalSchema, path);
+    const literalPath = COMBINATION_TYPES.includes(schemaType) ? [...path, 0] : path;
+    const literalTreeNode = createSchemaTree(literalSchema, literalPath);
 
     return createSingleRow(literalTreeNode);
   }
@@ -145,14 +152,15 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
   }
 
   /**
-   * Traverse a tree or subtree in pre-order in order to create rows.
-   * First, a row based on the root node will be created.
+   * Create rows by traversing the tree structure,
+   * starting from the rootNode, in pre-order.
+   * First, a single row based on the root node will be created.
    * Then, if the root node has children, this method may be called
    * recursively to create rows for the subtree structures.
    */
   function renderNodeToRows(rootNode, refType = 'none') {
     /**
-     *
+     * If rootNode is a $ref type, render rows based on ref node.
      */
     if ('isExpanded' in rootNode) {
       renderRefNodeToRows(rootNode);
@@ -161,9 +169,10 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
     }
 
     /**
-     * Create a row based on the rootNode
+     * Create a single row based on the rootNode.
      */
     const { schema, children } = rootNode;
+    const schemaType = schema._type;
     const rootNodeRow = createSingleRow(rootNode, refType);
 
     pushRow(rootNodeRow);
@@ -178,7 +187,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
          * If root node's schema defines a combination type,
          * add separator rows in between the option rows
          */
-        if (COMBINATION_TYPES.includes(schema.type) && i > 0) {
+        if (COMBINATION_TYPES.includes(schemaType) && i > 0) {
           const separatorRow = createLiteralRow(rootNode);
 
           pushRow(separatorRow);
@@ -192,7 +201,7 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
      * If root node's schema defines a nested structure,
      * add a row at the end to close off the nested structure
      */
-    if (NESTED_TYPES.includes(schema.type)) {
+    if (NESTED_TYPES.includes(schemaType)) {
       const closeRow = createLiteralRow(rootNode);
 
       pushRow(closeRow);
@@ -200,10 +209,9 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
   }
 
   /**
-   * Create a
    * Depending on the refTreeNode's 'isExpanded' state,
-   * create a shrunk version of a refRow.
-   *
+   * create either a default collapsed version of a refRow
+   * or an expanded version of possibly multiple rows.
    */
   function renderRefNodeToRows(refTreeNode) {
     const { defaultNode, expandedNode, isExpanded } = refTreeNode;

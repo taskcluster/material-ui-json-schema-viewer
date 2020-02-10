@@ -36,16 +36,15 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
   const styles = useStyles(indentSize);
   /**
    * Define the name to illustrate the schema or sub-schema.
-   * If a name property is not defined within the schema,
-   * set it to null in order to not display any name.
    */
-  const name = 'name' in schema ? schema.name : null;
+  const name = schema._name;
   /**
    * Define the type symbol for the schema or sub-schema's type
    * Types requiring nested structures use the according bracket symbol,
    * Complex types (allOf, anyOf, oneOf, no) use comment notation,
    * the rest simply use highlighted text to illustrate the data type.
    */
+  const schemaType = schema._type;
   const typeSymbol = (function createTypeSymbol(type) {
     const bracketTypes = [...NESTED_TYPES, 'closeArray', 'closeObject'];
     const combinationTypes = [...COMBINATION_TYPES, 'and', 'or', 'nor'];
@@ -74,19 +73,21 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
     }
 
     return <code className={classes.code}>{type}</code>;
-  })(schema.type);
+  })(schemaType);
   /**
-   * Define the required prefix (*) if the schema type
-   * is a required property of an object.
+   * Define the prefix used for the schema.
    */
-  const requiredPrefix =
-    'required' in schema && schema.required === true ? (
-      <span className={classes.prefix}>*</span>
-    ) : null;
-  const containsPrefix =
-    'contains' in schema && schema.contains === true ? (
-      <span className={classes.prefix}>⊃</span>
-    ) : null;
+  const prefix = (function createPrefix(schema) {
+    if (schema._required) {
+      return <span className={classes.prefix}>*</span>;
+    }
+
+    if (schema._contains) {
+      return <span className={classes.prefix}>⊃</span>;
+    }
+
+    return null;
+  })(schema);
   /**
    * If treeNode is $ref type, create $ref icon button for expanding
    * or shrinking the row depending on the the refType prop.
@@ -169,10 +170,9 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
         component="div"
         variant="subtitle2"
         className={classNames(classes.line, styles.indentation)}>
-        {containsPrefix}
+        {prefix}
         {name && `${name}: `}
         {typeSymbol}
-        {requiredPrefix}
         {refIcon}
       </Typography>
       {blankLinePaddings}

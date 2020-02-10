@@ -1,5 +1,5 @@
 import { clone } from 'ramda';
-import { COMBINATION_TYPES, COMPLEX_TYPES } from './constants';
+import { COMBINATION_TYPES, COMPLEX_TYPES, CUSTOM_KEYWORDS } from './constants';
 
 /**
  * Generate a tree that illustrates the recursive structure of a schema.
@@ -50,7 +50,7 @@ export function createSchemaTree(schema, path = []) {
    * create children nodes according to its type and append them
    * sequentially as children to the root node.
    */
-  const schemaType = rootNode.schema.type;
+  const schemaType = rootNode.schema._type;
 
   if (COMBINATION_TYPES.includes(schemaType)) {
     createCombinationTree(rootNode);
@@ -75,16 +75,25 @@ export function sanitizeSchema(schema) {
   const cloneSchema = clone(schema);
 
   /**
-   * Make sure schemas have a type property for identification.
-   * (since complex type schemas do not specify 'type' properties)
-   * If the type is not specified purposely, leave type property out.
+   * Make sure schema has a '_type' property for identification.
+   * If the type is not specified purposely, leave property undefined.
    */
-  if (!('type' in cloneSchema)) {
+  if ('type' in cloneSchema) {
+    cloneSchema._type = cloneSchema.type;
+  } else {
     COMPLEX_TYPES.forEach(type => {
       if (type in cloneSchema) {
-        cloneSchema.type = type;
+        cloneSchema._type = type;
       }
     });
+  }
+
+  /** 
+   * If name property exists, create a '_name' property with same value.
+   * (for consistency with object type subschema's '_name' properties)
+   */
+  if ('name' in cloneSchema) {
+    cloneSchema._name = name;
   }
 
   return cloneSchema;
@@ -93,6 +102,7 @@ export function sanitizeSchema(schema) {
 /**
  * Create a child node based on the given subschema and append it to
  * the rootNode. (the child node may be a single node or a subtree)
+ * @param {*} childIndex: index of the child node (used for its path)
  */
 export function createChildNode(rootNode, subschema, childIndex) {
   const childNode = createSchemaTree(subschema, [...rootNode.path, childIndex]);
@@ -107,7 +117,7 @@ export function createChildNode(rootNode, subschema, childIndex) {
  */
 export function createCombinationTree(rootNode) {
   const { schema } = rootNode;
-  const combType = schema.type;
+  const combType = schema._type;
 
   /**
    * If there are multiple options (defined in array form),
@@ -166,7 +176,7 @@ export function createArrayTree(rootNode) {
     const subschema = schema.contains;
     const childIndex = rootNode.children.length;
 
-    subschema.contains = true;
+    subschema._contains = true;
     createChildNode(rootNode, subschema, childIndex);
   }
 }
@@ -199,10 +209,10 @@ export function createObjectTree(rootNode) {
     propertyList.forEach((property, childIndex) => {
       const subschema = schema.properties[property];
 
-      subschema.name = property;
+      subschema._name = property;
 
       if (requiredList.has(property)) {
-        subschema.required = true;
+        subschema._required = true;
       }
 
       createChildNode(rootNode, subschema, childIndex);
@@ -299,10 +309,26 @@ export function expandRefNode(schemaTree, refDefaultNode) {
     const refString = refDefaultNode.schema.$ref;
     const expandedRefSchema = fetchRefSchema(schemaTree, refString);
 
+    /**
+     * Create a subschema tree based on the fetched ref schema
+     * and store the result within the expandedNode field.
+     */
     refNode.expandedNode = createSchemaTree(
       expandedRefSchema,
       refDefaultNode.path
     );
+
+    /**
+     * If the ref node's default node has custom fields,
+     * also include those same fields within the expanded node.
+     */
+    const customKeywords = CUSTOM_KEYWORDS.filter(key => key !== '_type');
+
+    customKeywords.forEach(keyword => {
+      if (keyword in refDefaultNode.schema) {
+        refNode.expandedNode.schema[keyword] = refDefaultNode.schema[keyword];
+      }
+    });
   }
 
   return cloneTree;

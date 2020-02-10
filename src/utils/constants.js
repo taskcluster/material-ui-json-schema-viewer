@@ -18,7 +18,12 @@ export const COMPLEX_TYPES = [...COMBINATION_TYPES, '$ref'];
  * in separation with specification keywords by a blank line.
  */
 export const DESCRIPTIVE_KEYWORDS = ['title', 'description'];
-
+/**
+ * Custom keywords created within the schemas of the tree nodes.
+ * An underscore is prefixed for these keywords in order to
+ * distinguish them with the built-in keywords for schemas.
+ */
+export const CUSTOM_KEYWORDS = ['_type', '_contains', '_required', '_name'];
 /**
  * Keywords used in schemas that will be ignored when 
  * creating lines for the rows in the left and right panels.
@@ -27,6 +32,7 @@ export const DESCRIPTIVE_KEYWORDS = ['title', 'description'];
    (ex. symbols in the left panel)
  */
 export const SKIP_KEYWORDS = [
+  ...CUSTOM_KEYWORDS,
   '$id',
   '$schema',
   'type',
