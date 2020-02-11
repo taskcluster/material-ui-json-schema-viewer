@@ -34,7 +34,7 @@ function Header({ schema, sourceMode, toggleMode }) {
         className={classes.title}>
         {schema.title}
         {` `}
-        <Button className={classes.button} size="small" onClick={() => toggleMode()}>
+        <Button className={classes.button} color="inherit" size="small" onClick={() => toggleMode()}>
           {sourceMode ? 'hide' : 'show'} source
         </Button>
       </Typography>
