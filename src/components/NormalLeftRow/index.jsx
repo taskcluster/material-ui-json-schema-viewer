@@ -6,14 +6,13 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandIcon from '@material-ui/icons/ArrowRightRounded';
 import ShrinkIcon from '@material-ui/icons/ArrowDropDownRounded';
-import { treeNode } from '../../utils/prop-types';
+import { treeNode, NOOP } from '../../utils/prop-types';
 import { expandRefNode, shrinkRefNode } from '../../utils/schemaTree';
 import {
   SKIP_KEYWORDS,
   DESCRIPTIVE_KEYWORDS,
   COMBINATION_TYPES,
   NESTED_TYPES,
-  NOOP,
 } from '../../utils/constants';
 
 /**

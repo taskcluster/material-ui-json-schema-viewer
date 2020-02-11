@@ -50,8 +50,10 @@ export const SKIP_KEYWORDS = [
   '$ref',
   'definitions',
 ];
-/** Empty Function to use for default props */
-export const NOOP = () => {};
+/**
+ * Max number of chips allowed to be displayed within a single line.
+ */
+export const MAX_NUMBER_OF_CHIPS = 3;
 /**
  *
  */
