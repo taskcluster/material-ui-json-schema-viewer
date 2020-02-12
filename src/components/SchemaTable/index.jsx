@@ -16,13 +16,13 @@ const useStyles = makeStyles(theme => ({
   },
   /** The left panel of the Schema Table */
   leftPanel: {
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.getContrastText(theme.palette.text.primary),
     borderRight: `${theme.spacing(1)}px solid ${theme.palette.divider}`,
     overflowX: 'auto',
   },
   /** The right panel of the Schema Table */
   rightPanel: {
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.getContrastText(theme.palette.text.primary),
     overflowX: 'auto',
   },
   /** Rows for the left and right panels */

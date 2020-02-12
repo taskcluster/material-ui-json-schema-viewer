@@ -141,9 +141,6 @@ export const customThemes = () => {
       text: {
         primary: '#ffc107',
       },
-      background: {
-        default: '#eceff1',
-      },
     },
   });
 
