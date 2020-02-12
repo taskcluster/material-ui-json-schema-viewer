@@ -28,20 +28,19 @@ function Header({ schema, sourceMode, toggleMode }) {
 
   return (
     <div className={classes.container}>
-      <Typography
-        component="div"
-        variant="h6"
-        className={classes.title}>
+      <Typography component="div" variant="h6" className={classes.title}>
         {schema.title}
         {` `}
-        <Button className={classes.button} color="inherit" size="small" onClick={() => toggleMode()}>
+        <Button
+          className={classes.button}
+          color="inherit"
+          size="small"
+          onClick={() => toggleMode()}>
           {sourceMode ? 'hide' : 'show'} source
         </Button>
       </Typography>
-      <Typography
-        component="div"
-        variant="subtitle2">
-          {schema.description}
+      <Typography component="div" variant="subtitle2">
+        {schema.description}
       </Typography>
     </div>
   );

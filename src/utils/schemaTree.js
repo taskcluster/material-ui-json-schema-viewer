@@ -88,7 +88,7 @@ export function sanitizeSchema(schema) {
     });
   }
 
-  /** 
+  /**
    * If name property exists, create a '_name' property with same value.
    * (for consistency with object type subschema's '_name' properties)
    */

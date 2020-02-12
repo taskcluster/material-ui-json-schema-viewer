@@ -43,7 +43,7 @@ function SchemaViewer({ schema }) {
 
 SchemaViewer.propTypes = {
   /** Schema input given to render */
-  schema: schema,
+  schema,
 };
 
 SchemaViewer.defaultProps = {
