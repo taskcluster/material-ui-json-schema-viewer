@@ -26,10 +26,16 @@ function Header({ schema, sourceMode, toggleMode }) {
    */
   const classes = useStyles();
 
+  /**
+   * 
+   */
+  const title = schema.title || 'No title';
+  const description = schema.description || 'No description available';
+
   return (
     <div className={classes.container}>
       <Typography component="div" variant="h6" className={classes.title}>
-        {schema.title}
+        {title}
         {` `}
         <Button
           className={classes.button}
@@ -40,7 +46,7 @@ function Header({ schema, sourceMode, toggleMode }) {
         </Button>
       </Typography>
       <Typography component="div" variant="subtitle2">
-        {schema.description}
+        {description}
       </Typography>
     </div>
   );

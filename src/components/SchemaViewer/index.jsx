@@ -49,8 +49,6 @@ SchemaViewer.propTypes = {
 SchemaViewer.defaultProps = {
   /** Null type schema is set as default prop */
   schema: {
-    title: 'Empty title',
-    description: 'No description available',
     type: 'null',
   },
 };
