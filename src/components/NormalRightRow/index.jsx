@@ -11,6 +11,7 @@ import {
   MAX_NUMBER_OF_CHIPS,
   TOOLTIP_DESCRIPTIONS,
 } from '../../utils/constants';
+import { Typography } from '@material-ui/core';
 
 function NormalRightRow({ classes, treeNode }) {
   const { schema } = treeNode;
@@ -133,21 +134,30 @@ function NormalRightRow({ classes, treeNode }) {
   }
 
   /**
+   * Display the title keyword in a single line.
+   */
+  function createTitleLine(keyword) {
+    return (
+      <Typography
+        className={classes.line}
+        component="div"
+        variant="subtitle2"
+        noWrap>
+        <strong>{schema[keyword]}</strong>
+      </Typography>
+    );
+  }
+
+  /**
    * Display the descriptive keyword in a single line.
    */
   function createDescriptionLine(keyword) {
-    const descriptorContent =
-      keyword === 'title' ? (
-        <strong>{schema[keyword]}</strong>
-      ) : (
-        schema[keyword]
-      );
 
     return (
       <OverflowLine
         key={keyword}
         classes={classes}
-        content={descriptorContent}
+        content={schema[keyword]}
       />
     );
   }
@@ -189,9 +199,13 @@ function NormalRightRow({ classes, treeNode }) {
         lines.push(<div key="separator-line" className={classes.line} />);
       }
 
-      descriptorKeywords.forEach(keyword =>
-        lines.push(createDescriptionLine(keyword))
-      );
+      descriptorKeywords.forEach(keyword => {
+        if (keyword === 'title') {
+          lines.push(createTitleLine(keyword));
+        } else if (keyword === 'description') {
+          lines.push(createDescriptionLine(keyword));
+        }
+      })
     }
 
     return lines;
