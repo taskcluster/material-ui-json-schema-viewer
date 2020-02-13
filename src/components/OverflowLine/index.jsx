@@ -4,55 +4,27 @@ import Typography from '@material-ui/core/Typography';
 import Tooltip from '../Tooltip';
 
 /**
- * A single line component within a row of the schemaTable.
- * If the content text overflows, returns a line component with
- * the text ellipsed and tooltip is used to display full text instead.
+ * A single line component within a row of the schemaTable
+ * which uses a tooltip to display the full text.
+ * If the content text overflows, the text is ellipsed.
+ * (the tooltip is always implemented regardless of whether text
+ * overflows or not in order to avoid complexities with dealing
+ * with detectin changes when the window size changes)
  */
 function OverflowLine({ classes, content }) {
-  /**
-   * Track the textOverflow state depending on the component's
-   * width size relative to the text's length.
-   */
-  const [isTextOverflow, setIsTextOverflow] = useState(false);
-  /**
-   * Create a callback ref method to use to track the component's
-   * width measurements.
-   * (using a callback ref ensures that changes made to the ref
-   *  component can update the isTextOverflow state)
-   */
-  const measuredRef = useCallback(element => {
-    if (element !== null) {
-      if (element.scrollWidth > element.offsetWidth) {
-        setIsTextOverflow(true);
-      }
-    }
-  }, []);
-
-  if (isTextOverflow) {
-    return (
-      <Tooltip title={content}>
-        <div className={classes.line}>
-          <Typography
-            component="div"
-            variant="subtitle2"
-            ref={measuredRef}
-            noWrap>
-            {content}
-          </Typography>
-        </div>
-      </Tooltip>
-    );
-  }
 
   return (
-    <Typography
-      component="div"
-      variant="subtitle2"
-      className={classes.line}
-      ref={measuredRef}>
-      {content}
-    </Typography>
-  );
+    <Tooltip title={content}>
+      <div className={classes.line}>
+        <Typography
+          component="div"
+          variant="subtitle2"
+          noWrap>
+          {content}
+        </Typography>
+      </div>
+    </Tooltip>
+  )
 }
 
 OverflowLine.propTypes = {
