@@ -152,7 +152,7 @@ export const customThemes = () => {
       </ThemeProvider>
       <h3>Colorful Theme</h3>
       <ThemeProvider theme={colorfulTheme}>
-        <SchemaViewer schema={objectSchemas.complexObjectExample} />
+        <SchemaViewer schema={demoSchemas.workerList} />
       </ThemeProvider>
     </Fragment>
   );
