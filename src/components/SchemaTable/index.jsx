@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react';
-import { shape, string, array, number, func } from 'prop-types';
+import { func } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import NormalLeftRow from '../NormalLeftRow';
 import NormalRightRow from '../NormalRightRow';
+import { treeNode } from '../../utils/prop-types';
 import { createSchemaTree } from '../../utils/schemaTree';
 import { COMBINATION_TYPES, NESTED_TYPES } from '../../utils/constants';
 
@@ -15,13 +16,13 @@ const useStyles = makeStyles(theme => ({
   },
   /** The left panel of the Schema Table */
   leftPanel: {
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.getContrastText(theme.palette.text.primary),
     borderRight: `${theme.spacing(1)}px solid ${theme.palette.divider}`,
     overflowX: 'auto',
   },
   /** The right panel of the Schema Table */
   rightPanel: {
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.getContrastText(theme.palette.text.primary),
     overflowX: 'auto',
   },
   /** Rows for the left and right panels */
@@ -136,7 +137,9 @@ function SchemaTable({ schemaTree, setSchemaTree }) {
         not: 'nor',
       }[schemaType],
     };
-    const literalPath = COMBINATION_TYPES.includes(schemaType) ? [...path, 0] : path;
+    const literalPath = COMBINATION_TYPES.includes(schemaType)
+      ? [...path, 0]
+      : path;
     const literalTreeNode = createSchemaTree(literalSchema, literalPath);
 
     return createSingleRow(literalTreeNode);
@@ -266,14 +269,7 @@ SchemaTable.propTypes = {
    * Schema tree structure defining the overall structure
    * for the schema table component.
    */
-  schemaTree: shape({
-    schema: shape({
-      /** Type of schema */
-      type: string,
-    }),
-    children: array,
-    depth: number,
-  }).isRequired,
+  schemaTree: treeNode.isRequired,
   /**
    * Function to update schemaTree structure.
    * Used specifically for expanding or shrinking a $ref.

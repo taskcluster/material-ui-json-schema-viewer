@@ -123,17 +123,9 @@ export const refTypes = () => (
 export const demo = () => (
   <Fragment>
     <h2>Demo of Taskcluster Schemas</h2>
-    <h3>Hook Status</h3>
-    <p>example of use of object, combination, default types</p>
     <SchemaViewer schema={demoSchemas.hookStatus} />
-    <h3>List Clients Response</h3>
-    <p>example of use of object, array, default types</p>
     <SchemaViewer schema={demoSchemas.listClients} />
-    <h3>Metadata Metaschema</h3>
-    <p>example of use of combination, array, $ref types</p>
     <SchemaViewer schema={demoSchemas.metaData} />
-    <h3>Worker List</h3>
-    <p>example of use of object, $ref types</p>
     <SchemaViewer schema={demoSchemas.workerList} />
   </Fragment>
 );
@@ -149,11 +141,9 @@ export const customThemes = () => {
       text: {
         primary: '#ffc107',
       },
-      background: {
-        default: '#eceff1',
-      }
     },
   });
+
   return (
     <Fragment>
       <h3>Dark Theme</h3>
@@ -166,4 +156,4 @@ export const customThemes = () => {
       </ThemeProvider>
     </Fragment>
   );
-}
+};
