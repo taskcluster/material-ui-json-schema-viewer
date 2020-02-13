@@ -53,7 +53,8 @@ const useStyles = makeStyles(theme => ({
    * in the left panel of the schema table component.
    */
   code: {
-    backgroundColor: theme.palette.grey[300],
+    backgroundColor: theme.palette.text.primary,
+    color: theme.palette.getContrastText(theme.palette.text.primary),
     padding: `0 ${theme.spacing(0.5)}px`,
   },
   /** Comments within the left panel (used for combination types) */
