@@ -1,7 +1,6 @@
 import React, { useState, Fragment } from 'react';
+import { arrayOf } from 'prop-types';
 import Header from '../Header';
-import React, { useState } from 'react';
-import { shape, string, arrayOf } from 'prop-types';
 import SchemaTable from '../SchemaTable';
 import SourceView from '../SourceView';
 import { schema } from '../../utils/prop-types';
@@ -22,7 +21,7 @@ function SchemaViewer({ schema, references }) {
    * If the mode is set to a source mode, displays the schema source instead.
    */
   const [sourceMode, setSourceMode] = useState(false);
-  /** 
+  /**
    * Create a reference map where all the references schemas are stored
    * in ($id, schema) key-value format. This will be used as a database
    * to which the schema viewer can refer to when expanding a $ref.
@@ -45,7 +44,11 @@ function SchemaViewer({ schema, references }) {
       {sourceMode ? (
         <SourceView schema={schema} />
       ) : (
-        <SchemaTable schemaTree={schemaTree} setSchemaTree={setSchemaTree} references={referenceMap}/>
+        <SchemaTable
+          schemaTree={schemaTree}
+          setSchemaTree={setSchemaTree}
+          references={referenceMap}
+        />
       )}
     </Fragment>
   );

@@ -284,8 +284,8 @@ export function shrinkRefNode(schemaTree, refDefaultNode) {
  * (creates a new schemaTree object to maintain immutability
  *  of the original schemaTree state)
  * @param {*} refDefaultNode a refNode's defaultNode field
- * @param {Object} references an object of schema references (schema.$id: schema)
- * @returns {Object} a schemaTree clone with refNode updated
+ * @param {object} references an object of schema references
+ * @returns {object} a schemaTree clone with refNode updated
  */
 export function expandRefNode(schemaTree, refDefaultNode, references) {
   /**
@@ -342,7 +342,7 @@ export function expandRefNode(schemaTree, refDefaultNode, references) {
  * Fetch the reference schema defined by the refString
  * @param {*} refString $ref field's string
  * @param {object} currentPath
- * @param {object} references an object of schema references (schema.$id: schema)
+ * @param {object} references an object of schema references
  */
 function fetchRefSchema(refString, currentPath, references) {
   const [source, definitionPath] = refString.split('#');
@@ -351,12 +351,10 @@ function fetchRefSchema(refString, currentPath, references) {
    */
   const refSchemaId = findSourcePath(source, currentPath);
   let ptr = references[refSchemaId];
-
   /**
    * TODO: if can't find source, add error message to $ref
    *       same with when can't find definition
    */
-
   /** Find the definition within the source */
   const parameters = definitionPath.split('/');
 
