@@ -166,7 +166,8 @@ function NormalLeftRow({
    */
   const onRefClick = {
     none: () => {},
-    default: () => setSchemaTree(prev => expandRefNode(prev, treeNode, references)),
+    default: () =>
+      setSchemaTree(prev => expandRefNode(prev, treeNode, references)),
     expanded: () => setSchemaTree(prev => shrinkRefNode(prev, treeNode)),
   }[refType];
   /**

@@ -1,4 +1,5 @@
 import { clone } from 'ramda';
+import { isAbsolute, dirname, resolve } from 'path';
 import { COMBINATION_TYPES, COMPLEX_TYPES, CUSTOM_KEYWORDS } from './constants';
 
 /**
@@ -304,8 +305,13 @@ export function expandRefNode(schemaTree, refDefaultNode, references) {
    * in order to cache the referenced schema within the ref node.
    */
   if (!refNode.expandedNode) {
+    const currentNodeId = refDefaultNode.schema.$id;
     const refString = refDefaultNode.schema.$ref;
-    const expandedRefSchema = fetchRefSchema(refString, references);
+    const expandedRefSchema = fetchRefSchema(
+      currentNodeId,
+      refString,
+      references
+    );
 
     /**
      * Create a subschema tree based on the fetched ref schema
@@ -334,15 +340,17 @@ export function expandRefNode(schemaTree, refDefaultNode, references) {
 
 /**
  * Fetch the reference schema defined by the refString
- * @param {*} refString value of $ref field within a schema
- * @param {Object} references an object of schema references (schema.$id: schema)
+ * @param {*} refString $ref field's string
+ * @param {object} currentPath
+ * @param {object} references an object of schema references (schema.$id: schema)
  */
-function fetchRefSchema(refString, references) {
+function fetchRefSchema(refString, currentPath, references) {
   const [source, definitionPath] = refString.split('#');
   /**
-   * Find the source for the reference
+   * Find the source for the reference.
    */
-  let ptr = references[source];
+  const refSchemaId = findSourcePath(source, currentPath);
+  let ptr = references[refSchemaId];
 
   /**
    * TODO: if can't find source, add error message to $ref
@@ -359,4 +367,30 @@ function fetchRefSchema(refString, references) {
   });
 
   return ptr;
+}
+
+function findSourcePath(source, currentPath) {
+  /**
+   * If the source is a self-reference,
+   * return the current path.
+   */
+  if (source.length === 0) {
+    return currentPath;
+  }
+
+  /**
+   * If the source has a relative path (ex. "worker-full.json"),
+   * return a path relative to the current path.
+   */
+  if (!isAbsolute(source)) {
+    const currentDirectory = dirname(currentPath);
+
+    return resolve(currentDirectory, source);
+  }
+
+  /**
+   * Else, the source has an absolute path (either a url or a file path)
+   * return the path as-is.
+   */
+  return source;
 }
