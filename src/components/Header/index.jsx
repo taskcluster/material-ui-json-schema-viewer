@@ -26,27 +26,21 @@ function Header({ schema, sourceMode, toggleMode }) {
    */
   const classes = useStyles();
 
-  /**
-   * 
-   */
-  const title = schema.title || 'No title';
-  const description = schema.description || 'No description available';
-
   return (
     <div className={classes.container}>
       <Typography component="div" variant="h6" className={classes.title}>
-        {title}
+        {schema.title}
         {` `}
         <Button
           className={classes.button}
           color="inherit"
           size="small"
-          onClick={() => toggleMode()}>
+          onClick={toggleMode}>
           {sourceMode ? 'hide' : 'show'} source
         </Button>
       </Typography>
       <Typography component="div" variant="subtitle2">
-        {description}
+        {schema.description}
       </Typography>
     </div>
   );
