@@ -1,0 +1,29 @@
+{
+  "$id": "/schemas/ref-types/circular-reference#",
+  "definitions": {
+    "person": {
+      "type": "object",
+      "description": "Person to get information about",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Full name of the person",
+          "pattern": "^[ -~]*$"
+        },
+        "children": {
+          "type": "array",
+          "uniqueItems": true,
+          "description": "Information about children of the person",
+          "items": { "$ref": "#/definitions/person" },
+          "default": []
+        }
+      },
+      "additionalProperties": true,
+      "required": ["name", "children"]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "person": { "$ref": "#/definitions/person" }
+  }
+}

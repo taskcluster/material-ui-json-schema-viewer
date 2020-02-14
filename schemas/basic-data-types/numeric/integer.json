@@ -1,0 +1,4 @@
+{   
+  "$id": "/schemas/basic-data-types/numeric/integer.json#",
+  "type": "integer"
+}

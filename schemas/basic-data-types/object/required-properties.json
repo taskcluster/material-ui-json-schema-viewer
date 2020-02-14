@@ -1,0 +1,11 @@
+{
+  "$id": "/schemas/basic-data-types/object/required-properties.json#",
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" },
+    "email": { "type": "string" },
+    "address": { "type": "string" },
+    "telephone": { "type": "string" }
+  },
+  "required": ["name", "email"]
+}

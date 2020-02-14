@@ -1,0 +1,6 @@
+{
+  "$id": "/schemas/basic-data-types/string/pattern.json#",
+  "type": "string",
+  "pattern": "^(\\([0-9]{3}\\))?[0-9]{3}-[0-9]{4}$",
+  "minLength": 13
+}

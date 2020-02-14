@@ -1,0 +1,4 @@
+{
+  "$id": "/schemas/ref-types/url-reference#",
+  "$ref": "https://json-schema.org/draft-07/schema#"
+}

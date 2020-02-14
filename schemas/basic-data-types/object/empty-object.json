@@ -1,0 +1,4 @@
+{ 
+  "$id": "/schemas/basic-data-types/object/empty-object.json#",
+  "type": "object"
+}

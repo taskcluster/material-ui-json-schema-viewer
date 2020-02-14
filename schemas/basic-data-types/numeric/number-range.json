@@ -1,0 +1,6 @@
+{
+  "$id": "/schemas/basic-data-types/numeric/number-range.json#",
+  "type": "number",
+  "minimum": 0,
+  "exclusiveMaximum": 100
+}

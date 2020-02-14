@@ -1,0 +1,8 @@
+{
+  "$id": "/schemas/basic-data-types/array/unique-items.json#",
+  "type": "array",
+  "items": {
+    "type": "number"
+  },
+  "uniqueItems": true
+}

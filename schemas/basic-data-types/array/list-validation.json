@@ -1,0 +1,7 @@
+{
+  "$id": "/schemas/basic-data-types/array/list-validation.json#",
+  "type": "array",
+  "items": {
+    "type": "number"
+  }
+}

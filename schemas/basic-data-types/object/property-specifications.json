@@ -1,0 +1,16 @@
+{
+  "$id": "/schemas/basic-data-types/object/property-specifications.json#",
+  "type": "object",
+  "propertyNames": {
+   "pattern": "[a-z]{5}"
+  },
+  "patternProperties": {
+    "^a": { "type": "string" },
+    "^b": { "type": "integer" }
+  },
+  "additionalProperties": {
+    "type": "boolean"
+  },
+  "minProperties": 1,
+  "maxProperties": 10
+}

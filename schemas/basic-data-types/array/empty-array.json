@@ -1,0 +1,4 @@
+{ 
+  "$id": "/schemas/basic-data-types/array/empty-array.json#",
+  "type": "array"
+}

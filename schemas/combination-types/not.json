@@ -1,0 +1,4 @@
+{ 
+  "$id": "/schemas/combination-types/not#",
+  "not": { "type": "string" }
+}

@@ -12,43 +12,43 @@ export default {
  */
 const defaultSchemas = {};
 
-defaultSchemas.boolean = require('../../../schemas/basicDataTypes/boolean/boolean.json');
-defaultSchemas.null = require('../../../schemas/basicDataTypes/null/null.json');
-defaultSchemas.integer = require('../../../schemas/basicDataTypes/numeric/integer.json');
-defaultSchemas.numberMultiples = require('../../../schemas/basicDataTypes/numeric/numberMultiples.json');
-defaultSchemas.numberRange = require('../../../schemas/basicDataTypes/numeric/numberRange.json');
-defaultSchemas.stringPattern = require('../../../schemas/basicDataTypes/string/stringPattern.json');
-defaultSchemas.stringFormat = require('../../../schemas/basicDataTypes/string/stringFormat.json');
+defaultSchemas.boolean = require('../../../schemas/basic-data-types/boolean/boolean.json');
+defaultSchemas.null = require('../../../schemas/basic-data-types/null/null.json');
+defaultSchemas.integer = require('../../../schemas/basic-data-types/numeric/integer.json');
+defaultSchemas.numberMultiples = require('../../../schemas/basic-data-types/numeric/number-multiples.json');
+defaultSchemas.numberRange = require('../../../schemas/basic-data-types/numeric/number-range.json');
+defaultSchemas.stringPattern = require('../../../schemas/basic-data-types/string/pattern.json');
+defaultSchemas.stringFormat = require('../../../schemas/basic-data-types/string/format.json');
 
 const arraySchemas = {};
 
-arraySchemas.emptyArray = require('../../../schemas/basicDataTypes/array/emptyArray.json');
-arraySchemas.listValidation = require('../../../schemas/basicDataTypes/array/listValidation.json');
-arraySchemas.tupleValidation = require('../../../schemas/basicDataTypes/array/tupleValidation.json');
-arraySchemas.containsValidations = require('../../../schemas/basicDataTypes/array/containsValidation.json');
-arraySchemas.additionalItems = require('../../../schemas/basicDataTypes/array/additionalItems.json');
+arraySchemas.emptyArray = require('../../../schemas/basic-data-types/array/empty-array.json');
+arraySchemas.listValidation = require('../../../schemas/basic-data-types/array/list-validation.json');
+arraySchemas.tupleValidation = require('../../../schemas/basic-data-types/array/tuple-validation.json');
+arraySchemas.containsValidations = require('../../../schemas/basic-data-types/array/contains.json');
+arraySchemas.additionalItems = require('../../../schemas/basic-data-types/array/additional-items.json');
 
 const objectSchemas = {};
 
-objectSchemas.emptyObject = require('../../../schemas/basicDataTypes/object/emptyObject.json');
-objectSchemas.simpleObject = require('../../../schemas/basicDataTypes/object/simpleObject.json');
-objectSchemas.propertySpecification = require('../../../schemas/basicDataTypes/object/propertySpecifications.json');
-objectSchemas.propertyDependency = require('../../../schemas/basicDataTypes/object/propertyDependencies.json');
-objectSchemas.requiredProperties = require('../../../schemas/basicDataTypes/object/requiredProperties.json');
+objectSchemas.emptyObject = require('../../../schemas/basic-data-types/object/empty-object.json');
+objectSchemas.simpleObject = require('../../../schemas/basic-data-types/object/simple-object.json');
+objectSchemas.propertySpecification = require('../../../schemas/basic-data-types/object/property-specifications.json');
+objectSchemas.propertyDependency = require('../../../schemas/basic-data-types/object/property-dependencies.json');
+objectSchemas.requiredProperties = require('../../../schemas/basic-data-types/object/required-properties.json');
 objectSchemas.complexObjectExample = require('../../../schemas/demo/list-clients-response.json');
 
 const combinationSchemas = {};
 
-combinationSchemas.allOf = require('../../../schemas/combinationTypes/allOf.json');
-combinationSchemas.anyOf = require('../../../schemas/combinationTypes/anyOf.json');
-combinationSchemas.oneOf = require('../../../schemas/combinationTypes/oneOf.json');
-combinationSchemas.not = require('../../../schemas/combinationTypes/not.json');
+combinationSchemas.allOf = require('../../../schemas/combination-types/allOf.json');
+combinationSchemas.anyOf = require('../../../schemas/combination-types/anyOf.json');
+combinationSchemas.oneOf = require('../../../schemas/combination-types/oneOf.json');
+combinationSchemas.not = require('../../../schemas/combination-types/not.json');
 
 const refSchemas = {};
 
-refSchemas.simpleReference = require('../../../schemas/refTypes/simpleReference.json');
-refSchemas.urlReference = require('../../../schemas/refTypes/urlReference.json');
-refSchemas.circularReference = require('../../../schemas/refTypes/circularReference.json');
+refSchemas.simpleReference = require('../../../schemas/ref-types/simple-reference.json');
+refSchemas.urlReference = require('../../../schemas/ref-types/url-reference.json');
+refSchemas.circularReference = require('../../../schemas/ref-types/circular-reference.json');
 
 const miscellaneousSchemas = {};
 
@@ -63,10 +63,19 @@ demoSchemas.metaData = require('../../../schemas/demo/metadata-metaschema.json')
 demoSchemas.workerFull = require('../../../schemas/demo/worker-full.json');
 demoSchemas.workerList = require('../../../schemas/demo/worker-list.json');
 
+const references = [
+  ...Object.values(defaultSchemas),
+  ...Object.values(arraySchemas),
+  ...Object.values(objectSchemas),
+  ...Object.values(combinationSchemas),
+  ...Object.values(refSchemas),
+  ...Object.values(demoSchemas),
+];
+
 export const defaultTypes = () => (
   <Fragment>
     <h3>Boolean</h3>
-    <SchemaViewer schema={defaultSchemas.boolean} />
+    <SchemaViewer schema={defaultSchemas.boolean}/>
     <h3>Null</h3>
     <SchemaViewer schema={defaultSchemas.null} />
     <h3>Integer</h3>
@@ -120,11 +129,11 @@ export const combinationTypes = () => (
 export const refTypes = () => (
   <Fragment>
     <h3>Simple Reference</h3>
-    <SchemaViewer schema={refSchemas.simpleReference} />
+    <SchemaViewer schema={refSchemas.simpleReference} references={references}/>
     <h3>URI Reference (fetch $ref based on URI)</h3>
-    <SchemaViewer schema={refSchemas.urlReference} />
+    <SchemaViewer schema={refSchemas.urlReference} references={references}/>
     <h3>Circular Reference</h3>
-    <SchemaViewer schema={refSchemas.circularReference} />
+    <SchemaViewer schema={refSchemas.circularReference} references={references}/>
   </Fragment>
 );
 
@@ -142,8 +151,8 @@ export const demo = () => (
     <h2>Demo of Taskcluster Schemas</h2>
     <SchemaViewer schema={demoSchemas.hookStatus} />
     <SchemaViewer schema={demoSchemas.listClients} />
-    <SchemaViewer schema={demoSchemas.metaData} />
-    <SchemaViewer schema={demoSchemas.workerList} />
+    <SchemaViewer schema={demoSchemas.metaData} references={references}/>
+    <SchemaViewer schema={demoSchemas.workerList} references={references}/>
   </Fragment>
 );
 
