@@ -2,6 +2,7 @@ import React from 'react';
 import { shape, string } from 'prop-types';
 import Chip from '@material-ui/core/Chip';
 import InfoIcon from '@material-ui/icons/Info';
+import { Typography } from '@material-ui/core';
 import Tooltip from '../Tooltip';
 import OverflowLine from '../OverflowLine';
 import { treeNode } from '../../utils/prop-types';
@@ -11,7 +12,6 @@ import {
   MAX_NUMBER_OF_CHIPS,
   TOOLTIP_DESCRIPTIONS,
 } from '../../utils/constants';
-import { Typography } from '@material-ui/core';
 
 function NormalRightRow({ classes, treeNode }) {
   const { schema } = treeNode;
@@ -152,13 +152,8 @@ function NormalRightRow({ classes, treeNode }) {
    * Display the descriptive keyword in a single line.
    */
   function createDescriptionLine(keyword) {
-
     return (
-      <OverflowLine
-        key={keyword}
-        classes={classes}
-        content={schema[keyword]}
-      />
+      <OverflowLine key={keyword} classes={classes} content={schema[keyword]} />
     );
   }
 
@@ -184,6 +179,7 @@ function NormalRightRow({ classes, treeNode }) {
      */
     if (specKeywords.length > 0) {
       const specLines = createSpecificationLines(specKeywords);
+
       lines = lines.concat(specLines);
     }
 
@@ -205,7 +201,7 @@ function NormalRightRow({ classes, treeNode }) {
         } else if (keyword === 'description') {
           lines.push(createDescriptionLine(keyword));
         }
-      })
+      });
     }
 
     return lines;

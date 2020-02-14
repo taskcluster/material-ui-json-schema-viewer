@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import { shape, string, oneOfType, node } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '../Tooltip';
@@ -12,19 +12,15 @@ import Tooltip from '../Tooltip';
  * with detectin changes when the window size changes)
  */
 function OverflowLine({ classes, content }) {
-
   return (
     <Tooltip title={content}>
       <div className={classes.line}>
-        <Typography
-          component="div"
-          variant="subtitle2"
-          noWrap>
+        <Typography component="div" variant="subtitle2" noWrap>
           {content}
         </Typography>
       </div>
     </Tooltip>
-  )
+  );
 }
 
 OverflowLine.propTypes = {
