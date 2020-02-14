@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
   /** Rows for the left and right panels */
   row: {
     borderBottom: `${theme.spacing(0.25)}px solid ${theme.palette.divider}`,
-    minHeight: theme.spacing(3),
+    minHeight: theme.spacing(3.5),
     width: '100%',
   },
   lastRow: {
@@ -44,6 +44,9 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     whiteSpace: 'nowrap',
     height: theme.spacing(3.5),
+  },
+  descriptionLine: {
+    alignItems: 'flex-start',
   },
   /**
    * Highlighting the type for the schema or sub-schema displayed

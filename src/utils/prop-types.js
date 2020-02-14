@@ -31,3 +31,8 @@ export const treeNode = shape({
   /** children nodes of the current node */
   children: array,
 });
+
+/**
+ * Empty Function to use for default props
+ */
+export const NOOP = () => {};

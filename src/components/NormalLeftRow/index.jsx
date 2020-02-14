@@ -6,14 +6,13 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandIcon from '@material-ui/icons/ArrowRightRounded';
 import ShrinkIcon from '@material-ui/icons/ArrowDropDownRounded';
-import { treeNode } from '../../utils/prop-types';
+import { treeNode, NOOP } from '../../utils/prop-types';
 import { expandRefNode, shrinkRefNode } from '../../utils/schemaTree';
 import {
   SKIP_KEYWORDS,
   DESCRIPTIVE_KEYWORDS,
   COMBINATION_TYPES,
   NESTED_TYPES,
-  NOOP,
 } from '../../utils/constants';
 
 /**
@@ -131,15 +130,18 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
     const specifications = Object.keys(schemaInput).filter(
       key => !SKIP_KEYWORDS.includes(key)
     );
-    /**
-     * If there are not descriptor keywords to display,
-     * there is no need for any blank line paddings.
-     */
     const lines = [];
 
-    if (descriptors.length === 0) {
-      return lines;
-    }
+    /**
+     * Create a blank line per 3 spec keywords since a single line may
+     * only contain a max of 3 spec keywords. Skip over the first group
+     * of keywords since the first line already exists (to specify 'type').
+     */
+    specifications.forEach((keyword, i) => {
+      if (i % 3 === 0 && i > 0) {
+        lines.push(<div key={`${keyword}-line`} className={classes.line} />);
+      }
+    });
 
     /** Create a blank line for each descriptor keyword. */
     descriptors.forEach((keyword, i) => {
@@ -148,7 +150,7 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
        * if specification keywords exists, a blank line should be added
        * to visually separate the specification line and descriptor line.
        * Else, no specifications exists, skip over the first descriptor
-       * keyword so that the lines match the number of lines in NormalRightRow
+       * since the first line already exists (to specify 'type').
        */
       if (i === 0) {
         if (specifications.length > 0) {

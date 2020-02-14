@@ -1,35 +1,67 @@
 import React from 'react';
 import { shape, string } from 'prop-types';
-import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
+import InfoIcon from '@material-ui/icons/Info';
+import { Typography } from '@material-ui/core';
 import Tooltip from '../Tooltip';
+import OverflowLine from '../OverflowLine';
 import { treeNode } from '../../utils/prop-types';
-import { SKIP_KEYWORDS, DESCRIPTIVE_KEYWORDS } from '../../utils/constants';
+import {
+  SKIP_KEYWORDS,
+  DESCRIPTIVE_KEYWORDS,
+  MAX_NUMBER_OF_CHIPS,
+  TOOLTIP_DESCRIPTIONS,
+} from '../../utils/constants';
 
 function NormalRightRow({ classes, treeNode }) {
   const { schema } = treeNode;
   /**
    * Identify keywords that define specifications of the given schema.
-   * (skip over keywords that do not need to be displayed)
+   * (skip over keywords that do not need to be displayed).
+   * Each keyword will be displayed as a chip.
    */
   const specKeywords = Object.keys(schema).filter(
     key => !SKIP_KEYWORDS.includes(key)
   );
   /**
    * Identify keywords that help describe the given schema.
+   * (ensure to maintain order specified in DESCRIPTIVE_KEYWORDS)
    */
-  const descriptorKeywords = Object.keys(schema).filter(key =>
-    DESCRIPTIVE_KEYWORDS.includes(key)
-  );
+  const descriptorKeywords = DESCRIPTIVE_KEYWORDS.filter(key => key in schema);
 
   /**
-   * Display keywords defining specifications as chips.
-   * If keyword definition is too complex, display tooltip with info icon
-   * in order to inform users to refer to the source for more details.
+   * Create a chip to display keyword properties.
+   * This is used to display specification keywords.
    */
-  function displaySpecKeyword(keyword) {
+  function createKeywordChip(keyword) {
     /**
-     * Typecast the definition in string format to display properly.
+     * If keyword's property is defined complex, display the chip within
+     * a tooltip to inform users to refer to the source for more details.
+     */
+    if (
+      typeof schema[keyword] === 'object' &&
+      !Array.isArray(schema[keyword])
+    ) {
+      /**
+       * Generate tooltip descriptions to match the keyword.
+       */
+      const tooltipTitle = `${TOOLTIP_DESCRIPTIONS[keyword]} See the JSON-schema source for details.`;
+      const infoIcon = <InfoIcon fontSize="inherit" color="inherit" />;
+
+      return (
+        <Tooltip key={keyword} title={tooltipTitle}>
+          <Chip
+            label={keyword}
+            icon={infoIcon}
+            size="small"
+            variant="outlined"
+          />
+        </Tooltip>
+      );
+    }
+
+    /**
+     * Typecast the keyword's property to string format for proper display.
      */
     const keyValue = (function keyValueToString(key) {
       if (Array.isArray(schema[keyword])) {
@@ -50,16 +82,6 @@ function NormalRightRow({ classes, treeNode }) {
       return schema[key];
     })(keyword);
 
-    /**
-     * Display chip within tooltip for complex definitions.
-     */
-    if (
-      typeof schema[keyword] === 'object' &&
-      !Array.isArray(schema[keyword])
-    ) {
-      return <Tooltip key={keyword} keyword={keyword} classes={classes} />;
-    }
-
     return (
       <Chip
         key={keyword}
@@ -71,59 +93,115 @@ function NormalRightRow({ classes, treeNode }) {
   }
 
   /**
-   * Display a single descriptive keyword in its own line.
+   * Create lines for specification keywords in groups of chips.
+   * Each specification keyword is displayed as a chip and
+   * a single line may only contain a MAX_NUMBER_OF_CHIPS at most.
    */
-  function displayDescriptor(keyword) {
+  function createSpecificationLines(specKeywords) {
+    const lines = [];
+    /**
+     * Sort specification keywords in alphabetical order and
+     * group the keywords in sizes of MAX_NUMBER_OF_CHIPS.
+     */
+    const keywordGroups = [[]];
+
+    specKeywords.sort();
+    specKeywords.forEach((keyword, i) => {
+      const groupIndex = Math.trunc(i / MAX_NUMBER_OF_CHIPS);
+
+      if (groupIndex > keywordGroups.length - 1) {
+        keywordGroups.push([]);
+      }
+
+      keywordGroups[groupIndex].push(keyword);
+    });
+
+    /**
+     * Each keyword group displays a single line containing
+     * a MAX_NUMBER_OF_CHIPS amount of chips
+     */
+    keywordGroups.forEach(keywordGroup => {
+      lines.push(
+        <div
+          key={`spec-line-${keywordGroup.toString()}`}
+          className={classes.line}>
+          {keywordGroup.map(keyword => createKeywordChip(keyword))}
+        </div>
+      );
+    });
+
+    return lines;
+  }
+
+  /**
+   * Display the title keyword in a single line.
+   */
+  function createTitleLine(keyword) {
     return (
       <Typography
-        key={keyword}
+        className={classes.line}
         component="div"
         variant="subtitle2"
-        className={classes.line}>
-        {keyword === 'title' ? (
-          <strong>{schema[keyword]}</strong>
-        ) : (
-          schema[keyword]
-        )}
+        noWrap>
+        <strong>{schema[keyword]}</strong>
       </Typography>
     );
   }
 
   /**
-   * Create the lines to display in a single right row according
-   * to the schema's specification and descriptive keywords.
+   * Display the descriptive keyword in a single line.
    */
-  function displayLines(specs, descriptors) {
-    const lines = [];
+  function createDescriptionLine(keyword) {
+    return (
+      <OverflowLine key={keyword} classes={classes} content={schema[keyword]} />
+    );
+  }
 
-    /** If no keywords necessary, display a single blank line */
-    if (specs.length === 0 && descriptors.length === 0) {
+  /**
+   * Create lines for the schema's specification and descriptive keywords.
+   * @param {Array} specKeywords specification keywords in schema
+   * @param {Array} descriptorKeywords descriptive keywords in schema
+   * @returns {Array} lines for the schema's right panel
+   */
+  function createLinesForKeywords(specKeywords, descriptorKeywords) {
+    let lines = [];
+
+    /**
+     * If neither keyword types exist, display a single blank line
+     * to match the 'type' line in NormalLeftRow.
+     */
+    if (specKeywords.length === 0 && descriptorKeywords.length === 0) {
       lines.push(<div key="blank-line" className={classes.line} />);
     }
 
     /**
-     * If specification keywords exist, display each keyword as chip
-     * within a single line.
+     * If specification keywords exist, create lines to hold keyword chips.
      */
-    if (specs.length > 0) {
-      lines.push(
-        <div key="spec-line" className={classes.line}>
-          {specs.map(keyword => displaySpecKeyword(keyword))}
-        </div>
-      );
+    if (specKeywords.length > 0) {
+      const specLines = createSpecificationLines(specKeywords);
+
+      lines = lines.concat(specLines);
     }
 
     /**
      * If descriptive keywords exist, display each keyword in its own line.
-     * (if specification keywords also exist, create a blank line to separate
-     *  specifications line and lines for descriptions)
      */
-    if (descriptors.length > 0) {
-      if (specs.length > 0) {
+    if (descriptorKeywords.length > 0) {
+      /**
+       * If specification keywords also exist, create a blank line to separate
+       * specification lines and lines for descriptions.
+       */
+      if (specKeywords.length > 0) {
         lines.push(<div key="separator-line" className={classes.line} />);
       }
 
-      descriptors.forEach(keyword => lines.push(displayDescriptor(keyword)));
+      descriptorKeywords.forEach(keyword => {
+        if (keyword === 'title') {
+          lines.push(createTitleLine(keyword));
+        } else if (keyword === 'description') {
+          lines.push(createDescriptionLine(keyword));
+        }
+      });
     }
 
     return lines;
@@ -131,7 +209,7 @@ function NormalRightRow({ classes, treeNode }) {
 
   return (
     <div className={classes.row}>
-      {displayLines(specKeywords, descriptorKeywords)}
+      {createLinesForKeywords(specKeywords, descriptorKeywords)}
     </div>
   );
 }
@@ -139,7 +217,7 @@ function NormalRightRow({ classes, treeNode }) {
 NormalRightRow.propTypes = {
   /**
    * Style for rows and lines for schema viewer.
-   * Necessary to maintain consistency with right panel's
+   * Necessary to maintain consistency with left panel's
    * rows and lines.
    */
   classes: shape({
