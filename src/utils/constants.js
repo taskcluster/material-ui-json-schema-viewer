@@ -1,4 +1,8 @@
 /**
+ * Keywords used in schemas to define the basic types.
+ */
+export const BASIC_TYPES = ['string', 'integer', 'number', 'boolean', 'null'];
+/**
  * Keywords used in schema to define nested types.
  * Define schemas for structure with an open row, child rows, and close row.
  */
@@ -12,6 +16,22 @@ export const COMBINATION_TYPES = ['allOf', 'anyOf', 'oneOf', 'not'];
  * This includes keywords used to define combination types.
  */
 export const COMPLEX_TYPES = [...COMBINATION_TYPES, '$ref'];
+/**
+ * Custom type keywords used to define schemas used for literal rows.
+ * (used in `createLiteralRow()` method in schemaTable)
+ */
+export const LITERAL_TYPES = {
+  array: 'closeArray',
+  object: 'closeObject',
+  allOf: 'and',
+  anyOf: 'or',
+  oneOf: 'or',
+  not: 'nor',
+}
+/**
+ * All the keywords used to define the possible types used for the schemaTable.
+ */
+export const ALL_TYPES = [...BASIC_TYPES, ...NESTED_TYPES, ...COMPLEX_TYPES, ...Object.values(LITERAL_TYPES)];
 /**
  * Keywords used in schema that are descriptors.
  * These are used to display in the rows of the right panel

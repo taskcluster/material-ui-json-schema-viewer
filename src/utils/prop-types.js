@@ -1,20 +1,13 @@
 import { shape, string, arrayOf, number, array, oneOf } from 'prop-types';
+import { ALL_TYPES } from './constants';
 
 export const schema = shape({
   /** Descriptive information about schema */
   title: string,
   description: string,
-  name: string,
+  _name: string,
   /** Type of schema */
-  type: oneOf([
-    'string',
-    'number',
-    'integer',
-    'null',
-    'boolean',
-    'object',
-    'array',
-  ]),
+  _type: oneOf(ALL_TYPES),
 });
 
 export const treeNode = shape({
