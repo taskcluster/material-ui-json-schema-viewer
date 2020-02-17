@@ -15,6 +15,8 @@ import {
   COMBINATION_TYPES,
   LITERAL_TYPES,
   NESTED_TYPES,
+  BRACKET_SYMBOLS,
+  COMBINATION_SYMBOLS,
   TOOLTIP_DESCRIPTIONS,
 } from '../../utils/constants';
 
@@ -60,29 +62,14 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
      * Types with nested structures use the a bracket symbol,
      */
     if (bracketTypes.includes(type)) {
-      return {
-        array: '[',
-        object: '{',
-        closeArray: ']',
-        closeObject: '}',
-      }[type];
+      return BRACKET_SYMBOLS[type];
     }
 
     /**
      * Combination types (allOf, anyOf, oneOf, no) use comment-like notation.
      */
     if (combinationTypes.includes(type)) {
-      const commentText = {
-        allOf: '// All of',
-        anyOf: '// Any of',
-        oneOf: '// One of',
-        not: '// Not',
-        and: '// and',
-        or: '// or',
-        nor: '// nor',
-      }[type];
-
-      return <span className={classes.comment}>{commentText}</span>;
+      return <span className={classes.comment}>{COMBINATION_SYMBOLS[type]}</span>;
     }
 
     /**

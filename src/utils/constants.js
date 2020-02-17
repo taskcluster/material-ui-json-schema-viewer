@@ -76,11 +76,35 @@ export const SKIP_KEYWORDS = [
   'definitions',
 ];
 /**
+ * Symbols used to display bracket types.
+ */
+export const BRACKET_SYMBOLS = {
+  array: '[',
+  object: '{',
+  closeArray: ']',
+  closeObject: '}',
+};
+/**
+ * Symbols (text) used to display for combination types.
+ */
+export const COMBINATION_SYMBOLS = {
+  allOf: '// All of',
+  anyOf: '// Any of',
+  oneOf: '// One of',
+  not: '// Not',
+  and: '// and',
+  or: '// or',
+  nor: '// nor',
+};
+/**
  * Max number of chips allowed to be displayed within a single line.
+ * (specified instead of having the line wrap when chips crowd a line
+ *  in order to avoid complexities with matching the line heights between
+ *  the left and right panel)
  */
 export const MAX_NUMBER_OF_CHIPS = 3;
 /**
- *
+ * Descriptions used for keywords displayed with tooltip.
  */
 export const TOOLTIP_DESCRIPTIONS = {
   additionalItems:
