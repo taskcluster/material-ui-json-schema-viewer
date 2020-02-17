@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandIcon from '@material-ui/icons/ArrowRightRounded';
 import ShrinkIcon from '@material-ui/icons/ArrowDropDownRounded';
+import Tooltip from '../Tooltip';
 import { treeNode, NOOP } from '../../utils/prop-types';
 import { expandRefNode, shrinkRefNode } from '../../utils/schemaTree';
 import {
@@ -13,6 +14,7 @@ import {
   DESCRIPTIVE_KEYWORDS,
   COMBINATION_TYPES,
   NESTED_TYPES,
+  TOOLTIP_DESCRIPTIONS,
 } from '../../utils/constants';
 
 /**
@@ -74,15 +76,23 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
     return <code className={classes.code}>{type}</code>;
   })(schemaType);
   /**
-   * Define the prefix used for the schema.
+   * Define the required/contains mark used for the schema.
    */
-  const prefix = (function createPrefix(schema) {
+  const requiredMark = (function createPrefix(schema) {
     if (schema._required) {
-      return <span className={classes.prefix}>*</span>;
+      return (
+        <Tooltip title={TOOLTIP_DESCRIPTIONS.required}>
+          <span className={classes.prefix}>*</span>
+        </Tooltip>
+      );
     }
 
     if (schema._contains) {
-      return <span className={classes.prefix}>⊃</span>;
+      return (
+        <Tooltip title={TOOLTIP_DESCRIPTIONS.contains}>
+          <span className={classes.prefix}>⊃</span>
+        </Tooltip>
+      );
     }
 
     return null;
@@ -172,9 +182,9 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
         component="div"
         variant="subtitle2"
         className={classNames(classes.line, styles.indentation)}>
-        {prefix}
         {name && `${name}: `}
         {typeSymbol}
+        {requiredMark}
         {refIcon}
       </Typography>
       {blankLinePaddings}
