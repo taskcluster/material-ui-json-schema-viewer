@@ -11,8 +11,11 @@ By default, the schema viewer inherits [material-ui's default theme](https://mat
 material-ui's [`ThemeProvider`](https://material-ui.com/styles/api/#themeprovider) component.
 You may also use material-ui's [`CSSBaseline`](https://material-ui.com/api/css-baseline/) to provide a more consistent style baseline as well.
 ```js
+const customTheme = createMuiTheme({
+    // change the theme object properties here
+});
 <CssBaseline />
 <ThemeProvider theme={customTheme}>
-    <SchemaTable />
+    <SchemaViewer />
 </ThemeProvider>
 ```

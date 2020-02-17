@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'flex-start',
   },
   /**
-   * Highlighting the type for the schema or sub-schema displayed
+   * Highlight the type for the schema or sub-schema displayed
    * in the left panel of the schema table component.
    */
   code: {
@@ -66,7 +66,14 @@ const useStyles = makeStyles(theme => ({
    */
   prefix: {
     color: theme.palette.error.main,
-    padding: `0 ${theme.spacing(0.5)}px}`,
+    padding: `0 ${theme.spacing(0.5)}px`,
+  },
+  /**
+   * Chips used for keyword notations.
+   */
+  chip: {
+    color: theme.palette.text.primary,
+    borderColor: theme.palette.text.primary
   },
 }));
 

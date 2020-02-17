@@ -51,6 +51,7 @@ function NormalRightRow({ classes, treeNode }) {
       return (
         <Tooltip key={keyword} title={tooltipTitle}>
           <Chip
+            className={classes.chip}
             label={keyword}
             icon={infoIcon}
             size="small"
@@ -84,6 +85,7 @@ function NormalRightRow({ classes, treeNode }) {
 
     return (
       <Chip
+        className={classes.chip}
         key={keyword}
         label={`${keyword}: ${keyValue}`}
         size="small"
@@ -216,13 +218,17 @@ function NormalRightRow({ classes, treeNode }) {
 
 NormalRightRow.propTypes = {
   /**
-   * Style for rows and lines for schema viewer.
-   * Necessary to maintain consistency with left panel's
-   * rows and lines.
+   * Style for schema table.
    */
   classes: shape({
+    /**
+     * Rows and lines need to maintain consistent
+     * with left panel's rows and lines.
+     */ 
     row: string.isRequired,
     line: string.isRequired,
+    /** Style chips wrapping keyword displays */
+    chip: string.isRequired,
   }).isRequired,
   /**
    * Tree node object data structure.
