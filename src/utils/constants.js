@@ -58,13 +58,13 @@ export const MAX_NUMBER_OF_CHIPS = 3;
  *
  */
 export const TOOLTIP_DESCRIPTIONS = {
-  additionalItems: 'Additional items must match a sub-schema.',
-  additionalProperties: 'Additional properties must match a sub-schema.',
+  additionalItems: 'Additional items must match a sub-schema. See the JSON-schema source for details.',
+  additionalProperties: 'Additional properties must match a sub-schema. See the JSON-schema source for details.',
   dependencies:
-    'The schema of the object may change based on the presence of certain special properties.',
-  propertyNames: 'Names of properties must follow a specified convention.',
+    'The schema of the object may change based on the presence of certain special properties. See the JSON-schema source for details.',
+  propertyNames: 'Names of properties must follow a specified convention. See the JSON-schema source for details.',
   patternProperties:
-    'Property names or values should match the specified pattern.',
+    'Property names or values should match the specified pattern. See the JSON-schema source for details.',
   required: 'Required property',
-  contains: 'Only needs to validate against one or more items in the array.',
+  contains: 'Only needs to validate against one or more items in the array',
 };

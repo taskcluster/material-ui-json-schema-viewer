@@ -45,7 +45,7 @@ function NormalRightRow({ classes, treeNode }) {
       /**
        * Generate tooltip descriptions to match the keyword.
        */
-      const tooltipTitle = `${TOOLTIP_DESCRIPTIONS[keyword]} See the JSON-schema source for details.`;
+      const tooltipTitle = TOOLTIP_DESCRIPTIONS[keyword];
       const infoIcon = <InfoIcon fontSize="inherit" color="inherit" />;
 
       return (
