@@ -224,7 +224,8 @@ NormalRightRow.propTypes = {
     /**
      * Rows and lines need to maintain consistent
      * with left panel's rows and lines.
-     */ 
+     */
+
     row: string.isRequired,
     line: string.isRequired,
     /** Style chips wrapping keyword displays */

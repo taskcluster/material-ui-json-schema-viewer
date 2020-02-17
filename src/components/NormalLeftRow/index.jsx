@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { shape, string, oneOf, func } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
@@ -37,20 +37,28 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
   const indentSize = path.length;
   const styles = useStyles(indentSize);
   /**
-   * Define the name to illustrate the schema or sub-schema.
+   * Define the name and type of the schema or sub-schema.
    */
   const name = schema._name;
-  /**
-   * Define the type symbol for the schema or sub-schema's type
-   * Types requiring nested structures use the according bracket symbol,
-   * Complex types (allOf, anyOf, oneOf, no) use comment notation,
-   * the rest simply use highlighted text to illustrate the data type.
-   */
   const schemaType = schema._type;
-  function createTypeSymbol(type) {
-    const bracketTypes = [...NESTED_TYPES, LITERAL_TYPES['array'], LITERAL_TYPES['object']];
-    const combinationTypes = [...COMBINATION_TYPES, ...COMBINATION_TYPES.map(type => LITERAL_TYPES[type])];
 
+  /**
+   * Create a type symbol corresponding to the specified type.
+   */
+  function createTypeSymbol(type) {
+    const bracketTypes = [
+      ...NESTED_TYPES,
+      LITERAL_TYPES.array,
+      LITERAL_TYPES.object,
+    ];
+    const combinationTypes = [
+      ...COMBINATION_TYPES,
+      ...COMBINATION_TYPES.map(type => LITERAL_TYPES[type]),
+    ];
+
+    /**
+     * Types with nested structures use the a bracket symbol,
+     */
     if (bracketTypes.includes(type)) {
       return {
         array: '[',
@@ -60,6 +68,9 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
       }[type];
     }
 
+    /**
+     * Combination types (allOf, anyOf, oneOf, no) use comment-like notation.
+     */
     if (combinationTypes.includes(type)) {
       const commentText = {
         allOf: '// All of',
@@ -74,18 +85,32 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
       return <span className={classes.comment}>{commentText}</span>;
     }
 
+    /**
+     * In case of an array of types (multiple types),
+     * create an array of type symbols with highlighted text format,
+     * with each symbol separated with a comma with each other.
+     */
     if (Array.isArray(type)) {
       const typeArray = [];
 
-      type.map((eachType, i) => {
+      type.forEach((eachType, i) => {
         if (i > 0) {
           typeArray.push(<span key={`${eachType}-comma`}>,</span>);
         }
-        typeArray.push(<code key={eachType} className={classes.code}>{eachType}</code>);
+
+        typeArray.push(
+          <code key={eachType} className={classes.code}>
+            {eachType}
+          </code>
+        );
       });
 
       return typeArray;
     }
+
+    /**
+     * Default types use highlighted code format.
+     */
     return <code className={classes.code}>{type}</code>;
   }
 
@@ -133,7 +158,7 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
    * to be used to expand or collapse a row depending on the refType prop.
    */
   const onRefClick = {
-    none: () => { },
+    none: () => {},
     default: () => setSchemaTree(prev => expandRefNode(prev, treeNode)),
     expanded: () => setSchemaTree(prev => shrinkRefNode(prev, treeNode)),
   }[refType];

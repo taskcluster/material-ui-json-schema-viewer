@@ -129,7 +129,7 @@ export const miscellaneous = () => (
     <h2>Multiple Types</h2>
     <SchemaViewer schema={miscellaneousSchemas.multipleTypes} />
   </Fragment>
-)
+);
 
 export const demo = () => (
   <Fragment>

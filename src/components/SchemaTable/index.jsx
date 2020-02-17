@@ -5,7 +5,11 @@ import NormalLeftRow from '../NormalLeftRow';
 import NormalRightRow from '../NormalRightRow';
 import { treeNode } from '../../utils/prop-types';
 import { createSchemaTree } from '../../utils/schemaTree';
-import { COMBINATION_TYPES, NESTED_TYPES, LITERAL_TYPES } from '../../utils/constants';
+import {
+  COMBINATION_TYPES,
+  NESTED_TYPES,
+  LITERAL_TYPES,
+} from '../../utils/constants';
 
 const useStyles = makeStyles(theme => ({
   /** Schema table displays two-column layout */
@@ -56,7 +60,6 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.text.primary,
     color: theme.palette.getContrastText(theme.palette.text.primary),
     padding: `0 ${theme.spacing(0.5)}px`,
-    marginLeft: theme.spacing(0.5),
   },
   /** Comments within the left panel (used for combination types) */
   comment: {
