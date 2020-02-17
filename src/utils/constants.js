@@ -119,5 +119,6 @@ export const TOOLTIP_DESCRIPTIONS = {
     'Property names or values should match the specified pattern. See the JSON-schema source for details.',
   required: 'Required property',
   contains: 'Only needs to validate against one or more items in the array',
-  noType: 'Type of schema is not specified. See the JSON-schema source for details.',
+  noType:
+    'Type of schema is not specified. See the JSON-schema source for details.',
 };

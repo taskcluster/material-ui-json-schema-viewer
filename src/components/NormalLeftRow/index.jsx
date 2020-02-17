@@ -59,10 +59,15 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
       ...COMBINATION_TYPES.map(type => LITERAL_TYPES[type]),
     ];
 
+    /**
+     * If type is not specified, create a tooltip with an icon.
+     */
     if (!type) {
-      return (<Tooltip title={TOOLTIP_DESCRIPTIONS['noType']}>
-        <WarningIcon color="inherit"/>
-      </Tooltip>);
+      return (
+        <Tooltip title={TOOLTIP_DESCRIPTIONS.noType}>
+          <WarningIcon color="inherit" />
+        </Tooltip>
+      );
     }
 
     /**
