@@ -74,7 +74,7 @@ const useStyles = makeStyles(theme => ({
    */
   chip: {
     color: theme.palette.text.primary,
-    borderColor: theme.palette.text.primary
+    borderColor: theme.palette.text.secondary,
   },
 }));
 
