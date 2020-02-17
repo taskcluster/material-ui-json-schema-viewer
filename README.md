@@ -12,7 +12,17 @@ material-ui's [`ThemeProvider`](https://material-ui.com/styles/api/#themeprovide
 You may also use material-ui's [`CSSBaseline`](https://material-ui.com/api/css-baseline/) to provide a more consistent style baseline as well.
 ```js
 const customTheme = createMuiTheme({
-    // change the theme object properties here
+    palette: {
+      background: {
+        paper: '#000', // change the background color
+      },
+      text: {
+        primary: '#ffc107', // change the text color
+        secondary: '#ffc53d', // change chip's border color
+        hint: '#ddd', // change comment color
+      },
+      divider: '#4f4f4f', // change table's border color
+    },
 });
 <CssBaseline />
 <ThemeProvider theme={customTheme}>
