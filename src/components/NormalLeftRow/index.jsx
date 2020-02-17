@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { shape, string, oneOf, func } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
@@ -13,6 +13,7 @@ import {
   SKIP_KEYWORDS,
   DESCRIPTIVE_KEYWORDS,
   COMBINATION_TYPES,
+  LITERAL_TYPES,
   NESTED_TYPES,
   TOOLTIP_DESCRIPTIONS,
 } from '../../utils/constants';
@@ -46,9 +47,9 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
    * the rest simply use highlighted text to illustrate the data type.
    */
   const schemaType = schema._type;
-  const typeSymbol = (function createTypeSymbol(type) {
-    const bracketTypes = [...NESTED_TYPES, 'closeArray', 'closeObject'];
-    const combinationTypes = [...COMBINATION_TYPES, 'and', 'or', 'nor'];
+  function createTypeSymbol(type) {
+    const bracketTypes = [...NESTED_TYPES, LITERAL_TYPES['array'], LITERAL_TYPES['object']];
+    const combinationTypes = [...COMBINATION_TYPES, ...COMBINATION_TYPES.map(type => LITERAL_TYPES[type])];
 
     if (bracketTypes.includes(type)) {
       return {
@@ -73,8 +74,21 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
       return <span className={classes.comment}>{commentText}</span>;
     }
 
+    if (Array.isArray(type)) {
+      const typeArray = [];
+
+      type.map((eachType, i) => {
+        if (i > 0) {
+          typeArray.push(<span key={`${eachType}-comma`}>,</span>);
+        }
+        typeArray.push(<code key={eachType} className={classes.code}>{eachType}</code>);
+      });
+
+      return typeArray;
+    }
     return <code className={classes.code}>{type}</code>;
-  })(schemaType);
+  }
+
   /**
    * Define the required/contains mark used for the schema.
    */
@@ -119,7 +133,7 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
    * to be used to expand or collapse a row depending on the refType prop.
    */
   const onRefClick = {
-    none: () => {},
+    none: () => { },
     default: () => setSchemaTree(prev => expandRefNode(prev, treeNode)),
     expanded: () => setSchemaTree(prev => shrinkRefNode(prev, treeNode)),
   }[refType];
@@ -183,7 +197,7 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
         variant="subtitle2"
         className={classNames(classes.line, styles.indentation)}>
         {name && `${name}: `}
-        {typeSymbol}
+        {createTypeSymbol(schemaType)}
         {requiredMark}
         {refIcon}
       </Typography>
