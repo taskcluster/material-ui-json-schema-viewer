@@ -305,11 +305,9 @@ export function expandRefNode(schemaTree, refDefaultNode, references) {
    * in order to cache the referenced schema within the ref node.
    */
   if (!refNode.expandedNode) {
-    const currentNodeId = refDefaultNode.schema.$id;
-    const refString = refDefaultNode.schema.$ref;
     const expandedRefSchema = fetchRefSchema(
-      currentNodeId,
-      refString,
+      refDefaultNode.schema.$id,
+      refDefaultNode.schema.$ref,
       references
     );
 
@@ -326,9 +324,7 @@ export function expandRefNode(schemaTree, refDefaultNode, references) {
      * If the ref node's default node has custom fields,
      * also include those same fields within the expanded node.
      */
-    const customKeywords = CUSTOM_KEYWORDS.filter(key => key !== '_type');
-
-    customKeywords.forEach(keyword => {
+    CUSTOM_KEYWORDS.forEach(keyword => {
       if (keyword in refDefaultNode.schema) {
         refNode.expandedNode.schema[keyword] = refDefaultNode.schema[keyword];
       }
@@ -339,32 +335,46 @@ export function expandRefNode(schemaTree, refDefaultNode, references) {
 }
 
 /**
- * Fetch the reference schema defined by the refString
- * @param {*} refString $ref field's string
- * @param {object} currentPath
- * @param {object} references an object of schema references
+ * Fetch the reference schema defined by the $ref
+ * @param {string} refNodeId ref default node schema's $id value
+ * @param {string} refString ref default node schema's $ref value
+ * @param {object} references collection of schema references
+ * @returns {object} $ref schema
  */
-function fetchRefSchema(refString, currentPath, references) {
+function fetchRefSchema(refNodeId, refString, references) {
   const [source, definitionPath] = refString.split('#');
-  /**
-   * Find the source for the reference.
-   */
-  const refSchemaId = findSourcePath(source, currentPath);
-  let ptr = references[refSchemaId];
-  /**
-   * TODO: if can't find source, add error message to $ref
-   *       same with when can't find definition
-   */
-  /** Find the definition within the source */
-  const parameters = definitionPath.split('/');
+  
+  try {
+    /**
+     * Find the source for the reference.
+     */
+    const refSchemaId = findSourcePath(source, refNodeId);
+    let ptr = references[refSchemaId];
 
-  parameters.forEach(parameter => {
-    if (parameter.length > 0) {
+    if (!refSchemaId) throw `Cannot find schema with $id: '${source}' in references.`;
+
+    /** 
+     * Find the definition within the source.
+     */
+    const parameters = definitionPath.split('/');
+
+    parameters.forEach(parameter => {
       ptr = ptr[parameter];
-    }
-  });
 
-  return ptr;
+      if (!ptr) throw `Cannot find ${definitionPath} in '${source}'.`;
+    });
+
+    return ptr;
+  }
+  catch (error) {
+    /**
+     * If cannot find the $ref,
+     */
+    const errorSchema = {
+      error,
+    };
+    return errorSchema;
+  }
 }
 
 function findSourcePath(source, currentPath) {
