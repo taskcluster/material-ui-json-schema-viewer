@@ -97,18 +97,33 @@ export function sanitizeSchema(schema) {
     cloneSchema._name = cloneSchema.name;
   }
 
+  /**
+   * If $id property exists, create a '_id' property with same value.
+   * (for consistency with object type subschema's '_id' properties)
+   */
+  if ('$id' in cloneSchema) {
+    cloneSchema._id = cloneSchema.$id;
+  }
+
   return cloneSchema;
 }
 
 /**
  * Create a child node based on the given subschema and append it to
- * the rootNode. (the child node may be a single node or a subtree)
- * @param {*} childIndex: index of the child node (used for its path)
+ * the parentNode. (the child node may be a single node or a subtree)
+ * @param {object} parentNode parent node of subschema
+ * @param {object} subschema schema of child node to create and append;
+ * @param {number} childIndex index of the child node (used for its path)
  */
-export function createChildNode(rootNode, subschema, childIndex) {
-  const childNode = createSchemaTree(subschema, [...rootNode.path, childIndex]);
+export function createChildNode(parentNode, subschema, childIndex) {
+  /**
+   * Child node should inherit parent's id in order to 
+   */
+  const cloneSubschema = clone(subschema);
+  cloneSubschema._id = parentNode.schema._id;
 
-  rootNode.children.push(childNode);
+  const childNode = createSchemaTree(cloneSubschema, [...parentNode.path, childIndex]);
+  parentNode.children.push(childNode);
 }
 
 /**
@@ -208,15 +223,15 @@ export function createObjectTree(rootNode) {
      * so that they are displayed accordingly when creating schemaTable rows.
      */
     propertyList.forEach((property, childIndex) => {
-      const subschema = schema.properties[property];
+      const cloneSubschema = clone(schema.properties[property]);
 
-      subschema._name = property;
+      cloneSubschema._name = property;
 
       if (requiredList.has(property)) {
-        subschema._required = true;
+        cloneSubschema._required = true;
       }
 
-      createChildNode(rootNode, subschema, childIndex);
+      createChildNode(rootNode, cloneSubschema, childIndex);
     });
   }
 }
@@ -292,7 +307,6 @@ export function expandRefNode(schemaTree, refDefaultNode, references) {
    * Create a clone tree and find the corresponding clone ref node.
    */
   const [cloneTree, refNode] = findRefNodeClone(schemaTree, refDefaultNode);
-
   /**
    * Update the 'isExpanded' state of the ref node so that
    * the ref row will now display an expanded version instead.
@@ -306,10 +320,12 @@ export function expandRefNode(schemaTree, refDefaultNode, references) {
    */
   if (!refNode.expandedNode) {
     const expandedRefSchema = fetchRefSchema(
-      refDefaultNode.schema.$id,
+      refDefaultNode.schema._id,
       refDefaultNode.schema.$ref,
       references
     );
+
+    console.log(expandedRefSchema);
 
     /**
      * Create a subschema tree based on the fetched ref schema
@@ -343,25 +359,32 @@ export function expandRefNode(schemaTree, refDefaultNode, references) {
  */
 function fetchRefSchema(refNodeId, refString, references) {
   const [sourcePath, definitionPath] = refString.split('#');
+  const refNodePath = refNodeId.slice(0, -1);
 
   try {
     /**
      * Find the source for the reference.
      */
-    const refSchemaId = resolveFullPath(sourcePath, refNodeId);
-    let ptr = references[refSchemaId];
+    const refSchemaId = resolveFullPath(sourcePath, refNodePath);
+    let ptr = references[refSchemaId.concat('#')];
 
-    if (!refSchemaId) throw `Cannot find schema with $id: '${sourcePath}' in references.`;
+    if (!ptr) {
+      throw `Cannot find schema with $id ${sourcePath} in references.`;
+    }
 
     /** 
      * Find the definition within the source.
      */
     const parameters = definitionPath.split('/');
 
-    parameters.forEach(parameter => {
-      ptr = ptr[parameter];
-
-      if (!ptr) throw `Cannot find ${definitionPath} in '${sourcePath}'.`;
+    parameters.forEach((parameter, i) => {
+      // skip over first parameter since it defaults to empty string ""
+      if (i > 0) {
+        if (!parameter in ptr) {
+          throw `Cannot find ${definitionPath} in '${sourcePath}'.`;
+        }
+        ptr = ptr[parameter];
+      }
     });
 
     return ptr;
@@ -371,7 +394,8 @@ function fetchRefSchema(refNodeId, refString, references) {
      * If cannot find the $ref,
      */
     const errorSchema = {
-      error,
+      type: 'error',
+      _error: error.message,
     };
     return errorSchema;
   }
@@ -381,7 +405,7 @@ function fetchRefSchema(refNodeId, refString, references) {
  * Find the full path of the given source path.
  * @param {string} sourcePath  path of source to find
  * @param {string} currentPath path to resolve when source has relative path
- * @returns {string}
+ * @returns {string} full path of the source
  */
 function resolveFullPath(sourcePath, currentPath) {
   /**
