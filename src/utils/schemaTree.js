@@ -117,12 +117,17 @@ export function sanitizeSchema(schema) {
  */
 export function createChildNode(parentNode, subschema, childIndex) {
   /**
-   * Child node should inherit parent's id in order to 
+   * Child node should inherit parent's id in order to
    */
   const cloneSubschema = clone(subschema);
+
   cloneSubschema._id = parentNode.schema._id;
 
-  const childNode = createSchemaTree(cloneSubschema, [...parentNode.path, childIndex]);
+  const childNode = createSchemaTree(cloneSubschema, [
+    ...parentNode.path,
+    childIndex,
+  ]);
+
   parentNode.children.push(childNode);
 }
 
@@ -307,6 +312,7 @@ export function expandRefNode(schemaTree, refDefaultNode, references) {
    * Create a clone tree and find the corresponding clone ref node.
    */
   const [cloneTree, refNode] = findRefNodeClone(schemaTree, refDefaultNode);
+
   /**
    * Update the 'isExpanded' state of the ref node so that
    * the ref row will now display an expanded version instead.
@@ -315,25 +321,14 @@ export function expandRefNode(schemaTree, refDefaultNode, references) {
 
   /**
    * If ref tree node has never referenced the $ref schema before,
-   * dynamically fetch the schema and store in expandedNode field
-   * in order to cache the referenced schema within the ref node.
+   * fetch the schema and store in expandedNode field in order to
+   * cache the referenced schema within the ref node.
    */
   if (!refNode.expandedNode) {
-    const expandedRefSchema = fetchRefSchema(
+    const referencedSchema = fetchRefSchema(
       refDefaultNode.schema._id,
       refDefaultNode.schema.$ref,
       references
-    );
-
-    console.log(expandedRefSchema);
-
-    /**
-     * Create a subschema tree based on the fetched ref schema
-     * and store the result within the expandedNode field.
-     */
-    refNode.expandedNode = createSchemaTree(
-      expandedRefSchema,
-      refDefaultNode.path
     );
 
     /**
@@ -341,10 +336,19 @@ export function expandRefNode(schemaTree, refDefaultNode, references) {
      * also include those same fields within the expanded node.
      */
     CUSTOM_KEYWORDS.forEach(keyword => {
-      if (keyword in refDefaultNode.schema) {
-        refNode.expandedNode.schema[keyword] = refDefaultNode.schema[keyword];
+      if (keyword in refDefaultNode.schema && !(keyword in referencedSchema)) {
+        referencedSchema[keyword] = refDefaultNode.schema[keyword];
       }
     });
+
+    /**
+     * Create a subschema tree based on the fetched ref schema
+     * and store the result within the expandedNode field.
+     */
+    refNode.expandedNode = createSchemaTree(
+      referencedSchema,
+      refDefaultNode.path
+    );
   }
 
   return cloneTree;
@@ -372,7 +376,7 @@ function fetchRefSchema(refNodeId, refString, references) {
       throw `Cannot find schema with $id ${sourcePath} in references.`;
     }
 
-    /** 
+    /**
      * Find the definition within the source.
      */
     const parameters = definitionPath.split('/');
@@ -380,16 +384,16 @@ function fetchRefSchema(refNodeId, refString, references) {
     parameters.forEach((parameter, i) => {
       // skip over first parameter since it defaults to empty string ""
       if (i > 0) {
-        if (!parameter in ptr) {
+        if (!(parameter in ptr)) {
           throw `Cannot find ${definitionPath} in '${sourcePath}'.`;
         }
+
         ptr = ptr[parameter];
       }
     });
 
     return ptr;
-  }
-  catch (error) {
+  } catch (error) {
     /**
      * If cannot find the $ref,
      */
@@ -397,6 +401,7 @@ function fetchRefSchema(refNodeId, refString, references) {
       type: 'error',
       _error: error.message,
     };
+
     return errorSchema;
   }
 }
@@ -426,16 +431,15 @@ function resolveFullPath(sourcePath, currentPath) {
   try {
     /**
      * If the source is a URI, return the path as-is.
-    */
+     */
     const uri = new URL(sourcePath);
 
     return uri.toString();
-  }
-  catch (error) {
+  } catch (error) {
     /**
      * If the source has a relative path (ex. "example.json"),
      * resolve the path against the current path.
-    */
+     */
     if (error instanceof TypeError) {
       const currentDir = dirname(currentPath);
 

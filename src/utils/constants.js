@@ -48,7 +48,13 @@ export const DESCRIPTIVE_KEYWORDS = ['title', 'description'];
  * An underscore is prefixed for these keywords in order to
  * distinguish them with the built-in keywords for schemas.
  */
-export const CUSTOM_KEYWORDS = ['_type', '_contains', '_required', '_name', '_id'];
+export const CUSTOM_KEYWORDS = [
+  '_type',
+  '_contains',
+  '_required',
+  '_name',
+  '_id',
+];
 /**
  * Keywords used in schemas that will be ignored when 
  * creating lines for the rows in the left and right panels.

@@ -75,7 +75,7 @@ const references = [
 export const defaultTypes = () => (
   <Fragment>
     <h3>Boolean</h3>
-    <SchemaViewer schema={defaultSchemas.boolean}/>
+    <SchemaViewer schema={defaultSchemas.boolean} />
     <h3>Null</h3>
     <SchemaViewer schema={defaultSchemas.null} />
     <h3>Integer</h3>
@@ -129,11 +129,14 @@ export const combinationTypes = () => (
 export const refTypes = () => (
   <Fragment>
     <h3>Simple Reference</h3>
-    <SchemaViewer schema={refSchemas.simpleReference} references={references}/>
+    <SchemaViewer schema={refSchemas.simpleReference} references={references} />
     <h3>URI Reference (fetch $ref based on URI)</h3>
-    <SchemaViewer schema={refSchemas.urlReference} references={references}/>
+    <SchemaViewer schema={refSchemas.urlReference} references={references} />
     <h3>Circular Reference</h3>
-    <SchemaViewer schema={refSchemas.circularReference} references={references}/>
+    <SchemaViewer
+      schema={refSchemas.circularReference}
+      references={references}
+    />
   </Fragment>
 );
 
@@ -151,8 +154,8 @@ export const demo = () => (
     <h2>Demo of Taskcluster Schemas</h2>
     <SchemaViewer schema={demoSchemas.hookStatus} />
     <SchemaViewer schema={demoSchemas.listClients} />
-    <SchemaViewer schema={demoSchemas.metaData} references={references}/>
-    <SchemaViewer schema={demoSchemas.workerList} references={references}/>
+    <SchemaViewer schema={demoSchemas.metaData} references={references} />
+    <SchemaViewer schema={demoSchemas.workerList} references={references} />
   </Fragment>
 );
 
