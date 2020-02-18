@@ -16,11 +16,11 @@ import { COMBINATION_TYPES, COMPLEX_TYPES, CUSTOM_KEYWORDS } from './constants';
  *
  * If node is a ref node, it may have a difference structure:
  * {
- *   defaultNode: ..  // the default node structure when a $ref is shrinked
- *                       (a node object as illustrated above)
- *   expandedNode: .. // the expanded node strucutre when a $ref is expanded
- *                       (a node object as illustrated above)
- *   isExpanded: ..   // whether the node is expanded or not
+ *   defaultNode: {..}  // the default node version when a $ref is shrunk
+ *                         (a node object as illustrated above)
+ *   expandedNode: {..} // the expanded node version when a $ref is expanded
+ *                         (a node object as illustrated above)
+ *   isExpanded: ..     // whether the node is expanded or not
  * }
  */
 export function createSchemaTree(schema, path = []) {
@@ -342,16 +342,16 @@ export function expandRefNode(schemaTree, refDefaultNode, references) {
  * @returns {object} $ref schema
  */
 function fetchRefSchema(refNodeId, refString, references) {
-  const [source, definitionPath] = refString.split('#');
-  
+  const [sourcePath, definitionPath] = refString.split('#');
+
   try {
     /**
      * Find the source for the reference.
      */
-    const refSchemaId = findSourcePath(source, refNodeId);
+    const refSchemaId = resolveFullPath(sourcePath, refNodeId);
     let ptr = references[refSchemaId];
 
-    if (!refSchemaId) throw `Cannot find schema with $id: '${source}' in references.`;
+    if (!refSchemaId) throw `Cannot find schema with $id: '${sourcePath}' in references.`;
 
     /** 
      * Find the definition within the source.
@@ -361,7 +361,7 @@ function fetchRefSchema(refNodeId, refString, references) {
     parameters.forEach(parameter => {
       ptr = ptr[parameter];
 
-      if (!ptr) throw `Cannot find ${definitionPath} in '${source}'.`;
+      if (!ptr) throw `Cannot find ${definitionPath} in '${sourcePath}'.`;
     });
 
     return ptr;
@@ -377,28 +377,45 @@ function fetchRefSchema(refNodeId, refString, references) {
   }
 }
 
-function findSourcePath(source, currentPath) {
+/**
+ * Find the full path of the given source path.
+ * @param {string} sourcePath  path of source to find
+ * @param {string} currentPath path to resolve when source has relative path
+ * @returns {string}
+ */
+function resolveFullPath(sourcePath, currentPath) {
   /**
-   * If the source is a self-reference,
+   * If the source is empty (is a self-reference),
    * return the current path.
    */
-  if (source.length === 0) {
+  if (sourcePath.length === 0) {
     return currentPath;
   }
 
   /**
-   * If the source has a relative path (ex. "worker-full.json"),
-   * return a path relative to the current path.
+   * If the source has an absolute path, return the path as-is.
    */
-  if (!isAbsolute(source)) {
-    const currentDirectory = dirname(currentPath);
-
-    return resolve(currentDirectory, source);
+  if (isAbsolute(sourcePath)) {
+    return sourcePath;
   }
 
-  /**
-   * Else, the source has an absolute path (either a url or a file path)
-   * return the path as-is.
-   */
-  return source;
+  try {
+    /**
+     * If the source is a URI, return the path as-is.
+    */
+    const uri = new URL(sourcePath);
+
+    return uri.toString();
+  }
+  catch (error) {
+    /**
+     * If the source has a relative path (ex. "example.json"),
+     * resolve the path against the current path.
+    */
+    if (error instanceof TypeError) {
+      const currentDir = dirname(currentPath);
+
+      return resolve(currentDir, sourcePath);
+    }
+  }
 }
