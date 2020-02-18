@@ -59,9 +59,11 @@ const demoSchemas = {};
 
 demoSchemas.hookStatus = require('../../../schemas/demo/hook-status.json');
 demoSchemas.listClients = require('../../../schemas/demo/list-clients-response.json');
-demoSchemas.metaData = require('../../../schemas/demo/metadata-metaschema.json');
-demoSchemas.workerFull = require('../../../schemas/demo/worker-full.json');
 demoSchemas.workerList = require('../../../schemas/demo/worker-list.json');
+demoSchemas.workerFull = require('../../../schemas/demo/worker-full.json');
+demoSchemas.workerPoolFull = require('../../../schemas/demo/worker-pool-full.json');
+demoSchemas.metaData = require('../../../schemas/demo/metadata-metaschema.json');
+demoSchemas.schemaDraft06 = require('../../../schemas/demo/schema-draft-06.json');
 
 const references = [
   ...Object.values(defaultSchemas),

@@ -1,0 +1,66 @@
+{
+  "$id": "/schemas/worker-manager/v1/worker-pool-full.json#",
+  "$schema": "/schemas/common/metaschema.json#",
+  "additionalProperties": false,
+  "description": "A complete worker pool definition.\n",
+  "properties": {
+    "config": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "created": {
+      "description": "Date and time when this worker pool was created\n",
+      "format": "date-time",
+      "title": "Created",
+      "type": "string"
+    },
+    "description": {
+      "description": "A description of this worker pool.\n",
+      "maxLength": 10240,
+      "title": "Description",
+      "type": "string"
+    },
+    "emailOnError": {
+      "description": "If true, the owner should be emailed on provisioning errors",
+      "title": "Wants Email",
+      "type": "boolean"
+    },
+    "lastModified": {
+      "description": "Date and time when this worker pool was last updated\n",
+      "format": "date-time",
+      "title": "Last Modified",
+      "type": "string"
+    },
+    "owner": {
+      "description": "An email address to notify when there are provisioning errors for this\nworker pool.\n",
+      "format": "email",
+      "title": "Owner Email",
+      "type": "string"
+    },
+    "providerId": {
+      "description": "The provider responsible for managing this worker pool.\n\nIf this value is `\"null-provider\"`, then the worker pool is pending deletion\nonce all existing workers have terminated.\n",
+      "maxLength": 38,
+      "minLength": 1,
+      "pattern": "^([a-zA-Z0-9-_]*)$",
+      "title": "Provider",
+      "type": "string"
+    },
+    "workerPoolId": {
+      "description": "The ID of this worker pool (of the form `providerId/workerType` for compatibility)\n",
+      "pattern": "^[a-zA-Z0-9-_]{1,38}/[a-z]([-a-z0-9]{0,36}[a-z0-9])?$",
+      "title": "Worker Pool ID",
+      "type": "string"
+    }
+  },
+  "required": [
+    "providerId",
+    "description",
+    "created",
+    "lastModified",
+    "config",
+    "owner",
+    "emailOnError"
+  ],
+  "title": "Worker Pool Full Definition",
+  "type": "object"
+}
