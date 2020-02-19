@@ -1,5 +1,6 @@
 import React from 'react';
 import { shape, string } from 'prop-types';
+import { isEmpty } from 'ramda';
 import Chip from '@material-ui/core/Chip';
 import InfoIcon from '@material-ui/icons/Info';
 import { Typography } from '@material-ui/core';
@@ -40,7 +41,7 @@ function NormalRightRow({ classes, treeNode }) {
      */
     if (
       typeof schema[keyword] === 'object' &&
-      !Array.isArray(schema[keyword])
+      !Array.isArray(schema[keyword]) && !isEmpty(schema[keyword])
     ) {
       /**
        * Generate tooltip descriptions to match the keyword.
