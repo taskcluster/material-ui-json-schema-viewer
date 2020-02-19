@@ -376,11 +376,12 @@ function fetchRefSchema(refNodeId, refString, references) {
     /**
      * Find the source for the reference.
      */
-    const refSchemaId = resolveFullPath(sourcePath, refNodePath);
-    let ptr = references[refSchemaId.concat('#')];
+    const refSchemaPath = resolveFullPath(sourcePath, refNodePath);
+    const refSchemaId = refSchemaPath.concat('#');
+    let ptr = references[refSchemaId];
 
     if (!ptr) {
-      throw `Cannot find schema with $id ${sourcePath} in references.`;
+      throw `Cannot find reference to \`${refSchemaId}\`.`;
     }
 
     /**
@@ -392,7 +393,7 @@ function fetchRefSchema(refNodeId, refString, references) {
       // skip over first parameter since it defaults to empty string ""
       if (i > 0) {
         if (!(parameter in ptr)) {
-          throw `Cannot find ${definitionPath} in '${sourcePath}'.`;
+          throw `Cannot find \`${definitionPath}\` in \`${refSchemaId}\`.`;
         }
 
         ptr = ptr[parameter];
@@ -406,7 +407,7 @@ function fetchRefSchema(refNodeId, refString, references) {
      */
     const errorSchema = {
       type: 'error',
-      _error: error.message,
+      description: error,
     };
 
     return errorSchema;
