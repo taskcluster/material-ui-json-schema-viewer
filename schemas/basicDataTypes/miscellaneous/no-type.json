@@ -1,0 +1,11 @@
+{
+    "$id": "/schemas/basicDataTypes/miscellaneous/no-type.json#",
+    "properties": {
+        "someProp": {
+            "type": "number"
+        },
+        "someOtherProp": {
+            "type": "string"
+        }
+    }
+}
