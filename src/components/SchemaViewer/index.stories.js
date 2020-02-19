@@ -138,9 +138,15 @@ export const customThemes = () => {
   });
   const colorfulTheme = createMuiTheme({
     palette: {
+      background: {
+        paper: '#000',
+      },
       text: {
         primary: '#ffc107',
+        secondary: '#ffc53d',
+        hint: '#ddd',
       },
+      divider: '#4f4f4f',
     },
   });
 
@@ -150,9 +156,13 @@ export const customThemes = () => {
       <ThemeProvider theme={darkTheme}>
         <SchemaViewer schema={objectSchemas.complexObjectExample} />
       </ThemeProvider>
-      <h3>Colorful Theme</h3>
+      <h3>Colorful Theme ex1</h3>
       <ThemeProvider theme={colorfulTheme}>
-        <SchemaViewer schema={objectSchemas.complexObjectExample} />
+        <SchemaViewer schema={demoSchemas.workerList} />
+      </ThemeProvider>
+      <h3>Colorful Theme ex2</h3>
+      <ThemeProvider theme={colorfulTheme}>
+        <SchemaViewer schema={combinationSchemas.anyOf} />
       </ThemeProvider>
     </Fragment>
   );

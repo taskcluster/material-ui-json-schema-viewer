@@ -104,12 +104,12 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
   const refIcon = {
     none: null,
     default: (
-      <IconButton aria-label="expand-ref">
+      <IconButton aria-label="expand-ref" color="inherit">
         <ExpandIcon fontSize="large" />
       </IconButton>
     ),
     expanded: (
-      <IconButton aria-label="shrink-ref">
+      <IconButton aria-label="shrink-ref" color="inherit">
         <ShrinkIcon fontSize="large" />
       </IconButton>
     ),

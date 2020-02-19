@@ -4,7 +4,7 @@ import { schema } from '../../utils/prop-types';
 
 const useStyles = makeStyles(theme => ({
   view: {
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.background.paper,
     color: theme.palette.text.primary,
     overflowX: 'auto',
   },

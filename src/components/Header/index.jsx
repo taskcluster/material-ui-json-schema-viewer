@@ -7,7 +7,7 @@ import { schema } from '../../utils/prop-types';
 
 const useStyles = makeStyles(theme => ({
   container: {
-    backgroundColor: theme.palette.getContrastText(theme.palette.text.primary),
+    backgroundColor: theme.palette.background.paper,
     color: theme.palette.text.primary,
     padding: `${theme.spacing(1.5)}px ${theme.spacing(1)}px`,
     marginBottom: theme.spacing(1),
