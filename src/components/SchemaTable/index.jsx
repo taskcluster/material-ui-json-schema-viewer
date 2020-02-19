@@ -3,7 +3,7 @@ import { func, object } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import NormalLeftRow from '../NormalLeftRow';
 import NormalRightRow from '../NormalRightRow';
-import { treeNode } from '../../utils/prop-types';
+import { treeNodeTypes } from '../../utils/prop-types';
 import { createSchemaTree } from '../../utils/schemaTree';
 import {
   COMBINATION_TYPES,
@@ -279,7 +279,7 @@ SchemaTable.propTypes = {
    * Schema tree structure defining the overall structure
    * for the schema table component.
    */
-  schemaTree: treeNode.isRequired,
+  schemaTree: treeNodeTypes.isRequired,
   /**
    * Function to update schemaTree structure.
    * Used specifically for expanding or shrinking a $ref.

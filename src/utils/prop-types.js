@@ -6,9 +6,13 @@ import {
   array,
   oneOf,
   oneOfType,
+  bool,
 } from 'prop-types';
 import { ALL_TYPES } from './constants';
 
+/**
+ * 
+ */
 export const schema = shape({
   /** Descriptive information about schema */
   title: string,
@@ -19,7 +23,9 @@ export const schema = shape({
    */
   _type: oneOfType([arrayOf(oneOf(ALL_TYPES)), oneOf(ALL_TYPES)]),
 });
-
+/**
+ * 
+ */
 export const treeNode = shape({
   /**
    * Schema given to render upon. May also be a sub-schema in case
@@ -35,6 +41,18 @@ export const treeNode = shape({
   children: array,
 });
 
+/**
+ * 
+ */
+export const refTreeNode = shape({
+  defaultNode: treeNode.isRequired,
+  expandedNode: treeNode, // expandedNode is set to null by default
+  isExpanded: bool.isRequired,
+});
+/**
+ * 
+ */
+export const treeNodeTypes = oneOfType([treeNode, refTreeNode]);
 /**
  * Empty Function to use for default props
  */

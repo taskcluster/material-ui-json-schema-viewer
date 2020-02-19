@@ -132,7 +132,7 @@ export const refTypes = () => (
   <Fragment>
     <h3>Simple Reference</h3>
     <SchemaViewer schema={refSchemas.simpleReference} references={references} />
-    <h3>URI Reference (fetch $ref based on URI)</h3>
+    <h3>URI Reference</h3>
     <SchemaViewer schema={refSchemas.urlReference} references={references} />
     <h3>Circular Reference</h3>
     <SchemaViewer
