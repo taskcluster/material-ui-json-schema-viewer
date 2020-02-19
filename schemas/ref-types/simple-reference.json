@@ -27,5 +27,7 @@
   "properties": {
     "user_name": { "$ref": "#/definitions/name" },
     "shipping_address": { "$ref": "#/definitions/address" }
-  }
+  },
+  "title": "Simple Reference Example",
+  "description": "Demonstrates a case where the $ref points to a definition defined within the schema.\n\n  * references the `name` and `address` definitions"
 }

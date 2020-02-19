@@ -49,6 +49,8 @@ const refSchemas = {};
 refSchemas.simpleReference = require('../../../schemas/ref-types/simple-reference.json');
 refSchemas.urlReference = require('../../../schemas/ref-types/url-reference.json');
 refSchemas.circularReference = require('../../../schemas/ref-types/circular-reference.json');
+refSchemas.errorReference = require('../../../schemas/ref-types/error-reference.json');
+refSchemas.errorDefinition = require('../../../schemas/ref-types/error-definition.json');
 
 const miscellaneousSchemas = {};
 
@@ -130,13 +132,26 @@ export const combinationTypes = () => (
 );
 export const refTypes = () => (
   <Fragment>
-    <h3>Simple Reference</h3>
     <SchemaViewer schema={refSchemas.simpleReference} references={references} />
-    <h3>URI Reference</h3>
+    <br />
+    <br />
     <SchemaViewer schema={refSchemas.urlReference} references={references} />
-    <h3>Circular Reference</h3>
+    <br />
+    <br />
     <SchemaViewer
       schema={refSchemas.circularReference}
+      references={references}
+    />
+    <br />
+    <br />
+    <SchemaViewer
+      schema={refSchemas.errorReference}
+      references={references}
+    />
+    <br />
+    <br />
+    <SchemaViewer
+      schema={refSchemas.errorDefinition}
       references={references}
     />
   </Fragment>

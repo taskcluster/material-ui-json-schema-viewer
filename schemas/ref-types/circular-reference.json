@@ -25,5 +25,7 @@
   "type": "object",
   "properties": {
     "person": { "$ref": "#/definitions/person" }
-  }
+  },
+  "title": "Circular Reference Example",
+  "description": "Demonstrates a case where the $ref points to itself (self-reference).\n\n  * `children` property references the entire `person` schema"
 }
