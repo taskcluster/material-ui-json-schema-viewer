@@ -52,6 +52,7 @@ refSchemas.circularReference = require('../../../schemas/refTypes/circularRefere
 const miscellaneousSchemas = {};
 
 miscellaneousSchemas.multipleTypes = require('../../../schemas/basicDataTypes/miscellaneous/multiple-type.json');
+miscellaneousSchemas.noType = require('../../../schemas/basicDataTypes/miscellaneous/no-type.json');
 
 const demoSchemas = {};
 
@@ -128,6 +129,8 @@ export const miscellaneous = () => (
   <Fragment>
     <h2>Multiple Types</h2>
     <SchemaViewer schema={miscellaneousSchemas.multipleTypes} />
+    <h2>No Type</h2>
+    <SchemaViewer schema={miscellaneousSchemas.noTypes} />
   </Fragment>
 );
 

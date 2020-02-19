@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandIcon from '@material-ui/icons/ArrowRightRounded';
 import ShrinkIcon from '@material-ui/icons/ArrowDropDownRounded';
+import WarningIcon from '@material-ui/icons/ReportProblemOutlined';
 import Tooltip from '../Tooltip';
 import { treeNode, NOOP } from '../../utils/prop-types';
 import { expandRefNode, shrinkRefNode } from '../../utils/schemaTree';
@@ -57,6 +58,17 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
       ...COMBINATION_TYPES,
       ...COMBINATION_TYPES.map(type => LITERAL_TYPES[type]),
     ];
+
+    /**
+     * If type is not specified, create a tooltip with an icon.
+     */
+    if (!type) {
+      return (
+        <Tooltip title={TOOLTIP_DESCRIPTIONS.noType}>
+          <WarningIcon color="inherit" />
+        </Tooltip>
+      );
+    }
 
     /**
      * Types with nested structures use the a bracket symbol,
