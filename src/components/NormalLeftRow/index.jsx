@@ -13,7 +13,10 @@ import {
   SKIP_KEYWORDS,
   DESCRIPTIVE_KEYWORDS,
   COMBINATION_TYPES,
+  LITERAL_TYPES,
   NESTED_TYPES,
+  BRACKET_SYMBOLS,
+  COMBINATION_SYMBOLS,
   TOOLTIP_DESCRIPTIONS,
 } from '../../utils/constants';
 
@@ -36,45 +39,68 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
   const indentSize = path.length;
   const styles = useStyles(indentSize);
   /**
-   * Define the name to illustrate the schema or sub-schema.
+   * Define the name and type of the schema or sub-schema.
    */
   const name = schema._name;
-  /**
-   * Define the type symbol for the schema or sub-schema's type
-   * Types requiring nested structures use the according bracket symbol,
-   * Complex types (allOf, anyOf, oneOf, no) use comment notation,
-   * the rest simply use highlighted text to illustrate the data type.
-   */
   const schemaType = schema._type;
-  const typeSymbol = (function createTypeSymbol(type) {
-    const bracketTypes = [...NESTED_TYPES, 'closeArray', 'closeObject'];
-    const combinationTypes = [...COMBINATION_TYPES, 'and', 'or', 'nor'];
 
+  /**
+   * Create a type symbol corresponding to the specified type.
+   */
+  function createTypeSymbol(type) {
+    const bracketTypes = [
+      ...NESTED_TYPES,
+      LITERAL_TYPES.array,
+      LITERAL_TYPES.object,
+    ];
+    const combinationTypes = [
+      ...COMBINATION_TYPES,
+      ...COMBINATION_TYPES.map(type => LITERAL_TYPES[type]),
+    ];
+
+    /**
+     * Types with nested structures use the a bracket symbol,
+     */
     if (bracketTypes.includes(type)) {
-      return {
-        array: '[',
-        object: '{',
-        closeArray: ']',
-        closeObject: '}',
-      }[type];
+      return BRACKET_SYMBOLS[type];
     }
 
+    /**
+     * Combination types (allOf, anyOf, oneOf, no) use comment-like notation.
+     */
     if (combinationTypes.includes(type)) {
-      const commentText = {
-        allOf: '// All of',
-        anyOf: '// Any of',
-        oneOf: '// One of',
-        not: '// Not',
-        and: '// and',
-        or: '// or',
-        nor: '// nor',
-      }[type];
-
-      return <span className={classes.comment}>{commentText}</span>;
+      return <span className={classes.comment}>{COMBINATION_SYMBOLS[type]}</span>;
     }
 
+    /**
+     * In case of an array of types (multiple types),
+     * create an array of type symbols with highlighted text format,
+     * with each symbol separated with a comma with each other.
+     */
+    if (Array.isArray(type)) {
+      const typeArray = [];
+
+      type.forEach((eachType, i) => {
+        if (i > 0) {
+          typeArray.push(<span key={`${eachType}-comma`}>,</span>);
+        }
+
+        typeArray.push(
+          <code key={eachType} className={classes.code}>
+            {eachType}
+          </code>
+        );
+      });
+
+      return typeArray;
+    }
+
+    /**
+     * Default types use highlighted code format.
+     */
     return <code className={classes.code}>{type}</code>;
-  })(schemaType);
+  }
+
   /**
    * Define the required/contains mark used for the schema.
    */
@@ -183,7 +209,7 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
         variant="subtitle2"
         className={classNames(classes.line, styles.indentation)}>
         {name && `${name}: `}
-        {typeSymbol}
+        {createTypeSymbol(schemaType)}
         {requiredMark}
         {refIcon}
       </Typography>

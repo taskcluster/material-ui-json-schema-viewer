@@ -5,7 +5,11 @@ import NormalLeftRow from '../NormalLeftRow';
 import NormalRightRow from '../NormalRightRow';
 import { treeNode } from '../../utils/prop-types';
 import { createSchemaTree } from '../../utils/schemaTree';
-import { COMBINATION_TYPES, NESTED_TYPES, LITERAL_TYPES } from '../../utils/constants';
+import {
+  COMBINATION_TYPES,
+  NESTED_TYPES,
+  LITERAL_TYPES,
+} from '../../utils/constants';
 
 const useStyles = makeStyles(theme => ({
   /** Schema table displays two-column layout */

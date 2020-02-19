@@ -1,0 +1,6 @@
+{ 
+  "$id": "/schemas/basicDataTypes/miscellaneous/multiple-type.json",
+  "type": ["number", "string"],
+  "minimum": 0,
+  "maxLength": 10
+}

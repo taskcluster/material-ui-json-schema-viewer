@@ -27,11 +27,16 @@ export const LITERAL_TYPES = {
   anyOf: 'or',
   oneOf: 'or',
   not: 'nor',
-}
+};
 /**
  * All the keywords used to define the possible types used for the schemaTable.
  */
-export const ALL_TYPES = [...BASIC_TYPES, ...NESTED_TYPES, ...COMPLEX_TYPES, ...Object.values(LITERAL_TYPES)];
+export const ALL_TYPES = [
+  ...BASIC_TYPES,
+  ...NESTED_TYPES,
+  ...COMPLEX_TYPES,
+  ...Object.values(LITERAL_TYPES),
+];
 /**
  * Keywords used in schema that are descriptors.
  * These are used to display in the rows of the right panel
@@ -71,18 +76,45 @@ export const SKIP_KEYWORDS = [
   'definitions',
 ];
 /**
+ * Symbols used to display bracket types.
+ */
+export const BRACKET_SYMBOLS = {
+  array: '[',
+  object: '{',
+  closeArray: ']',
+  closeObject: '}',
+};
+/**
+ * Symbols (text) used to display for combination types.
+ */
+export const COMBINATION_SYMBOLS = {
+  allOf: '// All of',
+  anyOf: '// Any of',
+  oneOf: '// One of',
+  not: '// Not',
+  and: '// and',
+  or: '// or',
+  nor: '// nor',
+};
+/**
  * Max number of chips allowed to be displayed within a single line.
+ * (specified instead of having the line wrap when chips crowd a line
+ *  in order to avoid complexities with matching the line heights between
+ *  the left and right panel)
  */
 export const MAX_NUMBER_OF_CHIPS = 3;
 /**
- *
+ * Descriptions used for keywords displayed with tooltip.
  */
 export const TOOLTIP_DESCRIPTIONS = {
-  additionalItems: 'Additional items must match a sub-schema. See the JSON-schema source for details.',
-  additionalProperties: 'Additional properties must match a sub-schema. See the JSON-schema source for details.',
+  additionalItems:
+    'Additional items must match a sub-schema. See the JSON-schema source for details.',
+  additionalProperties:
+    'Additional properties must match a sub-schema. See the JSON-schema source for details.',
   dependencies:
     'The schema of the object may change based on the presence of certain special properties. See the JSON-schema source for details.',
-  propertyNames: 'Names of properties must follow a specified convention. See the JSON-schema source for details.',
+  propertyNames:
+    'Names of properties must follow a specified convention. See the JSON-schema source for details.',
   patternProperties:
     'Property names or values should match the specified pattern. See the JSON-schema source for details.',
   required: 'Required property',
