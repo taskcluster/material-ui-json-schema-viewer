@@ -158,10 +158,12 @@ function NormalRightRow({ classes, treeNode }) {
    * Display the descriptive keyword in a single line.
    */
   function createDescriptionLine(keyword) {
-    const markdownContent = <Markdown inverse>{schema[keyword]}</Markdown>
-
+    const markdownTooltip = <Markdown inverse>{schema[keyword]}</Markdown>
+  
     return (
-      <OverflowLine key={keyword} classes={classes} content={markdownContent} />
+      <OverflowLine key={keyword} classes={classes} tooltip={markdownTooltip}>
+        <Markdown>{schema[keyword]}</Markdown>
+      </OverflowLine>
     );
   }
 

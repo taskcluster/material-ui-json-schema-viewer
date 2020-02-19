@@ -11,18 +11,16 @@ import Tooltip from '../Tooltip';
  * overflows or not in order to avoid complexities with dealing
  * with detectin changes when the window size changes)
  */
-function OverflowLine({ classes, content }) {
+function OverflowLine({ classes, tooltip, children }) {
   return (
-    <Tooltip title={content}>
-      <div>
+    <Tooltip title={tooltip}>
         <Typography
           component="div"
           variant="subtitle2"
           noWrap
           className={classes.line}>
-          {content}
+          {children}
         </Typography>
-      </div>
     </Tooltip>
   );
 }
@@ -38,7 +36,8 @@ OverflowLine.propTypes = {
   /**
    * Content to be displayed.
    */
-  content: oneOfType([node, string]).isRequired,
+  tooltip: oneOfType([node, string]).isRequired,
+  children: oneOfType([node, string]).isRequired,
 };
 
 export default React.memo(OverflowLine);
