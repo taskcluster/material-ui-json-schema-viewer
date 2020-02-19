@@ -3,6 +3,7 @@ import { bool, func } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Markdown from '../Markdown';
 import { schema } from '../../utils/prop-types';
 
 const useStyles = makeStyles(theme => ({
@@ -32,7 +33,7 @@ function Header({ schema, sourceMode, toggleMode }) {
   return (
     <div className={classes.container}>
       <Typography component="div" variant="h6" className={classes.title}>
-        {schema.title}
+        <Markdown>{schema.title}</Markdown>
         {` `}
         <Button
           className={classes.button}
@@ -46,7 +47,7 @@ function Header({ schema, sourceMode, toggleMode }) {
         component="div"
         variant="subtitle2"
         className={classes.description}>
-        {schema.description}
+        <Markdown>{schema.description}</Markdown>
       </Typography>
     </div>
   );

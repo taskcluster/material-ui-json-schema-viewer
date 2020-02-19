@@ -37,6 +37,7 @@ const customTheme = createMuiTheme({
         primary: '#ffc107', // change the text color
         secondary: '#ffc53d', // change chip's border color
         hint: '#ddd', // change comment color
+        disabled: '#808080', // change markdown code block color
       },
       divider: '#4f4f4f', // change table's border color
     },
