@@ -32,23 +32,26 @@ const useStyles = makeStyles(theme => ({
   /** Rows for the left and right panels */
   row: {
     borderBottom: `${theme.spacing(0.25)}px solid ${theme.palette.divider}`,
-    minHeight: theme.spacing(3.5),
+    /** 
+     * The minimum height of a row should always be the same
+     * with the height of a single line. 
+     */
+    minHeight: theme.spacing(4.5),
     width: '100%',
   },
   lastRow: {
     borderBottom: 'none',
   },
   /**
-   * Lines within the rows.
-   * (a single row may constitute of more than one line depending
-   *  on how many keywords the given schema or sub-schema defines)
+   * Lines within the rows. (a single row may constitute of more 
+   * than one line depending on the number of keywords of the schema)
    */
   line: {
     color: theme.palette.text.primary,
     display: 'flex',
     alignItems: 'center',
     whiteSpace: 'nowrap',
-    height: theme.spacing(3.5),
+    height: theme.spacing(4.5),
   },
   descriptionLine: {
     alignItems: 'flex-start',
