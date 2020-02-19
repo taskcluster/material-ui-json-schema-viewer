@@ -1,6 +1,6 @@
 import { clone } from 'ramda';
 import { isAbsolute, dirname, resolve } from 'path';
-import { COMBINATION_TYPES, COMPLEX_TYPES, CUSTOM_KEYWORDS } from './constants';
+import { COMBINATION_TYPES, REF_TYPE, CUSTOM_KEYWORDS } from './constants';
 
 /**
  * Generate a tree that illustrates the recursive structure of a schema.
@@ -77,12 +77,19 @@ export function sanitizeSchema(schema) {
 
   /**
    * Make sure schema has a '_type' property for identification.
-   * If the type is not specified purposely, leave property undefined.
    */
   if ('type' in cloneSchema) {
     cloneSchema._type = cloneSchema.type;
   } else {
-    COMPLEX_TYPES.forEach(type => {
+    /**
+     * If type is specified via a keyword for combination or $ref,
+     * define the _type property according to that keyword.
+     * (if the type is not specified purposely for other reasons, 
+     *  leave as undefined instead)
+     */
+    const complexTypes = [...COMBINATION_TYPES, REF_TYPE];
+
+    complexTypes.forEach(type => {
       if (type in cloneSchema) {
         cloneSchema._type = type;
       }
