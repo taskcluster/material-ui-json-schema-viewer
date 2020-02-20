@@ -6,20 +6,20 @@ import parser from 'markdown-it';
 import highlighter from 'markdown-it-highlightjs';
 
 const useStyles = makeStyles(theme => ({
-    markdown: {
-        '& code': {
-            color: theme.palette.text.primary,
-            backgroundColor: theme.palette.text.disabled,
-            padding: theme.spacing(0.5),
-        },
+  markdown: {
+    '& code': {
+      color: theme.palette.text.primary,
+      backgroundColor: theme.palette.text.disabled,
+      padding: theme.spacing(0.5),
     },
-    inverse: {
-        '& code': {
-            color: theme.palette.common.black,
-            backgroundColor: theme.palette.common.white,
-            padding: theme.spacing(0.25),
-        },
+  },
+  inverse: {
+    '& code': {
+      color: theme.palette.common.black,
+      backgroundColor: theme.palette.common.white,
+      padding: theme.spacing(0.25),
     },
+  },
 }));
 
 function Markdown({ children, inverse }) {
@@ -28,15 +28,20 @@ function Markdown({ children, inverse }) {
    */
   const classes = useStyles();
   /**
-   * 
+   *
    */
   const markdown = parser({ linkify: true });
+
   markdown.use(highlighter);
 
   return (
-    <span className={classNames({[`${classes.markdown}`]: !inverse}, {[`${classes.inverse}`]: inverse})}
+    <span
+      className={classNames(
+        { [`${classes.markdown}`]: !inverse },
+        { [`${classes.inverse}`]: inverse }
+      )}
       dangerouslySetInnerHTML={{
-        __html: markdown.renderInline(children)
+        __html: markdown.renderInline(children),
       }}
     />
   );
@@ -45,11 +50,11 @@ function Markdown({ children, inverse }) {
 Markdown.propTypes = {
   children: string,
   inverse: bool,
-}
+};
 
 Markdown.defaultProps = {
   children: '',
   inverse: false,
-}
+};
 
 export default React.memo(Markdown);

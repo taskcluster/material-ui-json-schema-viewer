@@ -34,7 +34,7 @@ function Header({ schema, sourceMode, toggleMode }) {
     <div className={classes.container}>
       <Typography component="div" variant="h6" className={classes.title}>
         <Markdown>{schema.title}</Markdown>
-        {` `}
+
         <Button
           className={classes.button}
           color="inherit"

@@ -32,9 +32,9 @@ const useStyles = makeStyles(theme => ({
   /** Rows for the left and right panels */
   row: {
     borderBottom: `${theme.spacing(0.25)}px solid ${theme.palette.divider}`,
-    /** 
+    /**
      * The minimum height of a row should always be the same
-     * with the height of a single line. 
+     * with the height of a single line.
      */
     minHeight: theme.spacing(4.5),
     width: '100%',
@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
     borderBottom: 'none',
   },
   /**
-   * Lines within the rows. (a single row may constitute of more 
+   * Lines within the rows. (a single row may constitute of more
    * than one line depending on the number of keywords of the schema)
    */
   line: {

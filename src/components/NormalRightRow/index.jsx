@@ -3,7 +3,6 @@ import { shape, string } from 'prop-types';
 import { isEmpty } from 'ramda';
 import Chip from '@material-ui/core/Chip';
 import InfoIcon from '@material-ui/icons/Info';
-import { Typography } from '@material-ui/core';
 import Markdown from '../Markdown';
 import Tooltip from '../Tooltip';
 import OverflowLine from '../OverflowLine';
@@ -153,8 +152,8 @@ function NormalRightRow({ classes, treeNode }) {
    * Display the descriptive keyword in a single line.
    */
   function createDescriptionLine(keyword) {
-    const markdownTooltip = <Markdown inverse>{schema[keyword]}</Markdown>
-  
+    const markdownTooltip = <Markdown inverse>{schema[keyword]}</Markdown>;
+
     return (
       <OverflowLine key={keyword} classes={classes} tooltip={markdownTooltip}>
         <Markdown>{schema[keyword]}</Markdown>
