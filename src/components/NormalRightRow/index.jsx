@@ -1,9 +1,9 @@
 import React from 'react';
 import { shape, string } from 'prop-types';
 import { isEmpty } from 'ramda';
-import Chip from '@material-ui/core/Chip';
 import InfoIcon from 'mdi-react/InformationOutlineIcon';
 import Markdown from '../Markdown';
+import Chip from '../Chip';
 import Tooltip from '../Tooltip';
 import OverflowLine from '../OverflowLine';
 import { basicTreeNode } from '../../utils/prop-types';
@@ -53,11 +53,9 @@ function NormalRightRow({ classes, treeNode }) {
       return (
         <Tooltip key={keyword} title={tooltipTitle}>
           <Chip
-            className={classes.chip}
+            classes={classes}
             label={keyword}
             icon={infoIcon}
-            size="small"
-            variant="outlined"
           />
         </Tooltip>
       );
@@ -87,11 +85,9 @@ function NormalRightRow({ classes, treeNode }) {
 
     return (
       <Chip
-        className={classes.chip}
         key={keyword}
+        classes={classes}
         label={`${keyword}: ${keyValue}`}
-        size="small"
-        variant="outlined"
       />
     );
   }
