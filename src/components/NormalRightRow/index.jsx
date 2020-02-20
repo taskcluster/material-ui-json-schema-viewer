@@ -6,7 +6,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import { Typography } from '@material-ui/core';
 import Tooltip from '../Tooltip';
 import OverflowLine from '../OverflowLine';
-import { treeNode } from '../../utils/prop-types';
+import { basicTreeNode } from '../../utils/prop-types';
 import {
   SKIP_KEYWORDS,
   DESCRIPTIVE_KEYWORDS,
@@ -236,7 +236,7 @@ NormalRightRow.propTypes = {
   /**
    * Tree node object data structure.
    */
-  treeNode: treeNode.isRequired,
+  treeNode: basicTreeNode.isRequired,
 };
 
 export default React.memo(NormalRightRow);

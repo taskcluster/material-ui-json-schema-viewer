@@ -8,7 +8,7 @@ import ExpandIcon from '@material-ui/icons/ArrowRightRounded';
 import ShrinkIcon from '@material-ui/icons/ArrowDropDownRounded';
 import WarningIcon from '@material-ui/icons/ReportProblemOutlined';
 import Tooltip from '../Tooltip';
-import { treeNode, NOOP } from '../../utils/prop-types';
+import { basicTreeNode, NOOP } from '../../utils/prop-types';
 import { expandRefNode, shrinkRefNode } from '../../utils/schemaTree';
 import {
   SKIP_KEYWORDS,
@@ -254,7 +254,7 @@ NormalLeftRow.propTypes = {
   /**
    * Tree node object data structure.
    */
-  treeNode: treeNode.isRequired,
+  treeNode: basicTreeNode.isRequired,
   /**
    * String for identification of row. Can be one of the following:
    * 'none': the row is not a ref row, so no button is necessary.
