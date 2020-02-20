@@ -12,13 +12,12 @@ export const NESTED_TYPES = ['object', 'array'];
  */
 export const COMBINATION_TYPES = ['allOf', 'anyOf', 'oneOf', 'not'];
 /**
- * Keywords used in schema to define complex types.
- * This includes keywords used to define combination types.
+ * Keyword used in schema to define $ref types.
  */
-export const COMPLEX_TYPES = [...COMBINATION_TYPES, '$ref'];
+export const REF_TYPE = '$ref';
 /**
- * Custom type keywords used to define schemas used for literal rows.
- * (used in `createLiteralRow()` method in schemaTable)
+ * Custom type keywords used to define schemas used for literal schemas,
+ * which are used to create literal rows, such as a closing or separating row.
  */
 export const LITERAL_TYPES = {
   array: 'closeArray',
@@ -29,13 +28,20 @@ export const LITERAL_TYPES = {
   not: 'nor',
 };
 /**
+ * Custom type keyword used to define schema with errors.
+ * (used specifically for when a $ref schema cannot be found)
+ */
+export const ERROR_TYPE = 'error';
+/**
  * All the keywords used to define the possible types used for the schemaTable.
  */
 export const ALL_TYPES = [
   ...BASIC_TYPES,
   ...NESTED_TYPES,
-  ...COMPLEX_TYPES,
+  ...COMBINATION_TYPES,
   ...Object.values(LITERAL_TYPES),
+  REF_TYPE,
+  ERROR_TYPE,
 ];
 /**
  * Keywords used in schema that are descriptors.
@@ -48,7 +54,13 @@ export const DESCRIPTIVE_KEYWORDS = ['title', 'description'];
  * An underscore is prefixed for these keywords in order to
  * distinguish them with the built-in keywords for schemas.
  */
-export const CUSTOM_KEYWORDS = ['_type', '_contains', '_required', '_name'];
+export const CUSTOM_KEYWORDS = [
+  '_type',
+  '_contains',
+  '_required',
+  '_name',
+  '_id',
+];
 /**
  * Keywords used in schemas that will be ignored when 
  * creating lines for the rows in the left and right panels.

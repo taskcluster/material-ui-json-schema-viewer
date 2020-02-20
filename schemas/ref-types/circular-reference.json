@@ -1,0 +1,31 @@
+{
+  "$id": "/schemas/ref-types/circular-reference#",
+  "definitions": {
+    "person": {
+      "type": "object",
+      "description": "Person to get information about",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Full name of the person",
+          "pattern": "^[ -~]*$"
+        },
+        "children": {
+          "type": "array",
+          "uniqueItems": true,
+          "description": "Information about children of the person",
+          "items": { "$ref": "#/definitions/person" },
+          "default": []
+        }
+      },
+      "additionalProperties": true,
+      "required": ["name", "children"]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "person": { "$ref": "#/definitions/person" }
+  },
+  "title": "Circular Reference Example",
+  "description": "Demonstrates a case where the $ref points to itself (self-reference).\n\n  * `children` property references the entire `person` schema"
+}

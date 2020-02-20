@@ -1,0 +1,7 @@
+{
+  "$id": "/schemas/combination-types/allOf#",
+  "allOf": [
+    { "type": "string" },
+    { "maxLength": 5 }
+  ]
+}

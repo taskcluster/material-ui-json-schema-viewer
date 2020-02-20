@@ -1,11 +1,12 @@
 import React from 'react';
 import { shape, string } from 'prop-types';
+import { isEmpty } from 'ramda';
 import Chip from '@material-ui/core/Chip';
 import InfoIcon from '@material-ui/icons/Info';
 import { Typography } from '@material-ui/core';
 import Tooltip from '../Tooltip';
 import OverflowLine from '../OverflowLine';
-import { treeNode } from '../../utils/prop-types';
+import { basicTreeNode } from '../../utils/prop-types';
 import {
   SKIP_KEYWORDS,
   DESCRIPTIVE_KEYWORDS,
@@ -40,7 +41,8 @@ function NormalRightRow({ classes, treeNode }) {
      */
     if (
       typeof schema[keyword] === 'object' &&
-      !Array.isArray(schema[keyword])
+      !Array.isArray(schema[keyword]) &&
+      !isEmpty(schema[keyword])
     ) {
       /**
        * Generate tooltip descriptions to match the keyword.
@@ -235,7 +237,7 @@ NormalRightRow.propTypes = {
   /**
    * Tree node object data structure.
    */
-  treeNode: treeNode.isRequired,
+  treeNode: basicTreeNode.isRequired,
 };
 
 export default React.memo(NormalRightRow);

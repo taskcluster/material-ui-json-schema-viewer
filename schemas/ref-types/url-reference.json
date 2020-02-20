@@ -1,0 +1,6 @@
+{
+  "$id": "/schemas/ref-types/url-reference#",
+  "$ref": "http://json-schema.org/draft-06/schema#",
+  "title": "URI Reference Example",
+  "description": "Demonstrates a case for when the $ref points to a schema with the `$id` in a URI format.\n\n  * references `http://json-schema.org/draft-06/schema#`"
+}

@@ -1,0 +1,15 @@
+{
+  "$id": "/schemas/basic-data-types/object/schema-dependencies.json#",
+  "type": "object",
+  "properties": {
+    "credit_card": { "type": "number" }
+  },
+  "dependencies": {
+    "credit_card": {
+      "properties": {
+        "billing_address": { "type": "string" }
+      },
+      "required": ["billing_address"]
+    }
+  }
+}

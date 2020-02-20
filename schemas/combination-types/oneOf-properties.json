@@ -1,0 +1,8 @@
+{
+  "$id": "/schemas/combination-types/oneOf-properties#",
+  "type": "number",
+  "oneOf": [
+    { "multipleOf": 5 },
+    { "multipleOf": 3 }
+   ]
+ }

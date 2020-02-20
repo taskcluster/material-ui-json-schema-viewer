@@ -1,0 +1,33 @@
+{
+  "$id": "/schemas/ref-types/simple-reference#",
+  "definitions": {
+    "name": {
+      "type": "string"
+    },
+    "address": {
+      "type": "object",
+      "description": "Full address of user",
+      "properties": {
+        "city": {
+          "type": "string",
+          "description": "Name of city of the address",
+          "pattern": "^[ -~]*$"
+        },
+        "state": {
+          "type": "string",
+          "description": "Name of state of the address",
+          "maxLength": 20
+        }
+      },
+      "additionalProperties": false,
+      "required": ["city", "state"]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "user_name": { "$ref": "#/definitions/name" },
+    "shipping_address": { "$ref": "#/definitions/address" }
+  },
+  "title": "Simple Reference Example",
+  "description": "Demonstrates a case where the $ref points to a definition defined within the schema.\n\n  * references the `name` and `address` definitions"
+}

@@ -1,0 +1,7 @@
+{
+  "$id": "/schemas/basic-data-types/array/contains.json#",
+  "type": "array",
+  "contains": {
+    "type": "number"
+  }
+}

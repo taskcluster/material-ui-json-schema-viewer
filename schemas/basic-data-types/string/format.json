@@ -1,0 +1,5 @@
+{
+  "$id": "/schemas/basic-data-types/string/format.json#",
+  "type": "string",
+  "format": "date-time"
+}

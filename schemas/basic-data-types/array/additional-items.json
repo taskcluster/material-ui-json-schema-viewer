@@ -1,0 +1,15 @@
+{
+  "$id": "/schemas/basic-data-types/array/additional-items.json#",
+  "type": "array",
+  "items": [
+    {
+      "type": "number"
+    },
+    {
+      "type": "string"
+    }
+  ],
+  "additionalItems": {
+    "type": "boolean"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "$id": "/schemas/combination-types/anyOf#",
+  "anyOf": [
+    { "type": "string", "maxLength": 5 },
+    { "type": "number", "minimum": 0 }
+  ]
+}

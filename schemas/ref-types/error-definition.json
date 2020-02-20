@@ -1,0 +1,6 @@
+{
+  "$id": "/schemas/ref-types/error-definition#",
+  "$ref": "#/definitions/doesNotExist",
+  "title": "Error Case #2: reference to undefined definition in schema",
+  "description": "Demonstrates a case for when the $ref points to a definition which cannot be found in the schema.\n\n  * while the schema `/schemas/ref-types/error-definition#` is found, the definition `doesNotExist` cannot be found within the schema"
+}

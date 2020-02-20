@@ -1,0 +1,6 @@
+{
+  "$id": "/schemas/ref-types/error-reference#",
+  "$ref": "/no/existing/schema#",
+  "title": "Error Case #1: reference to non-existing schema",
+  "description": "Demonstrates a case for when the $ref points to a JSON schema which is not included in `references` prop passed to the schema viewer component.\n\n  * references `/no/existing/schema#`"
+}
