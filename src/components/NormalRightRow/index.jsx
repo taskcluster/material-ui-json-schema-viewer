@@ -41,7 +41,8 @@ function NormalRightRow({ classes, treeNode }) {
      */
     if (
       typeof schema[keyword] === 'object' &&
-      !Array.isArray(schema[keyword]) && !isEmpty(schema[keyword])
+      !Array.isArray(schema[keyword]) &&
+      !isEmpty(schema[keyword])
     ) {
       /**
        * Generate tooltip descriptions to match the keyword.

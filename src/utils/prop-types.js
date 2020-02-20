@@ -39,7 +39,7 @@ export const basicTreeNode = shape({
    * Necessary to calculate the indent size for the row.
    */
   path: arrayOf(number).isRequired,
-  /** 
+  /**
    * Children nodes of the current node.
    * (include array items, object properties, combination options)
    */

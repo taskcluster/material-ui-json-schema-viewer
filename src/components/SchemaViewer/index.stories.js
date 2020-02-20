@@ -144,16 +144,10 @@ export const refTypes = () => (
     />
     <br />
     <br />
-    <SchemaViewer
-      schema={refSchemas.errorReference}
-      references={references}
-    />
+    <SchemaViewer schema={refSchemas.errorReference} references={references} />
     <br />
     <br />
-    <SchemaViewer
-      schema={refSchemas.errorDefinition}
-      references={references}
-    />
+    <SchemaViewer schema={refSchemas.errorDefinition} references={references} />
   </Fragment>
 );
 

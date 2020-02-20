@@ -22,6 +22,9 @@ import { COMBINATION_TYPES, REF_TYPE, CUSTOM_KEYWORDS } from './constants';
  *                         (a node object as illustrated above)
  *   isExpanded: ..     // whether the node is expanded or not
  * }
+ *
+ * @param {object} schema
+ * @param {array} path path to current node/subtree
  */
 export function createSchemaTree(schema, path = []) {
   /**
@@ -65,12 +68,11 @@ export function createSchemaTree(schema, path = []) {
 }
 
 /**
- * Create a clone of the given schema to ensure that the schema objects
- * defined in tree nodes are not references but rather, separate objects
- * non-affected nor affecting the actual JSON schema files.
- * This enables direct changes in the properties and structures of the nodes
- * in the schema tree to be made so that we can dynamically alter the
- * structure for the schema table component.
+ * Transform schema into a form to be stored within a schema tree.
+ * * make sure it is a copy separated from the original schema
+ * * add custom properties (keywords) for the schema table to utilize
+ *   (distinguish added properties with schema's original properties)
+ * @param {object} schema
  */
 export function sanitizeSchema(schema) {
   const cloneSchema = clone(schema);
@@ -84,7 +86,7 @@ export function sanitizeSchema(schema) {
     /**
      * If type is specified via a keyword for combination or $ref,
      * define the _type property according to that keyword.
-     * (if the type is not specified purposely for other reasons, 
+     * (if the type is not specified purposely for other reasons,
      *  leave as undefined instead)
      */
     const complexTypes = [...COMBINATION_TYPES, REF_TYPE];
@@ -98,7 +100,6 @@ export function sanitizeSchema(schema) {
 
   /**
    * If name property exists, create a '_name' property with same value.
-   * (for consistency with object type subschema's '_name' properties)
    */
   if ('name' in cloneSchema) {
     cloneSchema._name = cloneSchema.name;
@@ -106,7 +107,6 @@ export function sanitizeSchema(schema) {
 
   /**
    * If $id property exists, create a '_id' property with same value.
-   * (for consistency with object type subschema's '_id' properties)
    */
   if ('$id' in cloneSchema) {
     cloneSchema._id = cloneSchema.$id;
@@ -142,6 +142,7 @@ export function createChildNode(parentNode, subschema, childIndex) {
  * Create a tree for combination data type schemas (allOf, anyOf, oneOf, not).
  * Possible options should be created as children nodes by calling back on
  * the createSchemaTree method and appended to the given root node.
+ * @param {object} rootNode root tree node
  */
 export function createCombinationTree(rootNode) {
   const { schema } = rootNode;
@@ -169,6 +170,7 @@ export function createCombinationTree(rootNode) {
  * Create a tree for array data type schemas.
  * Array items should be created as children nodes by calling
  * back on the createSchemaTree method and appended to given root node.
+ * @param {object} rootNode root tree node
  */
 export function createArrayTree(rootNode) {
   const { schema } = rootNode;
@@ -199,6 +201,7 @@ export function createArrayTree(rootNode) {
    * If array items are defined via 'contains' keyword,
    * (add a 'contains' key set to true to the subschema
    *  in order to use the contains symbol in NormalLeftRow)
+   * @param {object} rootNode root tree node
    */
   if ('contains' in schema) {
     const subschema = schema.contains;
@@ -213,6 +216,7 @@ export function createArrayTree(rootNode) {
  * Create a tree for object data type schemas.
  * Object properties should be created as children nodes by calling
  * back on the createSchemaTree method and appended to given root node.
+ * @param {object} rootNode root tree node
  */
 export function createObjectTree(rootNode) {
   const { schema } = rootNode;
@@ -253,8 +257,8 @@ export function createObjectTree(rootNode) {
  * object can be updated without mutating the original schemaTree.
  * Also, create a reference pointer to the corresponding ref node
  * so that it can be used for updating the ref node's value.
- * @param {*} refDefaultNode: reference to refNode's defaultNode field
- * @returns {Array} of schema Tree clone and ref node pointer.
+ * @param {object} refDefaultNode reference to refNode's defaultNode field
+ * @returns {array} [schema Tree clone, ref node pointer]
  */
 export function findRefNodeClone(schemaTree, refDefaultNode) {
   /**
@@ -288,8 +292,8 @@ export function findRefNodeClone(schemaTree, refDefaultNode) {
  * Update the refNode's state to collapsed form.
  * (creates a new schemaTree object to maintain immutability
  *  of the original schemaTree state)
- * @param {*} refDefaultNode a refNode's defaultNode field
- * @returns {Object} a schemaTree clone with refNode updated
+ * @param {object} refDefaultNode a refNode's defaultNode field
+ * @returns {object} a schemaTree clone with refNode updated
  */
 export function shrinkRefNode(schemaTree, refDefaultNode) {
   /**
@@ -310,7 +314,7 @@ export function shrinkRefNode(schemaTree, refDefaultNode) {
  * Update the refNode's state to expanded form.
  * (creates a new schemaTree object to maintain immutability
  *  of the original schemaTree state)
- * @param {*} refDefaultNode a refNode's defaultNode field
+ * @param {object} refDefaultNode a refNode's defaultNode field
  * @param {object} references an object of schema references
  * @returns {object} a schemaTree clone with refNode updated
  */
@@ -381,7 +385,7 @@ function fetchRefSchema(refNodeId, refString, references) {
     let ptr = references[refSchemaId];
 
     if (!ptr) {
-      throw `Cannot find reference to \`${refSchemaId}\`.`;
+      throw new Error(`Cannot find reference to \`${refSchemaId}\`.`);
     }
 
     /**
@@ -393,7 +397,9 @@ function fetchRefSchema(refNodeId, refString, references) {
       // skip over first parameter since it defaults to empty string ""
       if (i > 0) {
         if (!(parameter in ptr)) {
-          throw `Cannot find \`${definitionPath}\` in \`${refSchemaId}\`.`;
+          throw new Error(
+            `Cannot find \`${definitionPath}\` in \`${refSchemaId}\`.`
+          );
         }
 
         ptr = ptr[parameter];
@@ -407,7 +413,7 @@ function fetchRefSchema(refNodeId, refString, references) {
      */
     const errorSchema = {
       type: 'error',
-      description: error,
+      description: error.message,
     };
 
     return errorSchema;
@@ -422,36 +428,38 @@ function fetchRefSchema(refNodeId, refString, references) {
  */
 function resolveFullPath(sourcePath, currentPath) {
   /**
-   * If the source is empty (is a self-reference),
+   * If the source is empty (self-reference to itself),
    * return the current path.
    */
   if (sourcePath.length === 0) {
     return currentPath;
   }
 
-  /**
-   * If the source has an absolute path, return the path as-is.
-   */
-  if (isAbsolute(sourcePath)) {
-    return sourcePath;
-  }
+  if (!isAbsolute(sourcePath)) {
+    try {
+      /**
+       * If the source is a URI (ex. "http://json-schema.org/draft-06/schema"),
+       * return the path as-is.
+       */
+      const uri = new URL(sourcePath);
 
-  try {
-    /**
-     * If the source is a URI, return the path as-is.
-     */
-    const uri = new URL(sourcePath);
+      return uri.toString();
+    } catch (error) {
+      /**
+       * If the source has a relative path (ex. "example.json"),
+       * resolve the path against the current path.
+       */
+      if (error instanceof TypeError) {
+        const currentDir = dirname(currentPath);
 
-    return uri.toString();
-  } catch (error) {
-    /**
-     * If the source has a relative path (ex. "example.json"),
-     * resolve the path against the current path.
-     */
-    if (error instanceof TypeError) {
-      const currentDir = dirname(currentPath);
-
-      return resolve(currentDir, sourcePath);
+        return resolve(currentDir, sourcePath);
+      }
     }
   }
+
+  /**
+   * Else, the source has an absolute path (ex. "schemas/example.json")
+   * return the path as-is.
+   */
+  return sourcePath;
 }

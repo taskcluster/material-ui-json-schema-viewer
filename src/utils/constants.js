@@ -31,7 +31,7 @@ export const LITERAL_TYPES = {
  * Custom type keyword used to define schema with errors.
  * (used specifically for when a $ref schema cannot be found)
  */
-export const ERROR_TYPE = "error";
+export const ERROR_TYPE = 'error';
 /**
  * All the keywords used to define the possible types used for the schemaTable.
  */
@@ -40,7 +40,7 @@ export const ALL_TYPES = [
   ...NESTED_TYPES,
   ...COMBINATION_TYPES,
   ...Object.values(LITERAL_TYPES),
-  REF_TYPE, 
+  REF_TYPE,
   ERROR_TYPE,
 ];
 /**
