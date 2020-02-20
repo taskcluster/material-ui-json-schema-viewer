@@ -141,6 +141,7 @@ function NormalRightRow({ classes, treeNode }) {
   function createTitleLine(keyword) {
     return (
       <Typography
+        key={keyword}
         className={classes.line}
         component="div"
         variant="subtitle2"

@@ -81,7 +81,9 @@ function NormalLeftRow({ classes, treeNode, refType, setSchemaTree }) {
      * Combination types (allOf, anyOf, oneOf, no) use comment-like notation.
      */
     if (combinationTypes.includes(type)) {
-      return <span className={classes.comment}>{COMBINATION_SYMBOLS[type]}</span>;
+      return (
+        <span className={classes.comment}>{COMBINATION_SYMBOLS[type]}</span>
+      );
     }
 
     /**
