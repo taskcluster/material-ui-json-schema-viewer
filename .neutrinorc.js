@@ -10,7 +10,7 @@ module.exports = {
          * Ignores reference to functions used before the function declaration. 
          * Since function declarations are hoisted, this is considered safe.
          */
-        'no-use-before-define': ['error', { 
+        'no-use-before-define': ['error', {
           functions: false,
         }],
         /**
@@ -23,8 +23,16 @@ module.exports = {
          * Allow both '.jsx' and '.js' file extensions to contain JSX
          * ('.js' files are necessary for stories)
          */
-        'react/jsx-filename-extension': ['error', { 
-          'extensions': ['.js', '.jsx'] 
+        'react/jsx-filename-extension': ['error', {
+          'extensions': ['.js', '.jsx']
+        }],
+        /**
+         * Allow exception to props spreading warning for divs.
+         * (so that the Tooltip component can apply to the div
+         *  wrapping children nodes, including custom components)
+         */
+        'react/jsx-props-no-spreading': ['error', {
+          'exceptions': ['div'],
         }],
         /**
          * 

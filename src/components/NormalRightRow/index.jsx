@@ -52,11 +52,7 @@ function NormalRightRow({ classes, treeNode }) {
 
       return (
         <Tooltip key={keyword} title={tooltipTitle}>
-          <Chip
-            classes={classes}
-            label={keyword}
-            icon={infoIcon}
-          />
+          <Chip classes={classes} label={keyword} icon={infoIcon} />
         </Tooltip>
       );
     }
@@ -84,11 +80,7 @@ function NormalRightRow({ classes, treeNode }) {
     })(keyword);
 
     return (
-      <Chip
-        key={keyword}
-        classes={classes}
-        label={`${keyword}: ${keyValue}`}
-      />
+      <Chip key={keyword} classes={classes} label={`${keyword}: ${keyValue}`} />
     );
   }
 

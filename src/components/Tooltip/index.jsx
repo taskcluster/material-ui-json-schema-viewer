@@ -11,7 +11,11 @@ function Tooltip({ title, children }) {
    * so that MuiTooltip has control over the wrapped components' props.
    */
   const ChildrenWrapped = React.forwardRef(function MyComponent(props, ref) {
-    return <div {...props} ref={ref}>{children}</div>
+    return (
+      <div {...props} ref={ref}>
+        {children}
+      </div>
+    );
   });
 
   return (
