@@ -15,12 +15,20 @@ import { ALL_TYPES } from './constants';
  * (custom fields are prefixed with underscore)
  */
 export const schema = shape({
+  /**
+   * A unique identifier for the schema.
+   * (used as a key to find $ref schema or also as a base URI
+   *  against which $ref URIs are resolved)
+   */
+  $id: string.isRequired,
   /** Descriptive information about schema */
   title: string,
   description: string,
   _name: string,
   /**
-   * Type of schema (either a single type or an array of types)
+   * Type of schema (either a single type or an array of types).
+   * '_type' is used as custom property distinguished from built-in
+   * 'type' property.
    */
   _type: oneOfType([arrayOf(oneOf(ALL_TYPES)), oneOf(ALL_TYPES)]),
 });
