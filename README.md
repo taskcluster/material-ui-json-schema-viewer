@@ -6,6 +6,23 @@ a viewer component that displays JSON schemas (built using [material-ui](https:/
 - `react` 16.8+
 - `react-dom` 16.8+
 
+## Usage
+Install package
+```
+npm i material-ui-json-schema-viewer
+```
+Import package and use component
+```js
+import SchemaViewer from 'material-ui-json-schema-viewer';
+
+<SchemaViewer schema={jsonSchema} references={schemaReferences} />
+```
+
+| Prop | Type | Required | Description |
+|:---|:---|:---|:---|
+| `schema` | Object | ✓ | A JSON schema object. |
+| `references` | Array| ✓ | An array of JSON schema objects (including the schema to render), which the schema may refer to. (each schema within the references must include an `$id` property to use for key-value mapping the references) |
+
 ## Theme Customization
 By default, the schema viewer inherits [material-ui's default theme](https://material-ui.com/customization/default-theme/). You can change the theme by customizing the theme passed to
 material-ui's [`ThemeProvider`](https://material-ui.com/styles/api/#themeprovider) component.
@@ -29,3 +46,16 @@ const customTheme = createMuiTheme({
     <SchemaViewer />
 </ThemeProvider>
 ```
+
+## Contributing
+This repository uses Neutrino and `neutrino-preset-react-components` for developing, previewing, and building React components. To get started:
+- Fork and clone this repo.
+- Install the dependencies with `yarn`.
+- Start the development server with `yarn start` (use `CTRL-C` to exit).
+
+Feel free to open an issue, submit a pull request, or contribute however you would like. Understand that this documentation is still a work in progress, so file an issue or submit a PR to ask questions or make improvements. Thanks!
+
+## Publishing
+- Bump the version of the package with `npm version {version-name}` (patch, minor, major, etc.).
+- Gererate the compiled component for publishing to npm with `yarn build`.
+- Publish the package with `npm publish --tag {tag-name}`
