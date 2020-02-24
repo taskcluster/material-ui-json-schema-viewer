@@ -3,5 +3,7 @@
   "allOf": [
     { "type": "string" },
     { "maxLength": 5 }
-  ]
+  ],
+  "title": "AllOf Type Schema",
+  "description": "Demonstrates a combination of schemas using the `allOf` keyword.\n\n * `allOf`: the given data must be valid against all of the given subschemas."
 }

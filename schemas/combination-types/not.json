@@ -1,4 +1,6 @@
 { 
   "$id": "/schemas/combination-types/not#",
-  "not": { "type": "string" }
+  "not": { "type": "string" },
+  "title": "Not Type Schema",
+  "description": "Demonstrates a combination of schemas using the `not` keyword.\n\n * `not`: the given data must not validate against the given subschema."
 }
