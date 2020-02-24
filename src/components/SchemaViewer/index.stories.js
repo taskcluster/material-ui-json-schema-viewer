@@ -54,8 +54,8 @@ refSchemas.errorDefinition = require('../../../schemas/ref-types/error-definitio
 
 const miscellaneousSchemas = {};
 
-miscellaneousSchemas.multipleTypes = require('../../../schemas/basicDataTypes/miscellaneous/multiple-type.json');
-miscellaneousSchemas.noType = require('../../../schemas/basicDataTypes/miscellaneous/no-type.json');
+miscellaneousSchemas.multipleTypes = require('../../../schemas/basic-data-types/miscellaneous/multiple-type.json');
+miscellaneousSchemas.noType = require('../../../schemas/basic-data-types/miscellaneous/no-type.json');
 
 const demoSchemas = {};
 
