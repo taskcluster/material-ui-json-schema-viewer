@@ -7,5 +7,7 @@
     "address": { "type": "string" },
     "telephone": { "type": "string" }
   },
-  "required": ["name", "email"]
+  "required": ["name", "email"],
+  "title": "Object Type Schema (+ Required)",
+  "description": "Demonstrates an array type schema with certain properties required.\n\n * By default, the properties defined by the `properties` keyword are not required. However, one can provide a list of required properties using the `required` keyword."
 }

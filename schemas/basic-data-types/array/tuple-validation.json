@@ -14,5 +14,7 @@
       "enum": ["NW", "NE", "SW", "SE"]
     }
   ],
-  "additionalItems": false
+  "additionalItems": false,
+  "title": "Array Type Schema (Tuple Validation)",
+  "description": "Demonstrates an array type schema defined by tuple validation.\n\n * Tuple validation: a sequence of fixed length where each item may have a different schema. In this usage, the index (or location) of each item is meaningful as to how the value is interpreted."
 }

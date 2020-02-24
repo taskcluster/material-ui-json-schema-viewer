@@ -3,5 +3,7 @@
   "type": "array",
   "items": {
     "type": "number"
-  }
+  },
+  "title": "Array Type Schema (List Validation)",
+  "description": "Demonstrates an array type schema defined by list validation.\n\n * List validation: a sequence of arbitrary length where each item matches the same schema."
 }

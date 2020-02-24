@@ -2,5 +2,7 @@
   "$id": "/schemas/basic-data-types/numeric/number-range.json#",
   "type": "number",
   "minimum": 0,
-  "exclusiveMaximum": 100
+  "exclusiveMaximum": 100,
+  "title": "Number Type Schema (+ Range)",
+  "description": "Demonstrates a number type schema specified in a range.\n\n * Ranges of numbers are specified using a combination of the `minimum` and `maximum` keywords, (or `exclusiveMinimum` and `exclusiveMaximum` for expressing exclusive range)."
 }

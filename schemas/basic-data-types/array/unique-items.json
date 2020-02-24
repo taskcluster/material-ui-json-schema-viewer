@@ -4,5 +4,7 @@
   "items": {
     "type": "number"
   },
-  "uniqueItems": true
+  "uniqueItems": true,
+  "title": "Array Type Schema (+ Unique Items)",
+  "description": "Demonstrates a schema where each of the items in an array is unique."
 }

@@ -9,5 +9,7 @@
       "enum": ["Street", "Avenue", "Boulevard"]
     }
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "title": "Object Type Schema",
+  "description": "Demonstrates an object type schema with properties.\n\n * The properties (key-value pairs) on an object are defined using the `properties` keyword. The value of `properties` is an object, where each key is the name of a property and each value is a JSON schema used to validate that property."
 }

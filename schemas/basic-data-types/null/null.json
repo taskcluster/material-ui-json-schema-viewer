@@ -1,4 +1,6 @@
 {   
   "$id": "/schemas/basic-data-types/null/null.json#",
-  "type": "null"
+  "type": "null",
+  "title": "Null Type Schema",
+  "description": "Demonstrates a null type schema."
 }

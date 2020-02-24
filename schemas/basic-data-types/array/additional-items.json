@@ -11,5 +11,7 @@
   ],
   "additionalItems": {
     "type": "boolean"
-  }
+  },
+  "title": "Array Type Schema (+ Additional Items)",
+  "description": "Demonstrates an array type schema with the `additionalItems` keyword. * The `additionalItems` keyword controls whether it’s valid to have additional items in the array beyond what is defined in `items`."
 }

@@ -7,5 +7,7 @@
   },
   "dependencies": {
     "credit_card": ["billing_address"]
-  }
+  },
+  "title": "Object Type Schema (+ Property Dependency)",
+  "description": "Demonstrates an object type schema where certain other properties must be present if a given property is present.\n\n * The `dependencies` keyword allows the schema of the object to change based on the presence of certain special properties."
 }

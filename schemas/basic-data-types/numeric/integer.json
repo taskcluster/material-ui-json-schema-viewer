@@ -1,4 +1,6 @@
 {   
   "$id": "/schemas/basic-data-types/numeric/integer.json#",
-  "type": "integer"
+  "type": "integer",
+  "title": "Integer Type Schema",
+  "description": "Demonstrates an integer type schema."
 }

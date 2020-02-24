@@ -1,4 +1,6 @@
 { 
   "$id": "/schemas/basic-data-types/array/empty-array.json#",
-  "type": "array"
+  "type": "array",
+  "title": "Empty Array Schema",
+  "description": "Demonstrates an array type schema with no items."
 }
