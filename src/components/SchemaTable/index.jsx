@@ -44,6 +44,7 @@ const useStyles = makeStyles(theme => ({
    *  on how many keywords the given schema or sub-schema defines)
    */
   line: {
+    color: theme.palette.text.primary,
     display: 'flex',
     alignItems: 'center',
     whiteSpace: 'nowrap',
