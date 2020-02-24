@@ -13,7 +13,11 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(1),
   },
   title: {
+    color: theme.palette.text.primary,
     margin: 0,
+  },
+  description: {
+    color: theme.palette.text.primary,
   },
   button: {
     margin: 0,
@@ -39,7 +43,7 @@ function Header({ schema, sourceMode, toggleMode }) {
           {sourceMode ? 'hide' : 'show'} source
         </Button>
       </Typography>
-      <Typography component="div" variant="subtitle2">
+      <Typography component="div" variant="subtitle2" className={classes.description}>
         {schema.description}
       </Typography>
     </div>
