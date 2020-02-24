@@ -14,8 +14,8 @@ import Tooltip from '../Tooltip';
 function OverflowLine({ classes, content }) {
   return (
     <Tooltip title={content}>
-      <div className={classes.line}>
-        <Typography component="div" variant="subtitle2" noWrap>
+      <div>
+        <Typography component="div" variant="subtitle2" noWrap className={classes.line}>
           {content}
         </Typography>
       </div>
