@@ -78,55 +78,63 @@ const references = [
 
 export const defaultTypes = () => (
   <Fragment>
-    <h3>Boolean</h3>
     <SchemaViewer schema={defaultSchemas.boolean} />
-    <h3>Null</h3>
+    <br />
+    <br />
     <SchemaViewer schema={defaultSchemas.null} />
-    <h3>Integer</h3>
+    <br />
+    <br />
     <SchemaViewer schema={defaultSchemas.integer} />
-    <h3>Number</h3>
+    <br />
+    <br />
     <SchemaViewer schema={defaultSchemas.numberRange} />
-    <h3>String</h3>
+    <br />
+    <br />
     <SchemaViewer schema={defaultSchemas.stringPattern} />
   </Fragment>
 );
 export const arrayTypes = () => (
   <Fragment>
-    <h3>List Validation</h3>
     <SchemaViewer schema={arraySchemas.listValidation} />
-    <h3>Tuple Validation</h3>
+    <br />
+    <br />
     <SchemaViewer schema={arraySchemas.tupleValidation} />
-    <h3>Contains Validation</h3>
+    <br />
+    <br />
     <SchemaViewer schema={arraySchemas.containsValidations} />
-    <h3>Additional Items Specification</h3>
+    <br />
+    <br />
     <SchemaViewer schema={arraySchemas.additionalItems} />
-    <h3>Empty Array</h3>
+    <br />
+    <br />
     <SchemaViewer schema={arraySchemas.emptyArray} />
   </Fragment>
 );
 export const objectTypes = () => (
   <Fragment>
-    <h3>Simple Object</h3>
     <SchemaViewer schema={objectSchemas.simpleObject} />
-    <h3>Property Specification</h3>
+    <br />
+    <br />
     <SchemaViewer schema={objectSchemas.propertySpecification} />
-    <h3>Required Properties Specification</h3>
+    <br />
+    <br />
     <SchemaViewer schema={objectSchemas.requiredProperties} />
-    <h3>Complex Nested Object</h3>
-    <SchemaViewer schema={objectSchemas.complexObjectExample} />
-    <h3>Empty Object</h3>
+    <br />
+    <br />
     <SchemaViewer schema={objectSchemas.emptyObject} />
   </Fragment>
 );
 export const combinationTypes = () => (
   <Fragment>
-    <h3>allOf</h3>
     <SchemaViewer schema={combinationSchemas.allOf} />
-    <h3>anyOf</h3>
+    <br />
+    <br />
     <SchemaViewer schema={combinationSchemas.anyOf} />
-    <h3>oneOf</h3>
+    <br />
+    <br />
     <SchemaViewer schema={combinationSchemas.oneOf} />
-    <h3>not</h3>
+    <br />
+    <br />
     <SchemaViewer schema={combinationSchemas.not} />
   </Fragment>
 );
@@ -153,20 +161,28 @@ export const refTypes = () => (
 
 export const miscellaneous = () => (
   <Fragment>
-    <h2>Multiple Types</h2>
     <SchemaViewer schema={miscellaneousSchemas.multipleTypes} />
-    <h2>No Type</h2>
-    <SchemaViewer schema={miscellaneousSchemas.noTypes} />
+    <br />
+    <br />
+    <SchemaViewer schema={miscellaneousSchemas.noType} />
   </Fragment>
 );
 
 export const demo = () => (
   <Fragment>
-    <h2>Demo of Taskcluster Schemas</h2>
+    <h2>Taskcluster Schema Examples</h2>
     <SchemaViewer schema={demoSchemas.hookStatus} />
+    <br />
+    <br />
     <SchemaViewer schema={demoSchemas.listClients} />
+    <br />
+    <br />
     <SchemaViewer schema={demoSchemas.metaData} references={references} />
+    <br />
+    <br />
     <SchemaViewer schema={demoSchemas.workerList} references={references} />
+    <br />
+    <br />
   </Fragment>
 );
 
