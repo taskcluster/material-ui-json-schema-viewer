@@ -57,5 +57,5 @@ Feel free to open an issue, submit a pull request, or contribute however you wou
 
 ## Publishing
 - Bump the version of the package with `npm version {version-name}` (patch, minor, major, etc.).
-- Gererate the compiled component for publishing to npm with `yarn build`.
+- Generate the compiled component for publishing to npm with `yarn build`.
 - Publish the package with `npm publish --tag {tag-name}`
