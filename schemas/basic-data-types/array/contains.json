@@ -3,5 +3,8 @@
   "type": "array",
   "contains": {
     "type": "number"
-  }
+  },
+  "title": "Array Type Schema (Contains Keyword)",
+  "description": "Demonstrates an array type schema using the `contains` keyword.\n\n * While the items schema must be valid for every item in the array, the contains schema only needs to validate against one or more items in the array."
+
 }

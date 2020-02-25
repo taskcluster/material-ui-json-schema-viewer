@@ -12,5 +12,7 @@
     "type": "boolean"
   },
   "minProperties": 1,
-  "maxProperties": 10
+  "maxProperties": 10,
+  "title": "Object Type Schema (+ Property Specifications)",
+  "description": "Demonstrates an object type schema with properties specified using the `propertyNames`, `patterProperties`, `additionalProperties`, `minProperties`, and `maxProperties`."
 }

@@ -2,5 +2,7 @@
   "$id": "/schemas/basic-data-types/string/pattern.json#",
   "type": "string",
   "pattern": "^(\\([0-9]{3}\\))?[0-9]{3}-[0-9]{4}$",
-  "minLength": 13
+  "minLength": 13,
+  "title": "String Type Schema (+ Pattern and Length)",
+  "description": "Demonstrates a string type schema with a pattern and length specification."
 }

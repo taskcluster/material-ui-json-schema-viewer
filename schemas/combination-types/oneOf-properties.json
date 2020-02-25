@@ -4,5 +4,7 @@
   "oneOf": [
     { "multipleOf": 5 },
     { "multipleOf": 3 }
-   ]
+   ],
+   "title": "OneOf Type Schema (Subschemas Factored Out)",
+  "description": "Demonstrates a combination of schemas using the `oneOf` keyword.\n\n * `oneOf`: the given data must be valid against exactly one of the given subschemas. It’s possible to factor out the common parts of the subschemas."
  }

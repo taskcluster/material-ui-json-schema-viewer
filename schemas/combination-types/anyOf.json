@@ -3,5 +3,7 @@
   "anyOf": [
     { "type": "string", "maxLength": 5 },
     { "type": "number", "minimum": 0 }
-  ]
+  ],
+  "title": "AnyOf Type Schema",
+  "description": "Demonstrates a combination of schemas using the `anyOf` keyword.\n\n * `anyOf`: the given data must be valid against any (one or more) of the given subschemas."
 }

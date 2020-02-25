@@ -1,5 +1,7 @@
 { 
   "$id": "/schemas/basic-data-types/numeric/number-multiples.json#",
   "type": "number", 
-  "multipleOf": 10
+  "multipleOf": 10,
+  "title": "Number Type Schema (+ multiples)",
+  "description": "Demonstrates a number type schema restricted to a multiple of a given number.\n\n * `multipleOf` keyword may be set to any positive number."
 }

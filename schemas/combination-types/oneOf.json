@@ -3,5 +3,7 @@
   "oneOf": [
     { "type": "number", "multipleOf": 5 },
     { "type": "number", "multipleOf": 3 }
-  ]
+  ],
+  "title": "OneOf Type Schema",
+  "description": "Demonstrates a combination of schemas using the `oneOf` keyword.\n\n * `oneOf`: the given data must be valid against exactly one of the given subschemas."
 }

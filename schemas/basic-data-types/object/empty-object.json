@@ -1,4 +1,6 @@
 { 
   "$id": "/schemas/basic-data-types/object/empty-object.json#",
-  "type": "object"
+  "type": "object",
+  "title": "Empty Object Schema",
+  "description": "Demonstrates an object type schema with no properties."
 }

@@ -1,0 +1,8 @@
+{ 
+  "$id": "/schemas/basic-data-types/miscellaneous/multiple-type.json#",
+  "type": ["number", "string"],
+  "minimum": 0,
+  "maxLength": 10,
+  "title": "Multiple Type Schema",
+  "description": "Demonstrates a schema with more than one type.\n\n * The `type` keyword may either be a string or an array. \n * If it’s a string, it is the name of one of the basic types.\n * If it is an array, it must be an array of strings, where each string is the name of one of the basic types, and each element is unique. In this case, a schema will be valid if it matches any of the given types."
+}

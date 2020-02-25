@@ -1,5 +1,7 @@
 {
   "$id": "/schemas/basic-data-types/string/format.json#",
   "type": "string",
-  "format": "date-time"
+  "format": "date-time",
+  "title": "String Type Schema (+ Format)",
+  "description": "Demonstrates a string type schema with a format specification."
 }

@@ -1,0 +1,13 @@
+{
+  "$id": "/schemas/basic-data-types/miscellaneous/no-type.json#",
+  "properties": {
+    "someProp": {
+      "type": "number"
+    },
+    "someOtherProp": {
+      "type": "string"
+    }
+  },
+  "title": "No Type Schema",
+  "description": "Demonstrates a schema with no specific type.\n\n * While the `type` keyword requires the schema to be a specific type, the absence of it means that any type is allowed."
+}
