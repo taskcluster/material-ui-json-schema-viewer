@@ -65,11 +65,8 @@ SchemaViewer.defaultProps = {
   schema: {
     type: 'null',
   },
-  references: [
-    {
-      type: 'null',
-    },
-  ],
+  /** References is set to empty array as default */
+  references: [],
 };
 
 export default React.memo(SchemaViewer);

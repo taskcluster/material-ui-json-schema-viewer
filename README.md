@@ -21,7 +21,7 @@ import SchemaViewer from 'material-ui-json-schema-viewer';
 | Prop | Type | Required | Description |
 |:---|:---|:---|:---|
 | `schema` | Object | ✓ | A JSON schema object. |
-| `references` | Array| ✓ | An array of JSON schema objects (including the schema to render), which the schema may refer to. (each schema within the references must include an `$id` property to use for key-value mapping the references) |
+| `references` | Array| - | An array of JSON schema objects (including the schema to render), which the schema may refer to. (each schema within the references must include an `$id` property to use for key-value mapping the references) |
 
 ## Theme Customization
 By default, the schema viewer inherits [material-ui's default theme](https://material-ui.com/customization/default-theme/). You can change the theme by customizing the theme passed to
@@ -48,10 +48,10 @@ const customTheme = createMuiTheme({
 ```
 
 ## Contributing
-This repository uses Neutrino and `neutrino-preset-react-components` for developing, previewing, and building React components. To get started:
+This repository uses Neutrino for developing, and building React components. To get started:
 - Fork and clone this repo.
 - Install the dependencies with `yarn`.
-- Start the development server with `yarn start` (use `CTRL-C` to exit).
+- Start the storybook server with `yarn start` (use `CTRL-C` to exit).
 
 Feel free to open an issue, submit a pull request, or contribute however you would like. Understand that this documentation is still a work in progress, so file an issue or submit a PR to ask questions or make improvements. Thanks!
 
