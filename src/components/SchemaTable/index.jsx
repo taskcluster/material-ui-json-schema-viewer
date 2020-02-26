@@ -85,6 +85,12 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.primary,
     borderColor: theme.palette.text.secondary,
   },
+  /**
+   * Button used to expand or shrink a $ref.
+   */
+  refButton: {
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 function SchemaTable({ schemaTree, setSchemaTree, references }) {

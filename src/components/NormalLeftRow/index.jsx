@@ -4,8 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import ExpandIcon from '@material-ui/icons/ArrowRightRounded';
-import ShrinkIcon from '@material-ui/icons/ArrowDropDownRounded';
+import ExpandIcon from 'mdi-react/MenuRightIcon';
+import ShrinkIcon from 'mdi-react/MenuDownIcon';
 import WarningIcon from '@material-ui/icons/ReportProblemOutlined';
 import Tooltip from '../Tooltip';
 import { basicTreeNode, NOOP } from '../../utils/prop-types';
@@ -27,7 +27,7 @@ import {
  */
 const useStyles = makeStyles(theme => ({
   indentation: {
-    marginLeft: indent => `${theme.spacing(indent * 2)}px`,
+    marginLeft: indent => theme.spacing(indent * 2),
   },
 }));
 
@@ -147,16 +147,16 @@ function NormalLeftRow({
    * If treeNode is $ref type, create $ref icon button for expanding
    * or shrinking the row depending on the the refType prop.
    */
-  const refIcon = {
+  const refButton = {
     none: null,
     default: (
-      <IconButton aria-label="expand-ref" color="inherit" size="small">
-        <ExpandIcon fontSize="large" />
+      <IconButton className={classes.refButton} aria-label="expand-ref" color="inherit" size="small">
+        <ExpandIcon size={24} />
       </IconButton>
     ),
     expanded: (
-      <IconButton aria-label="shrink-ref" color="inherit" size="small">
-        <ShrinkIcon fontSize="large" />
+      <IconButton className={classes.refButton} aria-label="shrink-ref" color="inherit" size="small">
+        <ShrinkIcon size={24} />
       </IconButton>
     ),
   }[refType];
@@ -232,7 +232,7 @@ function NormalLeftRow({
         {name && `${name}: `}
         {createTypeSymbol(schemaType)}
         {requiredMark}
-        {refIcon}
+        {refButton}
       </Typography>
       {blankLinePaddings}
     </div>
