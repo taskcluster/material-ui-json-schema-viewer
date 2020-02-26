@@ -198,10 +198,6 @@ export const customThemes = () => {
       <ThemeProvider theme={TASKCLUSTER_THEME.lightTheme}>
         <SchemaViewer schema={demoSchemas.workerList} />
       </ThemeProvider>
-      <h3>Taskcluster Dark Theme</h3>
-      <ThemeProvider theme={TASKCLUSTER_THEME.darkTheme}>
-        <SchemaViewer schema={combinationSchemas.anyOf} />
-      </ThemeProvider>
     </Fragment>
   );
 };
