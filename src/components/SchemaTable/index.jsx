@@ -52,6 +52,7 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     whiteSpace: 'nowrap',
     height: theme.spacing(4.5),
+    paddingLeft: theme.spacing(1),
   },
   descriptionLine: {
     alignItems: 'flex-start',
