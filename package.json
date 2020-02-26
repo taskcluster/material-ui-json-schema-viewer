@@ -9,12 +9,11 @@
     "src"
   ],
   "scripts": {
-    "start": "webpack-dev-server --mode development --open",
+    "start": "start-storybook",
     "build": "webpack --mode production",
     "lint": "eslint --cache --format codeframe --ext mjs,jsx,js src",
     "test": "jest",
     "test:watch": "jest --watch",
-    "storybook": "start-storybook",
     "deploy": "build-storybook -c .storybook -o storybook && gh-pages --remote upstream -d storybook"
   },
   "devDependencies": {

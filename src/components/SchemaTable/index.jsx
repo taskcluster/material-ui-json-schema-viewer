@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   /** The left panel of the Schema Table */
   leftPanel: {
     backgroundColor: theme.palette.background.paper,
-    borderRight: `${theme.spacing(1)}px solid ${theme.palette.divider}`,
+    borderRight: `${theme.spacing(0.25)}px solid ${theme.palette.divider}`,
     overflowX: 'auto',
   },
   /** The right panel of the Schema Table */
