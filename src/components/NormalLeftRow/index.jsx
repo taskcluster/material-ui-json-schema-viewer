@@ -150,12 +150,20 @@ function NormalLeftRow({
   const refButton = {
     none: null,
     default: (
-      <IconButton className={classes.refButton} aria-label="expand-ref" color="inherit" size="small">
+      <IconButton
+        className={classes.refButton}
+        aria-label="expand-ref"
+        color="inherit"
+        size="small">
         <ExpandIcon size={24} />
       </IconButton>
     ),
     expanded: (
-      <IconButton className={classes.refButton} aria-label="shrink-ref" color="inherit" size="small">
+      <IconButton
+        className={classes.refButton}
+        aria-label="shrink-ref"
+        color="inherit"
+        size="small">
         <ShrinkIcon size={24} />
       </IconButton>
     ),

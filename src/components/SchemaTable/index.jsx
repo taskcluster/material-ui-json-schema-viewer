@@ -156,6 +156,7 @@ function SchemaTable({ schemaTree, setSchemaTree, references }) {
     const { schema, path } = treeNode;
     const schemaType = schema._type;
     const literalSchema = {
+      $id: schema._id,
       type: LITERAL_TYPES[schemaType],
     };
     const literalPath = COMBINATION_TYPES.includes(schemaType)
