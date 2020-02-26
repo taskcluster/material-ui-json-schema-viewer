@@ -10,7 +10,6 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper,
     color: theme.palette.text.primary,
     padding: `${theme.spacing(1.5)}px ${theme.spacing(1)}px`,
-    marginBottom: theme.spacing(1),
   },
   title: {
     color: theme.palette.text.primary,
