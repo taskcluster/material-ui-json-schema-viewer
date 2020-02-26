@@ -15,7 +15,11 @@ function OverflowLine({ classes, content }) {
   return (
     <Tooltip title={content}>
       <div>
-        <Typography component="div" variant="subtitle2" noWrap className={classes.line}>
+        <Typography
+          component="div"
+          variant="subtitle2"
+          noWrap
+          className={classes.line}>
           {content}
         </Typography>
       </div>

@@ -43,7 +43,10 @@ function Header({ schema, sourceMode, toggleMode }) {
           {sourceMode ? 'hide' : 'show'} source
         </Button>
       </Typography>
-      <Typography component="div" variant="subtitle2" className={classes.description}>
+      <Typography
+        component="div"
+        variant="subtitle2"
+        className={classes.description}>
         {schema.description}
       </Typography>
     </div>

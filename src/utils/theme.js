@@ -7,22 +7,22 @@ import blue from '@material-ui/core/colors/blue';
 import green from '@material-ui/core/colors/green';
 
 export const THEME = {
-    WHITE: '#fff',
-    BLACK: '#000',
-    TEN_PERCENT_WHITE: fade('#fff', 0.1),
-    TEN_PERCENT_BLACK: fade('#000', 0.1),
-    DARK_THEME_BACKGROUND: '#12202c',
-    PRIMARY_DARK: '#1b2a39',
-    PRIMARY_LIGHT: '#fafafa',
-    PRIMARY_TEXT_DARK: 'rgba(255, 255, 255, 0.9)',
-    PRIMARY_TEXT_LIGHT: 'rgba(0, 0, 0, 0.9)',
-    SECONDARY_TEXT_DARK: 'rgba(255, 255, 255, 0.7)',
-    SECONDARY_TEXT_LIGHT: 'rgba(0, 0, 0, 0.7)',
-    SECONDARY: '#4177a5',
-    DRAWER_WIDTH: 240,
-    DIVIDER: 'rgba(0, 0, 0, 0.12)',
-    TONAL_OFFSET: 0.2,
-  };
+  WHITE: '#fff',
+  BLACK: '#000',
+  TEN_PERCENT_WHITE: fade('#fff', 0.1),
+  TEN_PERCENT_BLACK: fade('#000', 0.1),
+  DARK_THEME_BACKGROUND: '#12202c',
+  PRIMARY_DARK: '#1b2a39',
+  PRIMARY_LIGHT: '#fafafa',
+  PRIMARY_TEXT_DARK: 'rgba(255, 255, 255, 0.9)',
+  PRIMARY_TEXT_LIGHT: 'rgba(0, 0, 0, 0.9)',
+  SECONDARY_TEXT_DARK: 'rgba(255, 255, 255, 0.7)',
+  SECONDARY_TEXT_LIGHT: 'rgba(0, 0, 0, 0.7)',
+  SECONDARY: '#4177a5',
+  DRAWER_WIDTH: 240,
+  DIVIDER: 'rgba(0, 0, 0, 0.12)',
+  TONAL_OFFSET: 0.2,
+};
 export const Roboto300 = { fontFamily: 'Roboto300, sans-serif' };
 export const Roboto400 = { fontFamily: 'Roboto400, sans-serif' };
 export const Roboto500 = { fontFamily: 'Roboto500, sans-serif' };
@@ -468,33 +468,4 @@ export const theme = createMuiTheme(createTheme(true));
 export const TASKCLUSTER_THEME = {
   lightTheme: createMuiTheme(createTheme(false)),
   darkTheme: theme,
-  styleguide: {
-    StyleGuide: {
-      root: {
-        overflowY: 'scroll',
-        minHeight: '100vh',
-        backgroundColor: THEME.DARK_THEME_BACKGROUND,
-        color: theme.palette.text.primary,
-      },
-    },
-    fontFamily: {
-      base: theme.typography.fontFamily,
-    },
-    fontSize: {
-      base: theme.typography.fontSize - 1,
-      text: theme.typography.fontSize,
-      small: theme.typography.fontSize - 2,
-    },
-    color: {
-      base: theme.palette.text.primary,
-      link: theme.palette.text.primary,
-      linkHover: theme.palette.text.primary,
-      border: THEME.DIVIDER,
-      baseBackground: THEME.DARK_THEME_BACKGROUND,
-      sidebarBackground: theme.palette.primary.main,
-      codeBackground: theme.palette.primary.main,
-    },
-    sidebarWidth: THEME.DRAWER_WIDTH,
-    maxWidth: '100vw',
-  },
 };

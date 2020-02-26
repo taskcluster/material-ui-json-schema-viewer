@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
 import SchemaViewer from './index';
 import { TASKCLUSTER_THEME } from '../../utils/theme';
 
