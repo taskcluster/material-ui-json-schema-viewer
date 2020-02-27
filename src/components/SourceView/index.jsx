@@ -7,6 +7,8 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper,
     color: theme.palette.text.primary,
     overflowX: 'auto',
+    padding: theme.spacing(1),
+    margin: 0,
   },
 }));
 
