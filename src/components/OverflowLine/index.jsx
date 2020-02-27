@@ -14,13 +14,13 @@ import Tooltip from '../Tooltip';
 function OverflowLine({ classes, tooltip, children }) {
   return (
     <Tooltip title={tooltip}>
-        <Typography
-          component="div"
-          variant="subtitle2"
-          noWrap
-          className={classes.line}>
-          {children}
-        </Typography>
+      <Typography
+        component="div"
+        variant="subtitle2"
+        noWrap
+        className={classes.line}>
+        {children}
+      </Typography>
     </Tooltip>
   );
 }
