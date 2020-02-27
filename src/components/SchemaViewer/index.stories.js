@@ -187,7 +187,7 @@ export const customThemes = () => {
     <Fragment>
       <h3>Taskcluster Dark Theme</h3>
       <ThemeProvider theme={TASKCLUSTER_THEME.darkTheme}>
-        <SchemaViewer schema={objectSchemas.complexObjectExample} />
+        <SchemaViewer schema={demoSchemas.hookStatus} />
       </ThemeProvider>
       <h3>Taskcluster Light Theme</h3>
       <ThemeProvider theme={TASKCLUSTER_THEME.lightTheme}>
