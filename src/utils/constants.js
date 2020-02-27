@@ -33,6 +33,11 @@ export const LITERAL_TYPES = {
  */
 export const ERROR_TYPE = 'error';
 /**
+ * Types supported by json schemas:
+ * https://json-schema.org/understanding-json-schema/reference/type.html#type
+ */
+export const SUPPORTED_TYPES = [...BASIC_TYPES, ...NESTED_TYPES];
+/**
  * All the keywords used to define the possible types used for the schemaTable.
  */
 export const ALL_TYPES = [
