@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
 import SchemaViewer from './index';
+import { TASKCLUSTER_THEME } from '../../utils/theme';
 
 export default {
   title: 'Schema Viewer',
@@ -187,38 +188,15 @@ export const demo = () => (
 );
 
 export const customThemes = () => {
-  const darkTheme = createMuiTheme({
-    palette: {
-      type: 'dark',
-    },
-  });
-  const colorfulTheme = createMuiTheme({
-    palette: {
-      background: {
-        paper: '#000',
-      },
-      text: {
-        primary: '#ffc107',
-        secondary: '#ffc53d',
-        hint: '#ddd',
-      },
-      divider: '#4f4f4f',
-    },
-  });
-
   return (
     <Fragment>
-      <h3>Dark Theme</h3>
-      <ThemeProvider theme={darkTheme}>
+      <h3>Taskcluster Dark Theme</h3>
+      <ThemeProvider theme={TASKCLUSTER_THEME.darkTheme}>
         <SchemaViewer schema={objectSchemas.complexObjectExample} />
       </ThemeProvider>
-      <h3>Colorful Theme ex1</h3>
-      <ThemeProvider theme={colorfulTheme}>
+      <h3>Taskcluster Light Theme</h3>
+      <ThemeProvider theme={TASKCLUSTER_THEME.lightTheme}>
         <SchemaViewer schema={demoSchemas.workerList} />
-      </ThemeProvider>
-      <h3>Colorful Theme ex2</h3>
-      <ThemeProvider theme={colorfulTheme}>
-        <SchemaViewer schema={combinationSchemas.anyOf} />
       </ThemeProvider>
     </Fragment>
   );

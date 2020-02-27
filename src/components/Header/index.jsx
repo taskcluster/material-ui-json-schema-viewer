@@ -10,10 +10,13 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper,
     color: theme.palette.text.primary,
     padding: `${theme.spacing(1.5)}px ${theme.spacing(1)}px`,
-    marginBottom: theme.spacing(1),
   },
   title: {
+    color: theme.palette.text.primary,
     margin: 0,
+  },
+  description: {
+    color: theme.palette.text.primary,
   },
   button: {
     margin: 0,
@@ -39,7 +42,10 @@ function Header({ schema, sourceMode, toggleMode }) {
           {sourceMode ? 'hide' : 'show'} source
         </Button>
       </Typography>
-      <Typography component="div" variant="subtitle2">
+      <Typography
+        component="div"
+        variant="subtitle2"
+        className={classes.description}>
         {schema.description}
       </Typography>
     </div>

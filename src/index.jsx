@@ -1,3 +1,3 @@
-import SchemaViewer from '../src/components/SchemaViewer';
+import SchemaViewer from './components/SchemaViewer';
 
 export default SchemaViewer;
