@@ -35,7 +35,7 @@ module.exports = {
           'exceptions': ['div'],
         }],
         /**
-         * 
+         * Allow 'dangerouslySetInnerHTML' for Markdown component.
          */
         'react/no-danger': ['off'],
       },
