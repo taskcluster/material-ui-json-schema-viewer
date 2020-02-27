@@ -78,7 +78,7 @@ export function sanitizeSchema(schema) {
   const cloneSchema = clone(schema);
 
   /**
-   * Make sure schema has a '_type' property for identification.
+   * Make sure schema has a '_type' property to render according to its type.
    */
   if ('type' in cloneSchema) {
     cloneSchema._type = cloneSchema.type;

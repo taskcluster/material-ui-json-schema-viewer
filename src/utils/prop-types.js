@@ -8,32 +8,22 @@ import {
   oneOfType,
   bool,
 } from 'prop-types';
-import { ALL_TYPES } from './constants';
+import { SUPPORTED_TYPES, ALL_TYPES } from './constants';
 
 /**
- * Schema prop-type.
- * (custom keywords are prefixed with underscore '_'
- *  -> check utils/constants.js CUSTOM_KEYWORDS)
+ * Schema prop-type for SchemaViewer component.
  */
 export const schema = shape({
   /**
    * A unique identifier for the schema.
-   * (used as a key to find $ref schema or also as a base URI
+   * (required as a key to find $ref schema or also as a base URI
    *  against which $ref URIs are resolved)
    */
   $id: string.isRequired,
   /**
    * Type of schema (either a single type or an array of types).
-   * '_type' is used as custom property distinguished from built-in
-   * 'type' property.
    */
-  _type: oneOfType([arrayOf(oneOf(ALL_TYPES)), oneOf(ALL_TYPES)]),
-  /**
-   * Descriptive information about schema.
-   */
-  title: string,
-  description: string,
-  _name: string,
+  type: oneOfType([arrayOf(oneOf(SUPPORTED_TYPES)), oneOf(SUPPORTED_TYPES)]),
 });
 /**
  * Basic tree node structure for schema trees.
@@ -41,10 +31,31 @@ export const schema = shape({
  */
 export const basicTreeNode = shape({
   /**
-   * Schema given to render upon. May also be a sub-schema in case
-   * for array items, object properties or more complex schemas.
+   * Schema or sub-schema given to render upon.
+   * (Must be in a sanitized form which uses custom keywords prefixed
+   *  with an underscore '_' since those are used as identifiers to
+   *  create parts of the rows and lines of the schema table.)
    */
-  schema: schema.isRequired,
+  schema: shape({
+    /**
+     * A unique identifier for the schema.
+     * (used as a key to find $ref schema or also as a base URI
+     *  against which $ref URIs are resolved)
+     */
+    _id: string.isRequired,
+    /**
+     * Type of schema (either a single type or an array of types).
+     * '_type' is used as custom property distinguished from built-in
+     * 'type' property.
+     */
+    _type: oneOfType([arrayOf(oneOf(ALL_TYPES)), oneOf(ALL_TYPES)]),
+    /**
+     * Descriptive information about schema.
+     */
+    title: string,
+    description: string,
+    _name: string,
+  }).isRequired,
   /**
    * Path from root to current tree node.
    * Necessary to calculate the indent size for the row.
