@@ -1,9 +1,9 @@
 import React from 'react';
 import { shape, string } from 'prop-types';
 import { isEmpty } from 'ramda';
-import Chip from '@material-ui/core/Chip';
 import InfoIcon from 'mdi-react/InformationOutlineIcon';
 import Markdown from '../Markdown';
+import Chip from '../Chip';
 import Tooltip from '../Tooltip';
 import OverflowLine from '../OverflowLine';
 import { basicTreeNode } from '../../utils/prop-types';
@@ -52,13 +52,7 @@ function NormalRightRow({ classes, treeNode }) {
 
       return (
         <Tooltip key={keyword} title={tooltipTitle}>
-          <Chip
-            className={classes.chip}
-            label={keyword}
-            icon={infoIcon}
-            size="small"
-            variant="outlined"
-          />
+          <Chip label={keyword} icon={infoIcon} />
         </Tooltip>
       );
     }
@@ -85,15 +79,7 @@ function NormalRightRow({ classes, treeNode }) {
       return schema[key];
     })(keyword);
 
-    return (
-      <Chip
-        className={classes.chip}
-        key={keyword}
-        label={`${keyword}: ${keyValue}`}
-        size="small"
-        variant="outlined"
-      />
-    );
+    return <Chip key={keyword} label={`${keyword}: ${keyValue}`} />;
   }
 
   /**
@@ -221,17 +207,12 @@ function NormalRightRow({ classes, treeNode }) {
 NormalRightRow.propTypes = {
   /**
    * Style for schema table.
+   * Rows and lines need to maintain consistent
+   * with left panel's rows and lines.
    */
   classes: shape({
-    /**
-     * Rows and lines need to maintain consistent
-     * with left panel's rows and lines.
-     */
-
     row: string.isRequired,
     line: string.isRequired,
-    /** Style chips wrapping keyword displays */
-    chip: string.isRequired,
   }).isRequired,
   /**
    * Tree node object data structure.

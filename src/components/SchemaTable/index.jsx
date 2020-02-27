@@ -79,13 +79,6 @@ const useStyles = makeStyles(theme => ({
     padding: `0 ${theme.spacing(0.5)}px`,
   },
   /**
-   * Chips used for keyword notations.
-   */
-  chip: {
-    color: theme.palette.text.primary,
-    borderColor: theme.palette.text.secondary,
-  },
-  /**
    * Button used to expand or shrink a $ref.
    */
   refButton: {
