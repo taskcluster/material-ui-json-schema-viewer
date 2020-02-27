@@ -36,7 +36,6 @@ objectSchemas.simpleObject = require('../../../schemas/basic-data-types/object/s
 objectSchemas.propertySpecification = require('../../../schemas/basic-data-types/object/property-specifications.json');
 objectSchemas.propertyDependency = require('../../../schemas/basic-data-types/object/property-dependencies.json');
 objectSchemas.requiredProperties = require('../../../schemas/basic-data-types/object/required-properties.json');
-objectSchemas.complexObjectExample = require('../../../schemas/demo/list-clients-response.json');
 
 const combinationSchemas = {};
 
@@ -61,7 +60,6 @@ miscellaneousSchemas.noType = require('../../../schemas/basic-data-types/miscell
 const demoSchemas = {};
 
 demoSchemas.hookStatus = require('../../../schemas/demo/hook-status.json');
-demoSchemas.listClients = require('../../../schemas/demo/list-clients-response.json');
 demoSchemas.workerList = require('../../../schemas/demo/worker-list.json');
 demoSchemas.workerFull = require('../../../schemas/demo/worker-full.json');
 demoSchemas.workerPoolFull = require('../../../schemas/demo/worker-pool-full.json');
@@ -175,13 +173,10 @@ export const demo = () => (
     <SchemaViewer schema={demoSchemas.hookStatus} />
     <br />
     <br />
-    <SchemaViewer schema={demoSchemas.listClients} />
+    <SchemaViewer schema={demoSchemas.workerList} references={references} />
     <br />
     <br />
     <SchemaViewer schema={demoSchemas.metaData} references={references} />
-    <br />
-    <br />
-    <SchemaViewer schema={demoSchemas.workerList} references={references} />
     <br />
     <br />
   </Fragment>

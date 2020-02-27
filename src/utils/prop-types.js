@@ -12,7 +12,8 @@ import { ALL_TYPES } from './constants';
 
 /**
  * Schema prop-type.
- * (custom fields are prefixed with underscore)
+ * (custom keywords are prefixed with underscore '_'
+ *  -> check utils/constants.js CUSTOM_KEYWORDS)
  */
 export const schema = shape({
   /**
@@ -21,16 +22,18 @@ export const schema = shape({
    *  against which $ref URIs are resolved)
    */
   $id: string.isRequired,
-  /** Descriptive information about schema */
-  title: string,
-  description: string,
-  _name: string,
   /**
    * Type of schema (either a single type or an array of types).
    * '_type' is used as custom property distinguished from built-in
    * 'type' property.
    */
   _type: oneOfType([arrayOf(oneOf(ALL_TYPES)), oneOf(ALL_TYPES)]),
+  /**
+   * Descriptive information about schema.
+   */
+  title: string,
+  description: string,
+  _name: string,
 });
 /**
  * Basic tree node structure for schema trees.

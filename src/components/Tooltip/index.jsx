@@ -1,5 +1,5 @@
 import React from 'react';
-import { string, node } from 'prop-types';
+import { node } from 'prop-types';
 import MuiTooltip from '@material-ui/core/Tooltip';
 
 function Tooltip({ title, children }) {
@@ -12,7 +12,7 @@ function Tooltip({ title, children }) {
 
 Tooltip.propTypes = {
   /** Keyword to display with tooltip feature */
-  title: string.isRequired,
+  title: node.isRequired,
   children: node,
 };
 

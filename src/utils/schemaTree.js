@@ -99,14 +99,16 @@ export function sanitizeSchema(schema) {
   }
 
   /**
-   * If name property exists, create a '_name' property with same value.
+   * The custom keyword '_name' should be used instead of build-in
+   * keyword 'name' for NormalLeftRow to read properly.
    */
   if ('name' in cloneSchema) {
     cloneSchema._name = cloneSchema.name;
   }
 
   /**
-   * If $id property exists, create a '_id' property with same value.
+   * The custom keyword '_id' should be used instead of build-in
+   * keyword '$id' for NormalLeftRow to read properly.
    */
   if ('$id' in cloneSchema) {
     cloneSchema._id = cloneSchema.$id;

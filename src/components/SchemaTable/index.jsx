@@ -32,23 +32,27 @@ const useStyles = makeStyles(theme => ({
   /** Rows for the left and right panels */
   row: {
     borderBottom: `${theme.spacing(0.25)}px solid ${theme.palette.divider}`,
-    minHeight: theme.spacing(3.5),
+    /**
+     * The minimum height of a row should always be the same
+     * with the height of a single line.
+     */
+    minHeight: theme.spacing(4.5),
     width: '100%',
   },
   lastRow: {
     borderBottom: 'none',
   },
   /**
-   * Lines within the rows.
-   * (a single row may constitute of more than one line depending
-   *  on how many keywords the given schema or sub-schema defines)
+   * Lines within the rows. (a single row may constitute of more
+   * than one line depending on the number of keywords of the schema)
    */
   line: {
     color: theme.palette.text.primary,
     display: 'flex',
     alignItems: 'center',
     whiteSpace: 'nowrap',
-    height: theme.spacing(3.5),
+    height: theme.spacing(4.5),
+    paddingLeft: theme.spacing(1),
   },
   descriptionLine: {
     alignItems: 'flex-start',
@@ -80,6 +84,12 @@ const useStyles = makeStyles(theme => ({
   chip: {
     color: theme.palette.text.primary,
     borderColor: theme.palette.text.secondary,
+  },
+  /**
+   * Button used to expand or shrink a $ref.
+   */
+  refButton: {
+    marginLeft: theme.spacing(1),
   },
 }));
 
@@ -146,6 +156,7 @@ function SchemaTable({ schemaTree, setSchemaTree, references }) {
     const { schema, path } = treeNode;
     const schemaType = schema._type;
     const literalSchema = {
+      $id: schema._id,
       type: LITERAL_TYPES[schemaType],
     };
     const literalPath = COMBINATION_TYPES.includes(schemaType)

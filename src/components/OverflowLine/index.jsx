@@ -1,5 +1,5 @@
 import React from 'react';
-import { shape, string, oneOfType, node } from 'prop-types';
+import { shape, string, node } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '../Tooltip';
 
@@ -11,18 +11,16 @@ import Tooltip from '../Tooltip';
  * overflows or not in order to avoid complexities with dealing
  * with detectin changes when the window size changes)
  */
-function OverflowLine({ classes, content }) {
+function OverflowLine({ classes, tooltip, children }) {
   return (
-    <Tooltip title={content}>
-      <div>
+    <Tooltip title={tooltip}>
         <Typography
           component="div"
           variant="subtitle2"
           noWrap
           className={classes.line}>
-          {content}
+          {children}
         </Typography>
-      </div>
     </Tooltip>
   );
 }
@@ -36,9 +34,13 @@ OverflowLine.propTypes = {
     line: string.isRequired,
   }).isRequired,
   /**
-   * Content to be displayed.
+   * Content for tooltip to display upon hovering content in line.
    */
-  content: oneOfType([node, string]).isRequired,
+  tooltip: node.isRequired,
+  /**
+   * Content of the line.
+   */
+  children: node.isRequired,
 };
 
 export default React.memo(OverflowLine);
