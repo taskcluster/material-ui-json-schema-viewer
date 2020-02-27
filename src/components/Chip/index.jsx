@@ -1,8 +1,24 @@
 import React from 'react';
-import { shape, string, node, element } from 'prop-types';
+import { node, element } from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
 import MuiChip from '@material-ui/core/Chip';
 
-function Chip({ classes, label, icon }) {
+const useStyles = makeStyles(theme => ({
+  /**
+   * Chips used for keyword notations.
+   */
+  chip: {
+    color: theme.palette.text.primary,
+    borderColor: theme.palette.text.secondary,
+  },
+}));
+
+function Chip({ label, icon }) {
+  /**
+   * Generate classes to use styles for chips.
+   */
+  const classes = useStyles();
+
   return (
     <MuiChip
       className={classes.chip}
@@ -15,13 +31,9 @@ function Chip({ classes, label, icon }) {
 }
 
 Chip.propTypes = {
-  /**
-   * Style for chips used in schema table.
-   */
-  classes: shape({
-    chip: string.isRequired,
-  }).isRequired,
+  /** Label for chip to display */
   label: node.isRequired,
+  /** Icon for chip to display */
   icon: element,
 };
 
