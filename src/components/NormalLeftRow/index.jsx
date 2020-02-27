@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandIcon from 'mdi-react/MenuRightIcon';
 import ShrinkIcon from 'mdi-react/MenuDownIcon';
-import WarningIcon from '@material-ui/icons/ReportProblemOutlined';
+import WarningIcon from 'mdi-react/AlertOutlineIcon';
 import Tooltip from '../Tooltip';
 import { basicTreeNode, NOOP } from '../../utils/prop-types';
 import { expandRefNode, shrinkRefNode } from '../../utils/schemaTree';

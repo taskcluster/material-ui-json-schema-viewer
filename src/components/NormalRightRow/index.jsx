@@ -2,7 +2,7 @@ import React from 'react';
 import { shape, string } from 'prop-types';
 import { isEmpty } from 'ramda';
 import Chip from '@material-ui/core/Chip';
-import InfoIcon from '@material-ui/icons/Info';
+import InfoIcon from 'mdi-react/InformationOutlineIcon';
 import Markdown from '../Markdown';
 import Tooltip from '../Tooltip';
 import OverflowLine from '../OverflowLine';
