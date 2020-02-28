@@ -3,7 +3,6 @@ import { string, bool } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import parser from 'markdown-it';
-import highlighter from 'markdown-it-highlightjs';
 
 const useStyles = makeStyles(theme => ({
   markdown: {
@@ -31,8 +30,6 @@ function Markdown({ children, inverse }) {
    *
    */
   const markdown = parser({ linkify: true });
-
-  markdown.use(highlighter);
 
   return (
     <span
