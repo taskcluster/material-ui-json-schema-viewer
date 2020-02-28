@@ -65,6 +65,9 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.text.primary,
     color: theme.palette.getContrastText(theme.palette.text.primary),
     padding: `0 ${theme.spacing(0.5)}px`,
+    fontSize: theme.typography.subtitle2.fontSize,
+    fontWeight: theme.typography.subtitle2.fontWeight,
+    fontFamily: theme.typography.subtitle2.fontFamily,
   },
   /** Comments within the left panel (used for combination types) */
   comment: {
