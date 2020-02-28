@@ -78,7 +78,9 @@ function NormalLeftRow({
     if (!type) {
       return (
         <Tooltip title={TOOLTIP_DESCRIPTIONS.noType}>
-          <WarningIcon color="inherit" />
+          <div className={classes.missingType}>
+            <WarningIcon color="inherit" />
+          </div>
         </Tooltip>
       );
     }

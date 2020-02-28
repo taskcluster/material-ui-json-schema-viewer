@@ -75,6 +75,10 @@ const useStyles = makeStyles(theme => ({
     fontWeight: theme.typography.subtitle2.fontWeight,
     fontFamily: theme.typography.subtitle2.fontFamily,
   },
+  missingType: {
+    display: 'flex',
+    alignItems: 'center',
+  },
   /** Comments within the left panel (used for combination types) */
   comment: {
     color: theme.palette.text.hint,
