@@ -58,8 +58,14 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'flex-start',
   },
   /**
+   * Name text displayed within a left row.
+   */
+  name: {
+    marginRight: theme.spacing(0.5),
+  },
+  /**
    * Highlight the type for the schema or sub-schema displayed
-   * in the left panel of the schema table component.
+   * within a left row.
    */
   code: {
     backgroundColor: theme.palette.text.primary,
