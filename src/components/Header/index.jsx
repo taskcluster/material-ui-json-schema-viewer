@@ -37,9 +37,8 @@ function Header({ schema, sourceMode, toggleMode }) {
 
         <Button
           className={classes.button}
-          color="inherit"
+          color="secondary"
           size="small"
-          variant="outlined" 
           onClick={toggleMode}>
           {sourceMode ? 'hide' : 'show'} source
         </Button>
