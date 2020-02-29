@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.primary,
   },
   button: {
-    margin: 0,
+    margin: theme.spacing(1),
   },
 }));
 
@@ -37,7 +37,7 @@ function Header({ schema, sourceMode, toggleMode }) {
 
         <Button
           className={classes.button}
-          color="inherit"
+          color="secondary"
           size="small"
           onClick={toggleMode}>
           {sourceMode ? 'hide' : 'show'} source

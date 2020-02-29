@@ -58,13 +58,26 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'flex-start',
   },
   /**
+   * Name text displayed within a left row.
+   */
+  name: {
+    marginRight: theme.spacing(0.5),
+  },
+  /**
    * Highlight the type for the schema or sub-schema displayed
-   * in the left panel of the schema table component.
+   * within a left row.
    */
   code: {
     backgroundColor: theme.palette.text.primary,
     color: theme.palette.getContrastText(theme.palette.text.primary),
     padding: `0 ${theme.spacing(0.5)}px`,
+    fontSize: theme.typography.subtitle2.fontSize,
+    fontWeight: theme.typography.subtitle2.fontWeight,
+    fontFamily: theme.typography.subtitle2.fontFamily,
+  },
+  missingType: {
+    display: 'flex',
+    alignItems: 'center',
   },
   /** Comments within the left panel (used for combination types) */
   comment: {

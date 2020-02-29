@@ -45,16 +45,23 @@ function NormalLeftRow({
    */
   const indentSize = path.length;
   const styles = useStyles(indentSize);
+  const schemaType = schema._type;
   /**
-   * Define the name and type of the schema or sub-schema.
+   * Define the name of the schema.
    */
   const name = schema._name;
-  const schemaType = schema._type;
+  const nameText = (function createNameText(name, type) {
+    if (COMBINATION_TYPES.includes(type)) {
+      return <span className={classes.name}>{`${name}:`}</span>
+    }
+    return <span className={classes.name}>{name}</span>;
+  })(name, schemaType);
+  
 
   /**
    * Create a type symbol corresponding to the specified type.
    */
-  function createTypeSymbol(type) {
+  const typeSymbol = (function createTypeSymbol(type) {
     const bracketTypes = [
       ...NESTED_TYPES,
       LITERAL_TYPES.array,
@@ -71,7 +78,9 @@ function NormalLeftRow({
     if (!type) {
       return (
         <Tooltip title={TOOLTIP_DESCRIPTIONS.noType}>
-          <WarningIcon color="inherit" />
+          <div className={classes.missingType}>
+            <WarningIcon color="inherit" />
+          </div>
         </Tooltip>
       );
     }
@@ -119,7 +128,7 @@ function NormalLeftRow({
      * Default types use highlighted code format.
      */
     return <code className={classes.code}>{type}</code>;
-  }
+  })(schemaType);
 
   /**
    * Define the required/contains mark used for the schema.
@@ -232,13 +241,13 @@ function NormalLeftRow({
   })(schema);
 
   return (
-    <div key={schema.type} className={classes.row} onClick={onRefClick}>
+    <div key={schemaType} className={classes.row} onClick={onRefClick}>
       <Typography
         component="div"
         variant="subtitle2"
         className={classNames(classes.line, styles.indentation)}>
-        {name && `${name}: `}
-        {createTypeSymbol(schemaType)}
+        {name && nameText}
+        {typeSymbol}
         {requiredMark}
         {refButton}
       </Typography>
