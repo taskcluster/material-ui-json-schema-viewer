@@ -47,18 +47,16 @@ function NormalLeftRow({
    */
   const indentSize = path.length;
   const styles = useStyles(indentSize);
-
   /**
    * Create a text for the name of the schema.
    */
   const nameText = (function createNameText(name, type) {
     if (COMBINATION_TYPES.includes(type)) {
-      return <span className={classes.name}>{`${name}:`}</span>
+      return <span className={classes.name}>{`${name}:`}</span>;
     }
+
     return <span className={classes.name}>{name}</span>;
   })(name, schemaType);
-  
-
   /**
    * Create a type symbol corresponding to the specified type.
    */
@@ -132,7 +130,6 @@ function NormalLeftRow({
      */
     return <code className={classes.code}>{type}</code>;
   })(schemaType);
-
   /**
    * Create a required/contains mark if needed for schema.
    */

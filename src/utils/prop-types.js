@@ -89,6 +89,7 @@ export const refTreeNode = shape({
 });
 /**
  * Tree node prop-types within a schema tree.
+ * Can either be a basic tree node type or a ref tree node type.
  */
 export const treeNodeTypes = oneOfType([basicTreeNode, refTreeNode]);
 /**

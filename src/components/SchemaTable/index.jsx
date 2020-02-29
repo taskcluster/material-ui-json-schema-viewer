@@ -82,7 +82,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
   },
-  /** 
+  /**
    * Comments used for combination types in NormalLeftRow.
    */
   comment: {
