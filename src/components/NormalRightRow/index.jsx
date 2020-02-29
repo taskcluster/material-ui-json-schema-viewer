@@ -26,7 +26,7 @@ function NormalRightRow({ classes, treeNode }) {
   );
   /**
    * Identify keywords that help describe the given schema.
-   * (ensure to maintain order specified in DESCRIPTIVE_KEYWORDS)
+   * (maintain order specified in DESCRIPTIVE_KEYWORDS)
    */
   const descriptorKeywords = DESCRIPTIVE_KEYWORDS.filter(key => key in schema);
 
@@ -149,9 +149,9 @@ function NormalRightRow({ classes, treeNode }) {
 
   /**
    * Create lines for the schema's specification and descriptive keywords.
-   * @param {Array} specKeywords specification keywords in schema
-   * @param {Array} descriptorKeywords descriptive keywords in schema
-   * @returns {Array} lines for the schema's right panel
+   * @param {array} specKeywords specification keywords in schema
+   * @param {array} descriptorKeywords descriptive keywords in schema
+   * @returns {array} lines for the schema's right panel
    */
   function createLinesForKeywords(specKeywords, descriptorKeywords) {
     let lines = [];
