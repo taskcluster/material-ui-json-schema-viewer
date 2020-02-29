@@ -24,7 +24,7 @@ import { COMBINATION_TYPES, REF_TYPE, CUSTOM_KEYWORDS } from './constants';
  * }
  *
  * @param {object} schema
- * @param {array} path path to current node/subtree
+ * @param {array} path path to current node/subtree (ex. [1, 0])
  */
 export function createSchemaTree(schema, path = []) {
   /**

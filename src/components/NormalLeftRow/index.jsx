@@ -292,7 +292,8 @@ NormalLeftRow.propTypes = {
   setSchemaTree: func,
   /**
    * Object where all schemas are stored so that the table
-   * can reference to for dereferencing $ref schemas.
+   * can dereference $ref schemas by their '$id' as keys.
+   * (ex. references['/schemas/example.json#'] = exampleJson schema)
    * Only necessary for ref rows.
    */
   references: object,
