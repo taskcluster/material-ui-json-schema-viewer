@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import parser from 'markdown-it';
 
 const useStyles = makeStyles(theme => ({
+  /** Default styles applied to markdown content. */
   markdown: {
     '& code': {
       color: theme.palette.text.primary,
@@ -12,6 +13,7 @@ const useStyles = makeStyles(theme => ({
       padding: theme.spacing(0.5),
     },
   },
+  /** Inverse styles applied to markdown content (used for tooltip titles) */
   inverse: {
     '& code': {
       color: theme.palette.common.black,
@@ -26,9 +28,6 @@ function Markdown({ children, inverse }) {
    * Generate classes to define overall style for the schema table.
    */
   const classes = useStyles();
-  /**
-   *
-   */
   const markdown = parser({ linkify: true });
 
   return (
@@ -45,7 +44,9 @@ function Markdown({ children, inverse }) {
 }
 
 Markdown.propTypes = {
+  /** Markdown content */
   children: string,
+  /** Whether an inverse style should be applied or not */
   inverse: bool,
 };
 
