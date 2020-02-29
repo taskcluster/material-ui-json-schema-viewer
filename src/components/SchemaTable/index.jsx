@@ -39,9 +39,6 @@ const useStyles = makeStyles(theme => ({
     minHeight: theme.spacing(4.5),
     width: '100%',
   },
-  lastRow: {
-    borderBottom: 'none',
-  },
   /**
    * Lines within the rows. (a single row may constitute of more
    * than one line depending on the number of keywords of the schema)
@@ -54,18 +51,21 @@ const useStyles = makeStyles(theme => ({
     height: theme.spacing(4.5),
     paddingLeft: theme.spacing(1),
   },
+  /**
+   * Lines used specifically for displaying desciptions.
+   */
   descriptionLine: {
     alignItems: 'flex-start',
   },
   /**
-   * Name text displayed within a left row.
+   * Name text displayed within a NormalLeftRow.
    */
   name: {
     marginRight: theme.spacing(0.5),
   },
   /**
    * Highlight the type for the schema or sub-schema displayed
-   * within a left row.
+   * within a NormalLeftRow.
    */
   code: {
     backgroundColor: theme.palette.text.primary,
@@ -75,11 +75,16 @@ const useStyles = makeStyles(theme => ({
     fontWeight: theme.typography.subtitle2.fontWeight,
     fontFamily: theme.typography.subtitle2.fontFamily,
   },
+  /**
+   * Warning icon to inform missing type in NormalLeftRow.
+   */
   missingType: {
     display: 'flex',
     alignItems: 'center',
   },
-  /** Comments within the left panel (used for combination types) */
+  /** 
+   * Comments used for combination types in NormalLeftRow.
+   */
   comment: {
     color: theme.palette.text.hint,
   },
@@ -153,9 +158,9 @@ function SchemaTable({ schemaTree, setSchemaTree, references }) {
   /**
    * Create a literal row for displaying descriptive rows.
    * This is only used to create rows for the following:
-   * * a closing row for nested types (arrays and objects) to display a
+   * - a closing row for nested types (arrays and objects) to display a
    *   close bracket symbol
-   * * a separator row for combination types (allOf, anyOf, oneOf, not)
+   * - a separator row for combination types (allOf, anyOf, oneOf, not)
    *   to visually separate options.
    */
   function createLiteralRow(treeNode) {
@@ -176,6 +181,7 @@ function SchemaTable({ schemaTree, setSchemaTree, references }) {
   /**
    * Push a single row's left part and right part into
    * the leftPanelRows and rightPanelRows respectively.
+   * @param {object} row object including leftRow and rightRow components.
    */
   function pushRow(row) {
     leftPanelRows.push(row.leftRow);
