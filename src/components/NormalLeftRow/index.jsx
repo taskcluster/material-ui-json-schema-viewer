@@ -39,17 +39,18 @@ function NormalLeftRow({
   references,
 }) {
   const { schema, path } = treeNode;
+  const schemaType = schema._type;
+  const name = schema._name;
   /**
    * Dynamically generate indent styles using the length of the path.
    * (length of path = depth of the current treeNode)
    */
   const indentSize = path.length;
   const styles = useStyles(indentSize);
-  const schemaType = schema._type;
+
   /**
-   * Define the name of the schema.
+   * Create a text for the name of the schema.
    */
-  const name = schema._name;
   const nameText = (function createNameText(name, type) {
     if (COMBINATION_TYPES.includes(type)) {
       return <span className={classes.name}>{`${name}:`}</span>
@@ -73,7 +74,8 @@ function NormalLeftRow({
     ];
 
     /**
-     * If type is not specified, create a tooltip with an icon.
+     * If type is not specified, create a tooltip with an icon
+     * to indicate that the schema is missing a type property.
      */
     if (!type) {
       return (
@@ -86,14 +88,15 @@ function NormalLeftRow({
     }
 
     /**
-     * Types with nested structures use the a bracket symbol,
+     * Types with nested structures use a single bracket symbol.
+     * (either for opening a bracket or closing a bracket)
      */
     if (bracketTypes.includes(type)) {
       return BRACKET_SYMBOLS[type];
     }
 
     /**
-     * Combination types (allOf, anyOf, oneOf, no) use comment-like notation.
+     * Combination types (allOf, anyOf, oneOf, no) use comments.
      */
     if (combinationTypes.includes(type)) {
       return (
@@ -125,13 +128,13 @@ function NormalLeftRow({
     }
 
     /**
-     * Default types use highlighted code format.
+     * By default, types use highlighted code format.
      */
     return <code className={classes.code}>{type}</code>;
   })(schemaType);
 
   /**
-   * Define the required/contains mark used for the schema.
+   * Create a required/contains mark if needed for schema.
    */
   const requiredMark = (function createPrefix(schema) {
     if (schema._required) {
@@ -180,6 +183,7 @@ function NormalLeftRow({
   /**
    * If treeNode is $ref type, create ref expand/shrink action
    * to be used to expand or collapse a row depending on the refType prop.
+   * (will be applied to the first line of the row)
    */
   const onRefClick = {
     none: () => {},
@@ -195,8 +199,8 @@ function NormalLeftRow({
   const blankLinePaddings = (function createPaddingLines(schemaInput) {
     /**
      * Check for descriptor and specification keywords.
-     * * specification: displayed as chips in the first line of NormalRightRow
-     * * descriptors: displayed in the next sequential lines of NormalRightRow
+     * - specification: displayed as chips in the first line of NormalRightRow
+     * - descriptors: displayed in the next sequential lines of NormalRightRow
      */
     const descriptors = Object.keys(schema).filter(key =>
       DESCRIPTIVE_KEYWORDS.includes(key)
@@ -264,16 +268,19 @@ NormalLeftRow.propTypes = {
   classes: shape({
     row: string.isRequired,
     line: string.isRequired,
+    name: string.isRequired,
     code: string.isRequired,
+    missingType: string.isRequired,
     comment: string.isRequired,
     prefix: string.isRequired,
+    refButton: string.isRequired,
   }).isRequired,
   /**
    * Tree node object data structure.
    */
   treeNode: basicTreeNode.isRequired,
   /**
-   * String for identification of row. Can be one of the following:
+   * Identification of row's type. Can be one of the following:
    * 'none': the row is not a ref row, so no button is necessary.
    * 'default': the row is a ref row in collapsed form.
    *            A plus button will be displayed in order to expand the $ref.
@@ -282,8 +289,8 @@ NormalLeftRow.propTypes = {
    */
   refType: oneOf(['none', 'default', 'expanded']).isRequired,
   /**
-   * The method to set the state of the schemaTree.
-   * Only necessary for ref rows.
+   * The method to update the state of the schemaTree.
+   * Only necessary for ref rows for expanding or shrinking a $ref.
    */
   setSchemaTree: func,
   /**
