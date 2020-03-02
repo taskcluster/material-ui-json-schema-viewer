@@ -128,7 +128,7 @@ function NormalRightRow({ classes, treeNode }) {
    */
   function createTitleLine(keyword) {
     return (
-      <OverflowLine key={keyword} classes={classes} tooltip={schema[keyword]}>
+      <OverflowLine key={keyword} tooltip={schema[keyword]}>
         <strong>{schema[keyword]}</strong>
       </OverflowLine>
     );
@@ -141,7 +141,7 @@ function NormalRightRow({ classes, treeNode }) {
     const markdownTooltip = <Markdown inverse>{schema[keyword]}</Markdown>;
 
     return (
-      <OverflowLine key={keyword} classes={classes} tooltip={markdownTooltip}>
+      <OverflowLine key={keyword} tooltip={markdownTooltip}>
         <Markdown>{schema[keyword]}</Markdown>
       </OverflowLine>
     );

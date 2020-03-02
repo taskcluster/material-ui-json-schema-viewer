@@ -1,7 +1,22 @@
 import React from 'react';
-import { shape, string, node } from 'prop-types';
+import { node } from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '../Tooltip';
+
+const useStyles = makeStyles(theme => ({
+  typography: {
+    color: theme.palette.text.primary,
+  },
+  // Copied mostly from the line class name in SchemaTable/index.jsx
+  tooltipLineDiv: {
+    display: 'flex',
+    alignItems: 'center',
+    whiteSpace: 'nowrap',
+    height: theme.spacing(4.5),
+    paddingLeft: theme.spacing(1),
+  },
+}));
 
 /**
  * A single line component within a row of the schemaTable
@@ -11,28 +26,25 @@ import Tooltip from '../Tooltip';
  * overflows or not in order to avoid complexities with dealing
  * with detectin changes when the window size changes)
  */
-function OverflowLine({ classes, tooltip, children }) {
+function OverflowLine({ tooltip, children }) {
+  const classes = useStyles();
+
   return (
     <Tooltip title={tooltip}>
-      <Typography
-        component="div"
-        variant="subtitle2"
-        noWrap
-        className={classes.line}>
-        {children}
-      </Typography>
+      <div className={classes.tooltipLineDiv}>
+        <Typography
+          className={classes.typography}
+          component="div"
+          variant="subtitle2"
+          noWrap>
+          {children}
+        </Typography>
+      </div>
     </Tooltip>
   );
 }
 
 OverflowLine.propTypes = {
-  /**
-   * Style for lines for schema viewer.
-   * Necessary to maintain consistency within the schema table.
-   */
-  classes: shape({
-    line: string.isRequired,
-  }).isRequired,
   /**
    * Content for tooltip to display upon hovering content in line.
    */
