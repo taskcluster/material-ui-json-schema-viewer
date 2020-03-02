@@ -1,0 +1,34 @@
+version: 1
+policy:
+  pullRequests: public
+tasks:
+  - $if: '(tasks_for == "github-pull-request"  && event["action"] in ["opened", "reopened", "synchronize"])'
+    then:
+      taskId: {$eval: as_slugid("tests")}
+      created: {$fromNow: ''}
+      deadline: {$fromNow: '2 hours'}
+      provisionerId: proj-taskcluster
+      workerType: ci 
+      payload:
+        maxRunTime: 3600 
+        image: node 
+        env:
+          NO_TEST_SKIP: "true"
+        command:
+          - /bin/bash
+          - '--login'
+          - '-cx'
+          - >-
+            git clone ${event.pull_request.head.repo.git_url} repo &&
+            cd repo &&
+            git config advice.detachedHead false &&
+            git checkout ${event.pull_request.head.sha} &&
+            yarn &&
+            yarn lint &&
+            yarn test
+      metadata:
+        name: "tests/lint"
+        description: "Material UI JSON Schema Viewer Tests / Lint"
+        owner: ${event.pull_request.user.login}@users.noreply.github.com
+        source: ${event.repository.url}
+
