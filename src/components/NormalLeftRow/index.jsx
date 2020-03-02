@@ -52,12 +52,11 @@ function NormalLeftRow({
   const name = schema._name;
   const nameText = (function createNameText(name, type) {
     if (COMBINATION_TYPES.includes(type)) {
-      return <span className={classes.name}>{`${name}:`}</span>
+      return <span className={classes.name}>{`${name}:`}</span>;
     }
+
     return <span className={classes.name}>{name}</span>;
   })(name, schemaType);
-  
-
   /**
    * Create a type symbol corresponding to the specified type.
    */
@@ -129,7 +128,6 @@ function NormalLeftRow({
      */
     return <code className={classes.code}>{type}</code>;
   })(schemaType);
-
   /**
    * Define the required/contains mark used for the schema.
    */
