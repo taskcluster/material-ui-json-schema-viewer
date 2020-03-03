@@ -24,15 +24,16 @@ import { COMBINATION_TYPES, REF_TYPE, CUSTOM_KEYWORDS } from './constants';
  * }
  *
  * @param {object} schema
- * @param {array} path path to current node/subtree
+ * @param {array} path path to current node/subtree (ex. [1, 0])
  */
 export function createSchemaTree(schema, path = []) {
   /**
    * Create a root node object for the tree/subtree based on the schema.
-   * (make sure that nodes store only sanitized schemas)
+   * (make sure that node store only schemas transformed appropriately
+   *  to the tree node's schema formats)
    */
   const rootNode = {
-    schema: sanitizeSchema(schema),
+    schema: transformSchema(schema),
     children: [],
     path,
   };
@@ -74,7 +75,7 @@ export function createSchemaTree(schema, path = []) {
  *   (distinguish added properties with schema's original properties)
  * @param {object} schema
  */
-export function sanitizeSchema(schema) {
+export function transformSchema(schema) {
   const cloneSchema = clone(schema);
 
   /**
@@ -99,19 +100,19 @@ export function sanitizeSchema(schema) {
   }
 
   /**
-   * The custom keyword '_name' should be used instead of build-in
-   * keyword 'name' for NormalLeftRow to read properly.
-   */
-  if ('name' in cloneSchema) {
-    cloneSchema._name = cloneSchema.name;
-  }
-
-  /**
    * The custom keyword '_id' should be used instead of build-in
    * keyword '$id' for NormalLeftRow to read properly.
    */
   if ('$id' in cloneSchema) {
     cloneSchema._id = cloneSchema.$id;
+  }
+
+  /**
+   * The custom keyword '_name' should be used instead of build-in
+   * keyword 'name' for NormalLeftRow to read properly.
+   */
+  if ('name' in cloneSchema) {
+    cloneSchema._name = cloneSchema.name;
   }
 
   return cloneSchema;
@@ -121,17 +122,22 @@ export function sanitizeSchema(schema) {
  * Create a child node based on the given subschema and append it to
  * the parentNode. (the child node may be a single node or a subtree)
  * @param {object} parentNode parent node of subschema
- * @param {object} subschema schema of child node to create and append;
+ * @param {object} subschema schema of child node to create and append
  * @param {number} childIndex index of the child node (used for its path)
  */
 export function createChildNode(parentNode, subschema, childIndex) {
   /**
-   * Child node should inherit parent's id in order to
+   * Child node's schema should inherit parent's _id property
+   * to ensure all schemas have a reference point.
    */
   const cloneSubschema = clone(subschema);
 
   cloneSubschema._id = parentNode.schema._id;
 
+  /**
+   * Create a child node or subtree based on the subschema
+   * and append it to the parent node.
+   */
   const childNode = createSchemaTree(cloneSubschema, [
     ...parentNode.path,
     childIndex,
@@ -143,7 +149,7 @@ export function createChildNode(parentNode, subschema, childIndex) {
 /**
  * Create a tree for combination data type schemas (allOf, anyOf, oneOf, not).
  * Possible options should be created as children nodes by calling back on
- * the createSchemaTree method and appended to the given root node.
+ * the createSchemaTree method and appended the results to given root node.
  * @param {object} rootNode root tree node
  */
 export function createCombinationTree(rootNode) {

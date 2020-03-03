@@ -102,7 +102,7 @@ export const BRACKET_SYMBOLS = {
   closeObject: '}',
 };
 /**
- * Symbols (text) used to display for combination types.
+ * Symbols (text) used to display combination types.
  */
 export const COMBINATION_SYMBOLS = {
   allOf: '// All of',

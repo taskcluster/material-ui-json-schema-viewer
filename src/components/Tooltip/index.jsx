@@ -21,6 +21,7 @@ function Tooltip({ title, children }) {
 Tooltip.propTypes = {
   /** Keyword to display with tooltip feature */
   title: node.isRequired,
+  /** Nodes for tooltip to apply and point to */
   children: node,
 };
 

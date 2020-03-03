@@ -27,6 +27,7 @@ function SourceView({ schema }) {
 }
 
 SourceView.propTypes = {
+  /** Schema to display */
   schema: schema.isRequired,
 };
 
