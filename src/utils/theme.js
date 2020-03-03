@@ -162,7 +162,7 @@ export const createTheme = isDarkTheme => {
         fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace',
         lineHeight: 1.4,
         display: 'inline-block',
-        fontSize: '0.875rem',
+        fontSize: '0.875em',
       },
       listItemButton: {
         '& svg': {
