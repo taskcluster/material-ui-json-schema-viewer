@@ -57,7 +57,8 @@ This repository uses Neutrino for developing, and building React components. To 
 Feel free to open an issue, submit a pull request, or contribute however you would like. Understand that this documentation is still a work in progress, so file an issue or submit a PR to ask questions or make improvements. Thanks!
 
 ## Publishing
-- Bump the version of the package with `npm version {version-name}` (patch, minor, major, etc.).
-- Generate the compiled component for publishing to npm with `yarn build`.
-- Publish the package with `npm publish --tag {tag-name}`
-- Deploy Storybook to gh-pages with `yarn deploy`
+1. Bump the version of the package with `npm version {version-name}` (patch, minor, major, etc.).
+2. Generate the compiled component for publishing to npm with `yarn build`.
+3. Publish the package with `npm publish`
+4. Push your changes with `git push upstream master --tags`
+5. Deploy Storybook to gh-pages with `yarn deploy`
