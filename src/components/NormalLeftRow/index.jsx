@@ -11,8 +11,6 @@ import Tooltip from '../Tooltip';
 import { basicTreeNode, NOOP } from '../../utils/prop-types';
 import { expandRefNode, shrinkRefNode } from '../../utils/schemaTree';
 import {
-  SKIP_KEYWORDS,
-  DESCRIPTIVE_KEYWORDS,
   COMBINATION_TYPES,
   LITERAL_TYPES,
   NESTED_TYPES,
@@ -188,61 +186,9 @@ function NormalLeftRow({
       setSchemaTree(prev => expandRefNode(prev, treeNode, references)),
     expanded: () => setSchemaTree(prev => shrinkRefNode(prev, treeNode)),
   }[refType];
-  /**
-   * Create blank line paddings if descriptor keywords exists.
-   * This enables the left row to have matching number of lines with
-   * the right row and align the lines and heights between the two rows.
-   */
-  const blankLinePaddings = (function createPaddingLines(schemaInput) {
-    /**
-     * Check for descriptor and specification keywords.
-     * - specification: displayed as chips in the first line of NormalRightRow
-     * - descriptors: displayed in the next sequential lines of NormalRightRow
-     */
-    const descriptors = Object.keys(schema).filter(key =>
-      DESCRIPTIVE_KEYWORDS.includes(key)
-    );
-    const specifications = Object.keys(schemaInput).filter(
-      key => !SKIP_KEYWORDS.includes(key)
-    );
-    const lines = [];
-
-    /**
-     * Create a blank line per 3 spec keywords since a single line may
-     * only contain a max of 3 spec keywords. Skip over the first group
-     * of keywords since the first line already exists (to specify 'type').
-     */
-    specifications.forEach((keyword, i) => {
-      if (i % 3 === 0 && i > 0) {
-        lines.push(<div key={`${keyword}-line`} className={classes.line} />);
-      }
-    });
-
-    /** Create a blank line for each descriptor keyword. */
-    descriptors.forEach((keyword, i) => {
-      /**
-       * For the first descriptor keyword,
-       * if specification keywords exists, a blank line should be added
-       * to visually separate the specification line and descriptor line.
-       * Else, no specifications exists, skip over the first descriptor
-       * since the first line already exists (to specify 'type').
-       */
-      if (i === 0) {
-        if (specifications.length > 0) {
-          lines.push(<div key="separator-line" className={classes.line} />);
-          lines.push(<div key={`${keyword}-line`} className={classes.line} />);
-        }
-      } else {
-        /** Create blank lines for all the following descriptor keywords */
-        lines.push(<div key={`${keyword}-line`} className={classes.line} />);
-      }
-    });
-
-    return lines;
-  })(schema);
 
   return (
-    <div key={schemaType} className={classes.row} onClick={onRefClick}>
+    <div key={schemaType} onClick={onRefClick}>
       <Typography
         component="div"
         variant="subtitle2"
@@ -252,7 +198,6 @@ function NormalLeftRow({
         {requiredMark}
         {refButton}
       </Typography>
-      {blankLinePaddings}
     </div>
   );
 }

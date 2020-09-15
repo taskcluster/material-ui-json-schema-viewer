@@ -2,14 +2,13 @@ import React from 'react';
 import { shape, string } from 'prop-types';
 import { isEmpty } from 'ramda';
 import InfoIcon from 'mdi-react/InformationOutlineIcon';
+import Typography from '@material-ui/core/Typography';
 import Markdown from '../Markdown';
 import Chip from '../Chip';
 import Tooltip from '../Tooltip';
-import OverflowLine from '../OverflowLine';
 import { basicTreeNode } from '../../utils/prop-types';
 import {
   SKIP_KEYWORDS,
-  DESCRIPTIVE_KEYWORDS,
   MAX_NUMBER_OF_CHIPS,
   TOOLTIP_DESCRIPTIONS,
 } from '../../utils/constants';
@@ -24,11 +23,6 @@ function NormalRightRow({ classes, treeNode }) {
   const specKeywords = Object.keys(schema).filter(
     key => !SKIP_KEYWORDS.includes(key)
   );
-  /**
-   * Identify keywords that help describe the given schema.
-   * (maintain order specified in DESCRIPTIVE_KEYWORDS)
-   */
-  const descriptorKeywords = DESCRIPTIVE_KEYWORDS.filter(key => key in schema);
 
   /**
    * Create a chip to display keyword properties.
@@ -128,9 +122,12 @@ function NormalRightRow({ classes, treeNode }) {
    */
   function createTitleLine(keyword) {
     return (
-      <OverflowLine key={keyword} tooltip={schema[keyword]}>
+      <Typography
+        className={classes.typography}
+        variant="subtitle2"
+        key={keyword}>
         <strong>{schema[keyword]}</strong>
-      </OverflowLine>
+      </Typography>
     );
   }
 
@@ -138,30 +135,30 @@ function NormalRightRow({ classes, treeNode }) {
    * Display the descriptive keyword in a single line.
    */
   function createDescriptionLine(keyword) {
-    const markdownTooltip = <Markdown inverse>{schema[keyword]}</Markdown>;
-
     return (
-      <OverflowLine key={keyword} tooltip={markdownTooltip}>
+      <Typography className={classes.typography} variant="body2" key={keyword}>
         <Markdown>{schema[keyword]}</Markdown>
-      </OverflowLine>
+      </Typography>
     );
   }
 
   /**
    * Create lines for the schema's specification and descriptive keywords.
    * @param {array} specKeywords specification keywords in schema
-   * @param {array} descriptorKeywords descriptive keywords in schema
    * @returns {array} lines for the schema's right panel
    */
-  function createLinesForKeywords(specKeywords, descriptorKeywords) {
+  function createLinesForKeywords(specKeywords) {
     let lines = [];
 
     /**
-     * If neither keyword types exist, display a single blank line
-     * to match the 'type' line in NormalLeftRow.
+     * If descriptive keywords exist, display each keyword in its own line.
      */
-    if (specKeywords.length === 0 && descriptorKeywords.length === 0) {
-      lines.push(<div key="blank-line" className={classes.line} />);
+    if ('title' in schema) {
+      lines.push(createTitleLine('title'));
+    }
+
+    if ('description' in schema) {
+      lines.push(createDescriptionLine('description'));
     }
 
     /**
@@ -173,35 +170,10 @@ function NormalRightRow({ classes, treeNode }) {
       lines = lines.concat(specLines);
     }
 
-    /**
-     * If descriptive keywords exist, display each keyword in its own line.
-     */
-    if (descriptorKeywords.length > 0) {
-      /**
-       * If specification keywords also exist, create a blank line to separate
-       * specification lines and lines for descriptions.
-       */
-      if (specKeywords.length > 0) {
-        lines.push(<div key="separator-line" className={classes.line} />);
-      }
-
-      descriptorKeywords.forEach(keyword => {
-        if (keyword === 'title') {
-          lines.push(createTitleLine(keyword));
-        } else if (keyword === 'description') {
-          lines.push(createDescriptionLine(keyword));
-        }
-      });
-    }
-
     return lines;
   }
 
-  return (
-    <div className={classes.row}>
-      {createLinesForKeywords(specKeywords, descriptorKeywords)}
-    </div>
-  );
+  return <div>{createLinesForKeywords(specKeywords)}</div>;
 }
 
 NormalRightRow.propTypes = {
