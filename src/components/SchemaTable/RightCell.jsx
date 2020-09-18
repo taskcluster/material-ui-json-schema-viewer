@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { shape, string } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { isEmpty } from 'ramda';
+import classNames from 'classnames';
 import InfoIcon from 'mdi-react/InformationOutlineIcon';
 import Typography from '@material-ui/core/Typography';
 import Markdown from '../Markdown';
@@ -13,8 +14,9 @@ import { SKIP_KEYWORDS, TOOLTIP_DESCRIPTIONS } from '../../utils/constants';
 const useStyles = makeStyles(theme => ({
   typography: {
     color: theme.palette.text.primary,
-    display: 'flex',
-    alignItems: 'center',
+  },
+  chips: {
+    marginTop: theme.spacing(1),
   },
 }));
 
@@ -51,9 +53,12 @@ function RightCell({ treeNode }) {
       const infoIcon = <InfoIcon fontSize="inherit" color="inherit" />;
 
       return (
-        <Tooltip key={keyword} title={tooltipTitle}>
-          <Chip label={keyword} icon={infoIcon} />
-        </Tooltip>
+        <Fragment key={keyword}>
+          <Tooltip key={keyword} title={tooltipTitle}>
+            <Chip label={keyword} icon={infoIcon} />
+          </Tooltip>
+          <wbr />
+        </Fragment>
       );
     }
 
@@ -79,7 +84,12 @@ function RightCell({ treeNode }) {
       return schema[key];
     })(keyword);
 
-    return <Chip key={keyword} label={`${keyword}: ${keyValue}`} />;
+    return (
+      <Fragment key={keyword}>
+        <Chip label={`${keyword}: ${keyValue}`} />
+        <wbr />
+      </Fragment>
+    );
   }
 
   /**
@@ -87,7 +97,7 @@ function RightCell({ treeNode }) {
    */
   function createKeywordChips() {
     return (
-      <div className={classes.typography}>
+      <div className={classNames(classes.typography, classes.chips)}>
         {specKeywords.map(keyword => createKeywordChip(keyword))}
       </div>
     );
