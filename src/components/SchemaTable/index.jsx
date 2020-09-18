@@ -1,9 +1,8 @@
 import React from 'react';
 import { func, object } from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 import TableLayout from './TableLayout';
-import NormalLeftRow from '../NormalLeftRow';
-import NormalRightRow from '../NormalRightRow';
+import LeftCell from './LeftCell';
+import RightCell from './RightCell';
 import { treeNodeTypes } from '../../utils/prop-types';
 import { createSchemaTree } from '../../utils/schemaTree';
 import {
@@ -12,77 +11,7 @@ import {
   LITERAL_TYPES,
 } from '../../utils/constants';
 
-const useStyles = makeStyles(theme => ({
-  /** Schema table displays two-column layout */
-
-  /**
-   * Lines within the rows. (a single row may constitute of more
-   * than one line depending on the number of keywords of the schema)
-   */
-  line: {
-    color: theme.palette.text.primary,
-    display: 'flex',
-    alignItems: 'center',
-    height: theme.spacing(4.5),
-  },
-  /**
-   * Lines used specifically for displaying desciptions.
-   */
-  descriptionLine: {
-    alignItems: 'flex-start',
-  },
-  /**
-   * Name text displayed within a NormalLeftRow.
-   */
-  name: {
-    marginRight: theme.spacing(0.5),
-  },
-  /**
-   * Highlight the type for the schema or sub-schema displayed
-   * within a NormalLeftRow.
-   */
-  code: {
-    backgroundColor: theme.palette.text.primary,
-    color: theme.palette.getContrastText(theme.palette.text.primary),
-    padding: `0 ${theme.spacing(0.5)}px`,
-    fontSize: theme.typography.subtitle2.fontSize,
-    fontWeight: theme.typography.subtitle2.fontWeight,
-    fontFamily: theme.typography.subtitle2.fontFamily,
-  },
-  /**
-   * Warning icon to inform missing type in NormalLeftRow.
-   */
-  missingType: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  /**
-   * Comments used for combination types in NormalLeftRow.
-   */
-  comment: {
-    color: theme.palette.text.hint,
-  },
-  /**
-   * Prefixes used to notate special properties of data types in
-   * lines of NormalLeftRow. (ex. 'required', 'contains' keywords)
-   */
-  prefix: {
-    color: theme.palette.error.main,
-    padding: `0 ${theme.spacing(0.5)}px`,
-  },
-  /**
-   * Button used to expand or shrink a $ref.
-   */
-  refButton: {
-    marginLeft: theme.spacing(1),
-  },
-}));
-
 function SchemaTable({ schemaTree, setSchemaTree, references }) {
-  /**
-   * Generate classes to define overall style for the schema table.
-   */
-  const classes = useStyles();
   const rows = [];
 
   /**
@@ -99,22 +28,17 @@ function SchemaTable({ schemaTree, setSchemaTree, references }) {
     const refs = refType === 'none' ? null : references;
 
     return {
-      leftRow: (
-        <NormalLeftRow
+      left: (
+        <LeftCell
           key={`left-row-${rows.length + 1}`}
-          classes={classes}
           treeNode={treeNode}
           refType={refType}
           setSchemaTree={updateFunc}
           references={refs}
         />
       ),
-      rightRow: (
-        <NormalRightRow
-          key={`right-row-${rows.length + 1}`}
-          classes={classes}
-          treeNode={treeNode}
-        />
+      right: (
+        <RightCell key={`right-row-${rows.length + 1}`} treeNode={treeNode} />
       ),
     };
   }

@@ -39,11 +39,11 @@ function TableLayout({ rows }) {
 
   return (
     <div className={classes.wrapper}>
-      {rows.map(({ leftRow, rightRow }, i) => {
+      {rows.map(({ left, right }, i) => {
         return (
           <Fragment key={`row-${i}`}>
-            <div className={classes.left}>{leftRow}</div>
-            <div className={classes.right}>{rightRow}</div>
+            <div className={classes.left}>{left}</div>
+            <div className={classes.right}>{right}</div>
             <div className={classes.break} />
           </Fragment>
         );
@@ -54,7 +54,7 @@ function TableLayout({ rows }) {
 
 TableLayout.propTypes = {
   /**
-   * Array of elements containing {leftRow, rightRow}
+   * Array of elements containing {left, right}
    */
   rows: array.isRequired,
 };

@@ -1,5 +1,6 @@
 import React from 'react';
 import { shape, string } from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
 import { isEmpty } from 'ramda';
 import InfoIcon from 'mdi-react/InformationOutlineIcon';
 import Typography from '@material-ui/core/Typography';
@@ -13,8 +14,18 @@ import {
   TOOLTIP_DESCRIPTIONS,
 } from '../../utils/constants';
 
-function NormalRightRow({ classes, treeNode }) {
+const useStyles = makeStyles(theme => ({
+  typography: {
+    color: theme.palette.text.primary,
+    display: 'flex',
+    alignItems: 'center',
+    height: theme.spacing(4.5),
+  },
+}));
+
+function RightCell({ treeNode }) {
   const { schema } = treeNode;
+  const classes = useStyles();
   /**
    * Identify keywords that define specifications of the given schema.
    * (skip over keywords that do not need to be displayed).
@@ -108,7 +119,7 @@ function NormalRightRow({ classes, treeNode }) {
       lines.push(
         <div
           key={`spec-line-${keywordGroup.toString()}`}
-          className={classes.line}>
+          className={classes.typography}>
           {keywordGroup.map(keyword => createKeywordChip(keyword))}
         </div>
       );
@@ -176,7 +187,7 @@ function NormalRightRow({ classes, treeNode }) {
   return <div>{createLinesForKeywords(specKeywords)}</div>;
 }
 
-NormalRightRow.propTypes = {
+RightCell.propTypes = {
   /**
    * Style for schema table.
    * Rows and lines need to maintain consistent
@@ -192,4 +203,4 @@ NormalRightRow.propTypes = {
   treeNode: basicTreeNode.isRequired,
 };
 
-export default React.memo(NormalRightRow);
+export default React.memo(RightCell);
