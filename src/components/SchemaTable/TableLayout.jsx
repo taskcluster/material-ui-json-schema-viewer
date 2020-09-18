@@ -14,15 +14,16 @@ const useStyles = makeStyles(theme => ({
     float: 'left',
     width: '50%',
     boxSizing: 'border-box',
+    paddingLeft: theme.spacing(1),
     borderTop: `${theme.spacing(0.25)}px solid ${theme.palette.divider}`,
-    overflowX: 'wrap',
+    overflowX: 'auto',
   },
   right: {
     float: 'left',
     width: '50%',
     boxSizing: 'border-box',
     borderTop: `${theme.spacing(0.25)}px solid ${theme.palette.divider}`,
-    overflowX: 'wrap',
+    overflowX: 'auto',
   },
   break: {
     clear: 'both',
