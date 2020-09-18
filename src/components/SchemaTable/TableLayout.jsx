@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import classNames from 'classnames';
 import { array } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -10,20 +11,20 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper,
   },
 
-  left: {
+  cell: {
     float: 'left',
-    width: '50%',
     boxSizing: 'border-box',
-    paddingLeft: theme.spacing(1),
-    borderTop: `${theme.spacing(0.25)}px solid ${theme.palette.divider}`,
+    borderTop: `${theme.spacing(0.125)}px solid ${theme.palette.divider}`,
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
     overflowX: 'auto',
   },
-  right: {
-    float: 'left',
+  left: {
     width: '50%',
-    boxSizing: 'border-box',
-    borderTop: `${theme.spacing(0.25)}px solid ${theme.palette.divider}`,
-    overflowX: 'auto',
+    paddingLeft: theme.spacing(1),
+  },
+  right: {
+    width: '50%',
   },
   break: {
     clear: 'both',
@@ -42,8 +43,10 @@ function TableLayout({ rows }) {
       {rows.map(({ left, right }, i) => {
         return (
           <Fragment key={`row-${i}`}>
-            <div className={classes.left}>{left}</div>
-            <div className={classes.right}>{right}</div>
+            <div className={classNames(classes.cell, classes.left)}>{left}</div>
+            <div className={classNames(classes.cell, classes.right)}>
+              {right}
+            </div>
             <div className={classes.break} />
           </Fragment>
         );

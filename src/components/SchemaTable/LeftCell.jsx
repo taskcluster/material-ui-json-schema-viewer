@@ -35,7 +35,6 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.primary,
     display: 'flex',
     alignItems: 'center',
-    height: theme.spacing(4.5),
   },
 
   /**
