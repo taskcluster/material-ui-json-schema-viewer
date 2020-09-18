@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
     '& code': {
       color: theme.palette.text.primary,
       backgroundColor: theme.palette.text.disabled,
-      padding: theme.spacing(0.5),
+      padding: theme.spacing(0.25),
     },
   },
   /** Inverse styles applied to markdown content (used for tooltip titles) */
