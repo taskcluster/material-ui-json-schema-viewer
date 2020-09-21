@@ -50,7 +50,7 @@ function RightCell({ treeNode }) {
        * Generate tooltip descriptions to match the keyword.
        */
       const tooltipTitle = TOOLTIP_DESCRIPTIONS[keyword];
-      const infoIcon = <InfoIcon fontSize="inherit" color="inherit" />;
+      const infoIcon = <InfoIcon fontSize="inherit" />;
 
       return (
         <Fragment key={keyword}>
