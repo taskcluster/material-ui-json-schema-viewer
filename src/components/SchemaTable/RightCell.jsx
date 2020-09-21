@@ -15,8 +15,9 @@ const useStyles = makeStyles(theme => ({
   typography: {
     color: theme.palette.text.primary,
   },
-  chips: {
+  infoBlock: {
     marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
   },
 }));
 
@@ -97,7 +98,7 @@ function RightCell({ treeNode }) {
    */
   function createKeywordChips() {
     return (
-      <div className={classNames(classes.typography, classes.chips)}>
+      <div className={classNames(classes.typography, classes.infoBlock)}>
         {specKeywords.map(keyword => createKeywordChip(keyword))}
       </div>
     );
@@ -131,8 +132,12 @@ function RightCell({ treeNode }) {
 
   return (
     <div>
-      {createTitle()}
-      {createDescription()}
+      {(schema.title || schema.description) && (
+        <div className={classes.infoBlock}>
+          {createTitle()}
+          {createDescription()}
+        </div>
+      )}
       {specKeywords.length > 0 && createKeywordChips()}
     </div>
   );

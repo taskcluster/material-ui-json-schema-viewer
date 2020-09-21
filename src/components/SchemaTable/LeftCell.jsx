@@ -25,6 +25,8 @@ const useStyles = makeStyles(theme => ({
    * displaying the data structure of the schemas.
    */
   indentation: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
     marginLeft: indent => theme.spacing(indent * 2),
   },
 

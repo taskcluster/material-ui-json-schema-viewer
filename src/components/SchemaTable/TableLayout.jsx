@@ -15,8 +15,6 @@ const useStyles = makeStyles(theme => ({
     float: 'left',
     boxSizing: 'border-box',
     borderTop: `${theme.spacing(0.125)}px solid ${theme.palette.divider}`,
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
     overflowX: 'auto',
   },
   left: {
