@@ -1,5 +1,5 @@
 import React from 'react';
-import { shape, string, oneOf, func, object } from 'prop-types';
+import { oneOf, func, object } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
@@ -254,20 +254,6 @@ function LeftCell({ treeNode, refType, setSchemaTree, references }) {
 }
 
 LeftCell.propTypes = {
-  /**
-   * Style for rows and lines for left rows of the schema table.
-   * (necessary to maintain consistency with right panel's rows and lines)
-   */
-  classes: shape({
-    row: string.isRequired,
-    line: string.isRequired,
-    name: string.isRequired,
-    code: string.isRequired,
-    missingType: string.isRequired,
-    comment: string.isRequired,
-    prefix: string.isRequired,
-    refButton: string.isRequired,
-  }).isRequired,
   /**
    * Tree node object data structure.
    */

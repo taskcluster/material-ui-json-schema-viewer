@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import { shape, string } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { isEmpty } from 'ramda';
 import classNames from 'classnames';
@@ -144,15 +143,6 @@ function RightCell({ treeNode }) {
 }
 
 RightCell.propTypes = {
-  /**
-   * Style for schema table.
-   * Rows and lines need to maintain consistent
-   * with left panel's rows and lines.
-   */
-  classes: shape({
-    row: string.isRequired,
-    line: string.isRequired,
-  }).isRequired,
   /**
    * Tree node object data structure.
    */
