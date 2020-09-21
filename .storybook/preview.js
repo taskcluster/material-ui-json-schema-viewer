@@ -55,31 +55,3 @@ function WithTheme(Story, context) {
 }
 
 export const decorators = [WithTheme];
-/*
-        <Paper elevation={2}>
-          <form className={classes.themeForm}>
-            <FormControl className={classes.themeFormControl}>
-              <Typography variant="body2" gutterBottom>
-                Theme
-              </Typography>
-              <Select value={themeName} onChange={e => setThemeName(e.target.value)}>
-                <MenuItem value="default">Default</MenuItem>
-                <MenuItem value="tcLight">Taskcluster Light</MenuItem>
-                <MenuItem value="tcDark">Taskcluster Dark</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControl className={classes.themeFormControl}>
-              <Typography variant="body2" gutterBottom>
-                Spacing ({spacing})
-              </Typography>
-              <Slider
-                className={classes.spacingSlider}
-                value={spacing}
-                onChange={(e, v) => setSpacing(v)}
-                max={21}
-                min={1}
-              />
-            </FormControl>
-          </form>
-        </Paper>
-*/
