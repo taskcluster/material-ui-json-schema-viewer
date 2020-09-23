@@ -3,15 +3,7 @@ import {
   ThemeProvider,
   createMuiTheme,
   useTheme,
-  makeStyles,
 } from '@material-ui/core/styles';
-import Slider from '@material-ui/core/Slider';
-import Select from '@material-ui/core/Select';
-import FormControl from '@material-ui/core/FormControl';
-import Typography from '@material-ui/core/Typography';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Paper from '@material-ui/core/Paper';
 import { TASKCLUSTER_THEME } from '../src/utils/theme';
 
 export const globalTypes = {
