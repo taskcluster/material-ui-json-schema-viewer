@@ -1,8 +1,8 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { func, object } from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import NormalLeftRow from '../NormalLeftRow';
-import NormalRightRow from '../NormalRightRow';
+import TableLayout from './TableLayout';
+import LeftCell from './LeftCell';
+import RightCell from './RightCell';
 import { treeNodeTypes } from '../../utils/prop-types';
 import { createSchemaTree } from '../../utils/schemaTree';
 import {
@@ -11,119 +11,12 @@ import {
   LITERAL_TYPES,
 } from '../../utils/constants';
 
-const useStyles = makeStyles(theme => ({
-  /** Schema table displays two-column layout */
-  wrapper: {
-    display: 'grid',
-    gridTemplateColumns: '[left-panel] 1fr [right-panel] 1fr',
-    color: theme.palette.text.primary,
-  },
-  /** The left panel of the Schema Table */
-  leftPanel: {
-    backgroundColor: theme.palette.background.paper,
-    borderRight: `${theme.spacing(0.25)}px solid ${theme.palette.divider}`,
-    overflowX: 'auto',
-  },
-  /** The right panel of the Schema Table */
-  rightPanel: {
-    backgroundColor: theme.palette.background.paper,
-    overflowX: 'auto',
-  },
-  /** Rows for the left and right panels */
-  row: {
-    borderBottom: `${theme.spacing(0.25)}px solid ${theme.palette.divider}`,
-    /**
-     * The minimum height of a row should always be the same
-     * with the height of a single line.
-     */
-    minHeight: theme.spacing(4.5),
-    width: '100%',
-  },
-  /**
-   * Lines within the rows. (a single row may constitute of more
-   * than one line depending on the number of keywords of the schema)
-   */
-  line: {
-    color: theme.palette.text.primary,
-    display: 'flex',
-    alignItems: 'center',
-    whiteSpace: 'nowrap',
-    height: theme.spacing(4.5),
-    paddingLeft: theme.spacing(1),
-  },
-  /**
-   * Lines used specifically for displaying desciptions.
-   */
-  descriptionLine: {
-    alignItems: 'flex-start',
-  },
-  /**
-   * Name text displayed within a NormalLeftRow.
-   */
-  name: {
-    marginRight: theme.spacing(0.5),
-  },
-  /**
-   * Highlight the type for the schema or sub-schema displayed
-   * within a NormalLeftRow.
-   */
-  code: {
-    backgroundColor: theme.palette.text.primary,
-    color: theme.palette.getContrastText(theme.palette.text.primary),
-    padding: `0 ${theme.spacing(0.5)}px`,
-    fontSize: theme.typography.subtitle2.fontSize,
-    fontWeight: theme.typography.subtitle2.fontWeight,
-    fontFamily: theme.typography.subtitle2.fontFamily,
-  },
-  /**
-   * Warning icon to inform missing type in NormalLeftRow.
-   */
-  missingType: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  /**
-   * Comments used for combination types in NormalLeftRow.
-   */
-  comment: {
-    color: theme.palette.text.hint,
-  },
-  /**
-   * Prefixes used to notate special properties of data types in
-   * lines of NormalLeftRow. (ex. 'required', 'contains' keywords)
-   */
-  prefix: {
-    color: theme.palette.error.main,
-    padding: `0 ${theme.spacing(0.5)}px`,
-  },
-  /**
-   * Button used to expand or shrink a $ref.
-   */
-  refButton: {
-    marginLeft: theme.spacing(1),
-  },
-}));
-
 function SchemaTable({ schemaTree, setSchemaTree, references }) {
-  /**
-   * Generate classes to define overall style for the schema table.
-   */
-  const classes = useStyles();
-  /**
-   * Rows for the left and right columns are stored separately
-   * so that the table can create a two-column layout with each of
-   * the columns (named 'panels') having its own horizontal scroll.
-   * This way, the left and right panels can render the rows separately
-   * in their own containers.
-   */
-  const leftPanelRows = [];
-  const rightPanelRows = [];
+  const rows = [];
 
   /**
-   * Create a single normal row with a left and right column each.
-   * The result is stored in an object format in order for the
-   * pushRow method to push the left and right row of a single row
-   * into the leftPanelRows and rightPanelRows arrays respectively.
+   * Create a single normal row with a left and right column each, composed
+   * of a left and right element
    */
   function createSingleRow(treeNode, refType = 'none') {
     /**
@@ -135,22 +28,17 @@ function SchemaTable({ schemaTree, setSchemaTree, references }) {
     const refs = refType === 'none' ? null : references;
 
     return {
-      leftRow: (
-        <NormalLeftRow
-          key={`left-row-${leftPanelRows.length + 1}`}
-          classes={classes}
+      left: (
+        <LeftCell
+          key={`left-row-${rows.length + 1}`}
           treeNode={treeNode}
           refType={refType}
           setSchemaTree={updateFunc}
           references={refs}
         />
       ),
-      rightRow: (
-        <NormalRightRow
-          key={`right-row-${rightPanelRows.length + 1}`}
-          classes={classes}
-          treeNode={treeNode}
-        />
+      right: (
+        <RightCell key={`right-row-${rows.length + 1}`} treeNode={treeNode} />
       ),
     };
   }
@@ -179,16 +67,6 @@ function SchemaTable({ schemaTree, setSchemaTree, references }) {
   }
 
   /**
-   * Push a single row's left part and right part into
-   * the leftPanelRows and rightPanelRows respectively.
-   * @param {object} row object including leftRow and rightRow components.
-   */
-  function pushRow(row) {
-    leftPanelRows.push(row.leftRow);
-    rightPanelRows.push(row.rightRow);
-  }
-
-  /**
    * Create rows by traversing the tree structure,
    * starting from the rootNode, in pre-order.
    * First, a single row based on the root node will be created.
@@ -212,7 +90,7 @@ function SchemaTable({ schemaTree, setSchemaTree, references }) {
     const schemaType = schema._type;
     const rootNodeRow = createSingleRow(rootNode, refType);
 
-    pushRow(rootNodeRow);
+    rows.push(rootNodeRow);
 
     /**
      * If the root node has children (indicating a nested structure),
@@ -227,7 +105,7 @@ function SchemaTable({ schemaTree, setSchemaTree, references }) {
         if (COMBINATION_TYPES.includes(schemaType) && i > 0) {
           const separatorRow = createLiteralRow(rootNode);
 
-          pushRow(separatorRow);
+          rows.push(separatorRow);
         }
 
         renderNodeToRows(childNode);
@@ -241,7 +119,7 @@ function SchemaTable({ schemaTree, setSchemaTree, references }) {
     if (NESTED_TYPES.includes(schemaType)) {
       const closeRow = createLiteralRow(rootNode);
 
-      pushRow(closeRow);
+      rows.push(closeRow);
     }
   }
 
@@ -262,7 +140,7 @@ function SchemaTable({ schemaTree, setSchemaTree, references }) {
     if (!isExpanded) {
       const refRow = createSingleRow(defaultNode, refType);
 
-      pushRow(refRow);
+      rows.push(refRow);
     } else {
       /**
        * Else, the ref node has expanded state,
@@ -273,29 +151,13 @@ function SchemaTable({ schemaTree, setSchemaTree, references }) {
   }
 
   /**
-   * Create and render a table with two-columns based on
-   * the schemaTree's overall structure.
+   * Create left and right rows each for the schema table by traversing
+   * the schemaTree starting from the root node. The resulting rows will
+   * be stored in the 'rows' array.
    */
-  function renderTreeToTable(schemaTreeInput) {
-    /**
-     * Create left and right rows each for the schema table by traversing
-     * the schemaTree starting from the root node. The resulting rows will
-     * be stored in leftPanelRows and rightPanelRows array each.
-     * Which will then, ultimately be rendered within the leftPanal and
-     * rightPanel respectively to create a two-column layout with each of
-     * the columns having horizonal scrolls.
-     */
-    renderNodeToRows(schemaTreeInput);
+  renderNodeToRows(schemaTree);
 
-    return (
-      <div className={classes.wrapper}>
-        <div className={classes.leftPanel}>{leftPanelRows}</div>
-        <div className={classes.rightPanel}>{rightPanelRows}</div>
-      </div>
-    );
-  }
-
-  return <Fragment>{renderTreeToTable(schemaTree)}</Fragment>;
+  return <TableLayout rows={rows} />;
 }
 
 SchemaTable.propTypes = {

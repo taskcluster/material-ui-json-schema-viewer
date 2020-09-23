@@ -1,7 +1,5 @@
 import React, { Fragment } from 'react';
-import { ThemeProvider } from '@material-ui/core/styles';
 import SchemaViewer from './index';
-import { TASKCLUSTER_THEME } from '../../utils/theme';
 
 export default {
   title: 'Schema Viewer',
@@ -181,18 +179,3 @@ export const demo = () => (
     <br />
   </Fragment>
 );
-
-export const customThemes = () => {
-  return (
-    <Fragment>
-      <h3>Taskcluster Dark Theme</h3>
-      <ThemeProvider theme={TASKCLUSTER_THEME.darkTheme}>
-        <SchemaViewer schema={demoSchemas.hookStatus} />
-      </ThemeProvider>
-      <h3>Taskcluster Light Theme</h3>
-      <ThemeProvider theme={TASKCLUSTER_THEME.lightTheme}>
-        <SchemaViewer schema={demoSchemas.workerList} />
-      </ThemeProvider>
-    </Fragment>
-  );
-};

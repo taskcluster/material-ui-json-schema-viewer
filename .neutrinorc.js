@@ -38,6 +38,11 @@ module.exports = {
          * Allow 'dangerouslySetInnerHTML' for Markdown component.
          */
         'react/no-danger': ['off'],
+        /**
+         * Since what we render is static, there's no need to avoid array indexes
+         * in keys.
+         */
+        'react/no-array-index-key': ['off'],
       },
     }),
     reactComponents(),

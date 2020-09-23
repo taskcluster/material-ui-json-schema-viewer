@@ -114,13 +114,6 @@ export const COMBINATION_SYMBOLS = {
   nor: '// nor',
 };
 /**
- * Max number of chips allowed to be displayed within a single line.
- * (specified instead of having the line wrap when chips crowd a line
- *  in order to avoid complexities with matching the line heights between
- *  the left and right panel)
- */
-export const MAX_NUMBER_OF_CHIPS = 3;
-/**
  * Descriptions used for keywords displayed with tooltip.
  */
 export const TOOLTIP_DESCRIPTIONS = {

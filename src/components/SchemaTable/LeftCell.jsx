@@ -1,5 +1,5 @@
 import React from 'react';
-import { shape, string, oneOf, func, object } from 'prop-types';
+import { oneOf, func, object } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
@@ -11,8 +11,6 @@ import Tooltip from '../Tooltip';
 import { basicTreeNode, NOOP } from '../../utils/prop-types';
 import { expandRefNode, shrinkRefNode } from '../../utils/schemaTree';
 import {
-  SKIP_KEYWORDS,
-  DESCRIPTIVE_KEYWORDS,
   COMBINATION_TYPES,
   LITERAL_TYPES,
   NESTED_TYPES,
@@ -21,23 +19,74 @@ import {
   TOOLTIP_DESCRIPTIONS,
 } from '../../utils/constants';
 
-/**
- * Dynamically generate styles for indentations to be used for
- * displaying the data structure of the schemas.
- */
 const useStyles = makeStyles(theme => ({
+  /**
+   * Dynamically generate styles for indentations to be used for
+   * displaying the data structure of the schemas.
+   */
   indentation: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
     marginLeft: indent => theme.spacing(indent * 2),
+  },
+
+  /**
+   * Typography within the cell
+   */
+  typography: {
+    color: theme.palette.text.primary,
+    display: 'flex',
+    alignItems: 'center',
+  },
+
+  /**
+   * Name text displayed within a LeftCell.
+   */
+  name: {
+    marginRight: theme.spacing(0.5),
+  },
+  /**
+   * Highlight the type for the schema or sub-schema displayed
+   * within a LeftCell.
+   */
+  code: {
+    backgroundColor: theme.palette.text.primary,
+    color: theme.palette.getContrastText(theme.palette.text.primary),
+    padding: `0 ${theme.spacing(0.5)}px`,
+    fontSize: theme.typography.subtitle2.fontSize,
+    fontWeight: theme.typography.subtitle2.fontWeight,
+    fontFamily: theme.typography.subtitle2.fontFamily,
+  },
+  /**
+   * Warning icon to inform missing type in LeftCell.
+   */
+  missingType: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  /**
+   * Comments used for combination types in LeftCell.
+   */
+  comment: {
+    color: theme.palette.text.hint,
+  },
+  /**
+   * Prefixes used to notate special properties of data types in
+   * lines of LeftCell. (ex. 'required', 'contains' keywords)
+   */
+  prefix: {
+    color: theme.palette.error.main,
+    padding: `0 ${theme.spacing(0.5)}px`,
+  },
+  /**
+   * Button used to expand or shrink a $ref.
+   */
+  refButton: {
+    marginLeft: theme.spacing(1),
   },
 }));
 
-function NormalLeftRow({
-  classes,
-  treeNode,
-  refType,
-  setSchemaTree,
-  references,
-}) {
+function LeftCell({ treeNode, refType, setSchemaTree, references }) {
   const { schema, path } = treeNode;
   const schemaType = schema._type;
   const name = schema._name;
@@ -46,7 +95,7 @@ function NormalLeftRow({
    * (length of path = depth of the current treeNode)
    */
   const indentSize = path.length;
-  const styles = useStyles(indentSize);
+  const classes = useStyles(indentSize);
   /**
    * Create a text for the name of the schema.
    */
@@ -79,7 +128,7 @@ function NormalLeftRow({
       return (
         <Tooltip title={TOOLTIP_DESCRIPTIONS.noType}>
           <div className={classes.missingType}>
-            <WarningIcon color="inherit" />
+            <WarningIcon />
           </div>
         </Tooltip>
       );
@@ -162,7 +211,6 @@ function NormalLeftRow({
       <IconButton
         className={classes.refButton}
         aria-label="expand-ref"
-        color="inherit"
         size="small">
         <ExpandIcon size={24} />
       </IconButton>
@@ -171,7 +219,6 @@ function NormalLeftRow({
       <IconButton
         className={classes.refButton}
         aria-label="shrink-ref"
-        color="inherit"
         size="small">
         <ShrinkIcon size={24} />
       </IconButton>
@@ -188,90 +235,23 @@ function NormalLeftRow({
       setSchemaTree(prev => expandRefNode(prev, treeNode, references)),
     expanded: () => setSchemaTree(prev => shrinkRefNode(prev, treeNode)),
   }[refType];
-  /**
-   * Create blank line paddings if descriptor keywords exists.
-   * This enables the left row to have matching number of lines with
-   * the right row and align the lines and heights between the two rows.
-   */
-  const blankLinePaddings = (function createPaddingLines(schemaInput) {
-    /**
-     * Check for descriptor and specification keywords.
-     * - specification: displayed as chips in the first line of NormalRightRow
-     * - descriptors: displayed in the next sequential lines of NormalRightRow
-     */
-    const descriptors = Object.keys(schema).filter(key =>
-      DESCRIPTIVE_KEYWORDS.includes(key)
-    );
-    const specifications = Object.keys(schemaInput).filter(
-      key => !SKIP_KEYWORDS.includes(key)
-    );
-    const lines = [];
-
-    /**
-     * Create a blank line per 3 spec keywords since a single line may
-     * only contain a max of 3 spec keywords. Skip over the first group
-     * of keywords since the first line already exists (to specify 'type').
-     */
-    specifications.forEach((keyword, i) => {
-      if (i % 3 === 0 && i > 0) {
-        lines.push(<div key={`${keyword}-line`} className={classes.line} />);
-      }
-    });
-
-    /** Create a blank line for each descriptor keyword. */
-    descriptors.forEach((keyword, i) => {
-      /**
-       * For the first descriptor keyword,
-       * if specification keywords exists, a blank line should be added
-       * to visually separate the specification line and descriptor line.
-       * Else, no specifications exists, skip over the first descriptor
-       * since the first line already exists (to specify 'type').
-       */
-      if (i === 0) {
-        if (specifications.length > 0) {
-          lines.push(<div key="separator-line" className={classes.line} />);
-          lines.push(<div key={`${keyword}-line`} className={classes.line} />);
-        }
-      } else {
-        /** Create blank lines for all the following descriptor keywords */
-        lines.push(<div key={`${keyword}-line`} className={classes.line} />);
-      }
-    });
-
-    return lines;
-  })(schema);
 
   return (
-    <div key={schemaType} className={classes.row} onClick={onRefClick}>
+    <div key={schemaType} onClick={onRefClick}>
       <Typography
         component="div"
         variant="subtitle2"
-        className={classNames(classes.line, styles.indentation)}>
+        className={classNames(classes.typography, classes.indentation)}>
         {name && nameText}
         {typeSymbol}
         {requiredMark}
         {refButton}
       </Typography>
-      {blankLinePaddings}
     </div>
   );
 }
 
-NormalLeftRow.propTypes = {
-  /**
-   * Style for rows and lines for left rows of the schema table.
-   * (necessary to maintain consistency with right panel's rows and lines)
-   */
-  classes: shape({
-    row: string.isRequired,
-    line: string.isRequired,
-    name: string.isRequired,
-    code: string.isRequired,
-    missingType: string.isRequired,
-    comment: string.isRequired,
-    prefix: string.isRequired,
-    refButton: string.isRequired,
-  }).isRequired,
+LeftCell.propTypes = {
   /**
    * Tree node object data structure.
    */
@@ -299,9 +279,9 @@ NormalLeftRow.propTypes = {
   references: object,
 };
 
-NormalLeftRow.defaultProps = {
+LeftCell.defaultProps = {
   setSchemaTree: NOOP,
   references: {},
 };
 
-export default React.memo(NormalLeftRow);
+export default React.memo(LeftCell);
