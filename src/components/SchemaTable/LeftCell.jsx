@@ -128,7 +128,7 @@ function LeftCell({ treeNode, refType, setSchemaTree, references }) {
       return (
         <Tooltip title={TOOLTIP_DESCRIPTIONS.noType}>
           <div className={classes.missingType}>
-            <WarningIcon color="inherit" />
+            <WarningIcon />
           </div>
         </Tooltip>
       );
@@ -211,7 +211,6 @@ function LeftCell({ treeNode, refType, setSchemaTree, references }) {
       <IconButton
         className={classes.refButton}
         aria-label="expand-ref"
-        color="inherit"
         size="small">
         <ExpandIcon size={24} />
       </IconButton>
@@ -220,7 +219,6 @@ function LeftCell({ treeNode, refType, setSchemaTree, references }) {
       <IconButton
         className={classes.refButton}
         aria-label="shrink-ref"
-        color="inherit"
         size="small">
         <ShrinkIcon size={24} />
       </IconButton>
