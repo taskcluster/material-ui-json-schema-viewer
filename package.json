@@ -11,6 +11,7 @@
   "scripts": {
     "start": "start-storybook",
     "build": "webpack --mode production",
+    "prepublish": "npm run build",
     "lint": "eslint --cache --format codeframe --ext mjs,jsx,js src",
     "test": "jest",
     "test:watch": "jest --watch",
