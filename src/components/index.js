@@ -1,3 +1,4 @@
 import SchemaViewer from './SchemaViewer';
 
-export default { SchemaViewer };
+export { SchemaViewer };
+export default SchemaViewer;
