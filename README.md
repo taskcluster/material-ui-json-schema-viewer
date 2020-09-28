@@ -18,6 +18,8 @@ import SchemaViewer from 'material-ui-json-schema-viewer';
 <SchemaViewer schema={jsonSchema} references={schemaReferences} />
 ```
 
+(Named import, `import { SchemaViewer } from ..`, is also supported)
+
 | Prop | Type | Required | Description |
 |:---|:---|:---|:---|
 | `schema` | Object | ✓ | A JSON schema object. |
