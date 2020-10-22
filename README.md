@@ -62,5 +62,5 @@ Feel free to open an issue, submit a pull request, or contribute however you wou
 1. Bump the version of the package with `npm version {version-name}` (patch, minor, major, etc.).
 2. Generate the compiled component for publishing to npm with `yarn build`.
 3. Publish the package with `npm publish`
-4. Push your changes with `git push upstream master --tags`
+4. Push your changes with `git push upstream main --tags`
 5. Deploy Storybook to gh-pages with `yarn deploy`
