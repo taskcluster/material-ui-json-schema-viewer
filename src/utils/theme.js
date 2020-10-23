@@ -8,7 +8,7 @@ import green from '@material-ui/core/colors/green';
 
 /**
  * Theme values are all copied from the Taskcluster UI source code:
- * https://github.com/taskcluster/taskcluster/blob/master/ui/src/theme.js
+ * https://github.com/taskcluster/taskcluster/blob/main/ui/src/theme.js
  */
 export const THEME = {
   WHITE: '#fff',
