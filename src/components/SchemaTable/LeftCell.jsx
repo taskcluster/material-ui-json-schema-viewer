@@ -19,7 +19,7 @@ import {
   TOOLTIP_DESCRIPTIONS,
 } from '../../utils/constants';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   /**
    * Dynamically generate styles for indentations to be used for
    * displaying the data structure of the schemas.
@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
   indentation: {
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
-    marginLeft: indent => theme.spacing(indent * 2),
+    marginLeft: (indent) => theme.spacing(indent * 2),
   },
 
   /**
@@ -104,7 +104,7 @@ function LeftCell({ treeNode, refType, setSchemaTree, references }) {
       return <span className={classes.name}>{`${name}:`}</span>;
     }
 
-    return <span className={classes.name}>{name}</span>;
+    return <span className={classes.name}>{`${name}:`}</span>;
   })(name, schemaType);
   /**
    * Create a type symbol corresponding to the specified type.
@@ -117,7 +117,7 @@ function LeftCell({ treeNode, refType, setSchemaTree, references }) {
     ];
     const combinationTypes = [
       ...COMBINATION_TYPES,
-      ...COMBINATION_TYPES.map(type => LITERAL_TYPES[type]),
+      ...COMBINATION_TYPES.map((type) => LITERAL_TYPES[type]),
     ];
 
     /**
@@ -211,7 +211,8 @@ function LeftCell({ treeNode, refType, setSchemaTree, references }) {
       <IconButton
         className={classes.refButton}
         aria-label="expand-ref"
-        size="small">
+        size="small"
+      >
         <ExpandIcon size={24} />
       </IconButton>
     ),
@@ -219,7 +220,8 @@ function LeftCell({ treeNode, refType, setSchemaTree, references }) {
       <IconButton
         className={classes.refButton}
         aria-label="shrink-ref"
-        size="small">
+        size="small"
+      >
         <ShrinkIcon size={24} />
       </IconButton>
     ),
@@ -232,8 +234,8 @@ function LeftCell({ treeNode, refType, setSchemaTree, references }) {
   const onRefClick = {
     none: () => {},
     default: () =>
-      setSchemaTree(prev => expandRefNode(prev, treeNode, references)),
-    expanded: () => setSchemaTree(prev => shrinkRefNode(prev, treeNode)),
+      setSchemaTree((prev) => expandRefNode(prev, treeNode, references)),
+    expanded: () => setSchemaTree((prev) => shrinkRefNode(prev, treeNode)),
   }[refType];
 
   return (
@@ -241,7 +243,8 @@ function LeftCell({ treeNode, refType, setSchemaTree, references }) {
       <Typography
         component="div"
         variant="subtitle2"
-        className={classNames(classes.typography, classes.indentation)}>
+        className={classNames(classes.typography, classes.indentation)}
+      >
         {name && nameText}
         {typeSymbol}
         {requiredMark}
