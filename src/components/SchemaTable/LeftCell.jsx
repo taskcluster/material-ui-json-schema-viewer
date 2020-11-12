@@ -211,8 +211,7 @@ function LeftCell({ treeNode, refType, setSchemaTree, references }) {
       <IconButton
         className={classes.refButton}
         aria-label="expand-ref"
-        size="small"
-      >
+        size="small">
         <ExpandIcon size={24} />
       </IconButton>
     ),
@@ -220,8 +219,7 @@ function LeftCell({ treeNode, refType, setSchemaTree, references }) {
       <IconButton
         className={classes.refButton}
         aria-label="shrink-ref"
-        size="small"
-      >
+        size="small">
         <ShrinkIcon size={24} />
       </IconButton>
     ),
@@ -243,8 +241,7 @@ function LeftCell({ treeNode, refType, setSchemaTree, references }) {
       <Typography
         component="div"
         variant="subtitle2"
-        className={classNames(classes.typography, classes.indentation)}
-      >
+        className={classNames(classes.typography, classes.indentation)}>
         {name && nameText}
         {typeSymbol}
         {requiredMark}
