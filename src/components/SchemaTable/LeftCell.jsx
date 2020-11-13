@@ -104,7 +104,7 @@ function LeftCell({ treeNode, refType, setSchemaTree, references }) {
       return <span className={classes.name}>{`${name}:`}</span>;
     }
 
-    return <span className={classes.name}>{name}</span>;
+    return <span className={classes.name}>{`${name}:`}</span>;
   })(name, schemaType);
   /**
    * Create a type symbol corresponding to the specified type.
