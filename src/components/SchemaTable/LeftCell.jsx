@@ -44,6 +44,7 @@ const useStyles = makeStyles(theme => ({
    */
   name: {
     marginRight: theme.spacing(0.5),
+    fontFamily: 'monospace',
   },
   /**
    * Highlight the type for the schema or sub-schema displayed
@@ -55,7 +56,7 @@ const useStyles = makeStyles(theme => ({
     padding: `0 ${theme.spacing(0.5)}px`,
     fontSize: theme.typography.subtitle2.fontSize,
     fontWeight: theme.typography.subtitle2.fontWeight,
-    fontFamily: theme.typography.subtitle2.fontFamily,
+    fontFamily: 'monospace',
   },
   /**
    * Warning icon to inform missing type in LeftCell.
