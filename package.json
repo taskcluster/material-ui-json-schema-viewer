@@ -1,6 +1,6 @@
 {
   "name": "material-ui-json-schema-viewer",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "repository": "https://github.com/taskcluster/material-ui-json-schema-viewer",
   "license": "MPL-2.0",
   "main": "build/index.js",
