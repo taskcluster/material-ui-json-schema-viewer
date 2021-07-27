@@ -3,8 +3,8 @@ a viewer component that displays JSON schemas (built using [material-ui](https:/
 
 ## Requirements
 - `@material-ui/core` v4+
-- `react` 16.8+
-- `react-dom` 16.8+
+- `react` >=16.8
+- `react-dom` >=16.8
 
 ## Usage
 Install package
