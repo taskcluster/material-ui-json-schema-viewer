@@ -8,10 +8,10 @@ tasks:
       created: {$fromNow: ''}
       deadline: {$fromNow: '2 hours'}
       provisionerId: proj-taskcluster
-      workerType: ci 
+      workerType: ci
       payload:
-        maxRunTime: 3600 
-        image: node 
+        maxRunTime: 3600
+        image: node
         env:
           NO_TEST_SKIP: "true"
         command:
@@ -19,6 +19,7 @@ tasks:
           - '--login'
           - '-cx'
           - >-
+            npm install -g yarn &&
             git clone ${event.pull_request.head.repo.html_url} repo &&
             cd repo &&
             git config advice.detachedHead false &&
